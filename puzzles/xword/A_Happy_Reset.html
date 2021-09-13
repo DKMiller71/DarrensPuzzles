@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!--
+MIT License
+
+Copyright (c) 2019 Viresh Ratnakar
+
+See the full Exolve license notice in exolve-m.js.
+
+Version: Exolve v1.19 September 9 2021
+-->
+<link rel="stylesheet" type="text/css" href="exolve/exolve-m.css?v1.19"/>
+<script src="exolve/exolve-m.js?v1.19"></script>
+
+<title>A Happy Reset</title>
+
+</head>
+<body>
+
+<script>
+function customizeExolve(p) {
+	let c = [
+		p.addCellText(1, 11, '(15)', 10, 33, false, false),
+		p.addCellText(1, 12, '(26)', 10, 33, false, false),
+		p.addCellText(2, 4, '(13,33)', 10, 33, false, false),
+		p.addCellText(2, 5, '(2)', 10, 33, false, false),
+		p.addCellText(2, 7, '(23)', 10, 33, false, false),
+		p.addCellText(2, 9, '(28)', 10, 33, false, false),
+		p.addCellText(3, 4, '(6)', 10, 33, false, false),
+		p.addCellText(3, 8, '(5)', 10, 33, false, false),
+		p.addCellText(4, 6, '(3)', 10, 33, false, false),
+		p.addCellText(4, 8, '(9,10)', 10, 33, false, false),
+		p.addCellText(4, 9, '(21)', 10, 33, false, false),
+		p.addCellText(4, 12, '(14)', 10, 33, false, false),
+		p.addCellText(4, 13, '(29)', 10, 33, false, false),
+		p.addCellText(5, 3, '(18)', 10, 33, false, false),
+		p.addCellText(5, 7, '(4,24)', 10, 33, false, false),
+		p.addCellText(5, 8, '(17)', 10, 33, false, false),
+		p.addCellText(6, 6, '(12)', 10, 33, false, false),
+		p.addCellText(6, 8, '(1)', 10, 33, false, false),
+		p.addCellText(8, 5, '(22)', 10, 33, false, false),
+		p.addCellText(8, 6, '(19)', 10, 33, false, false),
+		p.addCellText(8, 7, '(27)', 10, 33, false, false),
+		p.addCellText(9, 3, '(25,31)', 10, 33, false, false),
+		p.addCellText(10, 1, '(20)', 10, 33, false, false),
+		p.addCellText(10, 3, '(16)', 10, 33, false, false),
+		p.addCellText(11, 2, '(11)', 10, 33, false, false),
+		p.addCellText(11, 4, '(8)', 10, 33, false, false),
+		p.addCellText(12, 1, '(7)', 10, 33, false, false),
+		p.addCellText(12, 3, '(32,34)', 10, 33, false, false),
+		p.addCellText(13, 1, '(30)', 10, 33, false, false)
+	]
+	
+	c.forEach(element => element.style.stroke = 'darkred');
+		
+}	
+createExolve(`
+======REPLACE WITH YOUR PUZZLE BELOW======
+
+exolve-begin
+  exolve-id: A_Happy_Reset_2019
+  exolve-title: A Happy Reset
+  exolve-setter: Darren Miller
+  exolve-copyright: 2019 Darren Miller
+  exolve-preamble:
+	  <p>This is an online fillable version of the puzzle. 
+	  You can check your final answer or get hints at 
+		<a href='https://darrenspuzzles.blogspot.com/2019/04/a-happy-reset.html' title='Go to Darren&apos;s Puzzles blog' target='_blank'>Darren&apos;s Puzzles blog</a>.</p>
+  exolve-width: 14
+  exolve-height: 14
+  exolve-grid:
+		. . . . . . . . . . . . 0 .
+		. . . . 0 . . . . . . 0 0 0
+		. . . . 0 0 0 0 0 0 0 . 0 .
+		. . . . 0 . . . 0 . . . 0 .
+		. . . . 0 . 0 . 0 0 0 0 0 0
+		. . . 0 0 0 0 0 0 . . . 0 .
+		. . . . 0 . 0 . 0 . . . . .
+		. . . . . . 0 . . . . . . .
+		. . . 0 0 0 0 0 . . . . . .
+		. . . 0 . . 0 . . . . . . .
+		. 0 . 0 . . . . . . . . . .
+		0 0 0 0 0 0 . . . . . . . .
+		. 0 . 0 . . . . . . . . . .
+		. 0 . . . . . . . . . . . .
+	exolve-across:
+		3 A notebook that&apos;s oddly plaid. (3)
+		4 Monster gives nothing for you to classic TV family. (7)
+		7 I heard Gil did something covered in precious metal. (6)
+		8 Almost process broken remains. (6)
+		9 Liquid put back in secret awning. (5)
+		11 A ceramics maker occupies the depot terminal. (6)
+	exolve-down:
+		1 Depression of 55 Romans in Yale, confused. (6)
+		2 A mason loses direction and gets some sleep on the river. (6)
+		5 Wildcat star of the links. (5)
+		6 Spooner yells, &ldquo;Die, spur!&rdquo; to creepy-crawly. (6)
+		9 Black&apos;s opponent has no right to writhe around. (5)
+		10 Dan leaves fondant for Arial. (4)
+	exolve-cell-size: 35 35
+	exolve-option: color-active:lightyellow
+  exolve-option: color-input:royalblue color-arrow:lightyellow
+  exolve-option: color-light-label-input:white
+  exolve-option: color-light-text-input:white
+  exolve-option: color-button:navy color-button-hover:purple
+	exolve-end
+
+======REPLACE WITH YOUR PUZZLE ABOVE======
+`);
+</script>
+</body>
+</html>
