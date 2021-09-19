@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!--
+MIT License
+Copyright (c) 2019 Viresh Ratnakar
+See the full Exolve license notice in exolve-m.js.
+-->
+<link rel="stylesheet" type="text/css" href="exolve/exolve-m.css"/>
+<script src="exolve/exolve-m.js"></script>
+
+<title>Treasure Map by Darren Miller</title>
+
+<style>
+	body {
+		font-family: "Gill Sans", sans-serif;
+	}
+</style>
+</head>
+<body>
+
+<script>
+function customizeExolve(p) {
+	let c = [
+		p.addCellText(10, 5, '1', 11, 6, false, true),
+		p.addCellText(1, 4, '2', 11, 6, false, true),
+		p.addCellText(1, 1, '3', 11, 6, false, true),
+		p.addCellText(3, 5, '4', 11, 6, false, true),
+		p.addCellText(2, 1, '5', 11, 6, false, true),
+		p.addCellText(8, 5, '6', 11, 6, false, true),
+		p.addCellText(6, 11, '7', 11, 6, false, true),
+		p.addCellText(0, 9, '8', 11, 6, false, true),
+		p.addCellText(11, 12, '9', 11, 6, false, true),
+		p.addCellText(12, 8, '10', 11, 11, false, true),
+		p.addCellText(12, 0, '11', 11, 11, false, true),
+		p.addCellText(7, 4, '12', 11, 11, false, true),
+		p.addCellText(4, 6, '13', 11, 11, false, true)
+	]
+	
+	c.forEach(element => element.style.stroke = 'darkred')
+	
+	 p.cellActivator(0,0)
+		
+}
+createExolve(`
+======REPLACE WITH YOUR PUZZLE BELOW======
+
+exolve-begin
+  exolve-id: treasure-map-2021
+  exolve-title: Treasure Map
+  exolve-setter: Darren Miller
+  exolve-copyright: 2021 Darren Miller
+  exolve-credits: Testers: Anthony H, Matt L, Greg D, sng
+  exolve-width: 13
+  exolve-height: 13
+  exolve-preamble:
+	  <p>This is rather strange for a pirate&apos;s treasure map. It seems 
+		rather cryptic, but perhaps it can help you find the treasure!</p>
+		<p>This is only the first part of the puzzle. 
+		You can see the rest of the puzzle, submit your final answer, or get hints at 
+		<a href='https://darrenspuzzles.blogspot.com/2021/09/treasure-map.html' 
+		title='Go to Darren&apos;s Puzzles blog' target='_blank'>Darren&apos;s Puzzles blog</a>.</p>
+  exolve-color: yellow f3 e12 b12 f10 b11 f5 l7 j13 m2 i1 a1 e6 g9
+  exolve-option: color-active:lightyellow
+  exolve-option: color-input:royalblue color-arrow:lightyellow
+  exolve-option: color-light-label-input:white
+  exolve-option: color-light-text-input:white
+  exolve-option: color-button:navy color-button-hover:purple
+  exolve-option: clues-panel-lines:20
+  exolve-relabel:
+    clear: Clear this word
+    reveal: Show hint for method(s)
+  exolve-grid:
+	 0 0 0_0|0 0_0_0 0 0 0 0_0_
+	 0 0 0_0|0 0_0_0 0|0 0 0_0 
+	 0|0|0 0 0 0_0_0 0|0 0 0_0 
+	 0 0_0 0 0+0 0_0 0 0 0+0|0 
+	 0+0 0 0_0_0 0|0_0_0_0_0 0 
+	 0 0 0 0+0_0 0 0 0_0+0|0|0 
+	 0|0 0 0_0_0|0|0 0_0_0 0|0 
+	 0|0|0+0_0_0_0 0 0+0_0 0 0_
+	 0 0 0_0 0 0|0_0 0_0 0 0+0 
+	 0|0+0 0 0 0 0_0+0 0 0 0 0 
+	 0 0_0 0|0 0 0_0_0 0 0+0|0 
+	 0_0_0 0|0 0 0_0_0|0 0_0 0 
+	 0 0 0 0 0 0 0 0 0|0 0 0 0                            
+	exolve-across:
+		1  Your spirit is terribly lousy? Not entirely! (4)
+		4  I help oxen warped by one with strange friends. (9)
+		9  I am going back around ten to get a long dress. (4)
+		10  Ren ejects from maneuver, turning purple. (5)
+		11  Chooses spinning tops. (4)
+		13  Dances over to partner&apos;s child. (7)
+		14  Helpful utensil found in hollow toadstool. (4)
+		15  Wood used to make Kafka&apos;s pencil. (5)
+		16  Adrien danced when it came down. (6)
+		18  Warning! The rat had a heart transplant! (6)
+		20  According to Spooner, Lee ducks the best. (6)
+		21  Sketched detective Nancy. (4)
+		22  Beautifies even as angry old man flips. (6)
+		25  Investigators rarely ask questions involving leaders of the Middle East. (5)
+		26  Strive to decapitate Rex and Bert. (5)
+		27  Heard composer Johann Sebastian croon about prizefighting. (6)
+		28  Sore about products of mine. (4)
+		29  Cuckoo roosts on trunks. (6)
+		33  Mixing acid and scrubbing a revealing photograph. (6)
+		36  Uh, Paul, I hear, is overcome with horror. (6)
+		37  Shirtless Latina exercises on the veranda. (5)
+		39  Fraudster even pulls a trick. (4)
+		40  Former spouse you penalize for showing off. (7)
+		41  Work hard with 14A, but nothing is important at first. (4)
+		42  Get excited in some carousels. (5)
+		43  Challenge to lead a better life at last. (4)
+		44  Shaking an ax helps Greeks in military formations. (9)
+		45  Yearn unendingly for a period of time. (4)
+	exolve-down:
+		1  Oddly, summer air can leave a streak. (5)
+		2  Partially drenches mighty trees. (4)
+		3  Low-fat and right to measure. (5)
+		4  Superhero team consisting of ten guys. (1-3)
+		5  Goose egg? Nothing is that shape! (5)
+		6  Tubes smuggled in open neckwear. (5)
+		7  Lodging in a hovel until five leave for a short time. (5)
+		8  One mixed-up dope almost was a player. (4)
+		12  Vessel wandering around east has slip covers. (7)
+		13  Gasp! He really has a ball! (6)
+		16  Root that half of radishes cross. (5)
+		17  Lexi lost her top, and Ted departed. (6)
+		18  Trot in, sort of like a sea-god. (6)
+		19  In Appomattox, icebergs are dangerous. (5)
+		21  Change crazy dictators and eliminate California! (7)
+		23  Learn about things related to the kidneys. (5)
+		24  Making mistakes when sampling another ringtone. (6)
+		30  Magical chant to put letters in order. (5)
+		31  A musical performance takes some cooperation. (5)
+		32  Boy takes ax to an Englishman of German descent. (5)
+		34  Fine! Dungeons &amp; Dragons with Yvette first, but give back a diamond! (5)
+		35  Setter trades two 50s for a kiss at the social hour. (5)
+		36  Capitals of any state in Argentina where many Indians live. (4)
+		37  Even old ideas contain falsehoods. (4)
+		38  Restaurateur offers a distinctive atmosphere. (4)
+exolve-end
+
+======REPLACE WITH YOUR PUZZLE ABOVE======
+`);
+</script>
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<HTML lang="en">
+<TITLE>Treasure Map hints</TITLE>
+<BODY>
+<STYLE>
+body {
+	text-align:center
+}
+
+table {
+	margin-left: auto;
+  margin-right: auto;
+  min-width: 600px;
+	
+	-webkit-touch-callout: none; /* iOS Safari */
+	  -webkit-user-select: none; /* Safari */
+	   -khtml-user-select: none; /* Konqueror HTML */
+	     -moz-user-select: none; /* Firefox */
+	      -ms-user-select: none; /* Internet Explorer/Edge */
+	          user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+
+tr, th, td {
+    padding: 2px 10px 2px 10px;
+    text-align: center;
+}
+
+th.ad {
+	text-align:left;
+	padding-top:5px;
+}
+
+h2 {
+	padding-bottom: 0px;
+}
+
+th, td {
+    border-bottom: grey 1px solid;
+}
+
+tr.hint > td {
+	color: #333333;
+	background-color: #333333;
+}
+
+tr.hint > td.revealed { 
+	color: #000000;
+	background-color: #ffffff;
+  padding: 2px 10px 2px 10px;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	transition: background-color .2s;
+}
+</STYLE>
+<script>
+window.onload = init;
+
+function init() {
+
+	let data = document.getElementById("data");
+	if(!data) { return;}
+	
+	let rows = data.innerText.split(/\r?\n/);
+
+	let table = document.getElementById("hints");
+	let tr;
+	
+	for(let i=0; i < rows.length; i++) {
+		let fields = rows[i].split(/\t/);
+		if(fields[0] == '') {}
+		else if(fields[0].match(/^ACROSS$|^DOWN$/i)) {
+			tr = table.insertRow(-1);
+			tr.innerHTML = "<TH colspan=4 class='ad'><h2>" 
+										+ fields[0].charAt(0).toUpperCase() 
+										+ fields[0].slice(1).toLowerCase()
+										+ "</h2></TH>";
+			tr = table.insertRow(-1)
+			tr.innerHTML = "<TH>Clue</TH><TH>indicator(s)</TH><TH>method(s)</TH><TH>definition(s)</TH>"							
+		} else {
+			tr = table.insertRow(-1);
+			tr.classList.add('hint');
+			tr.innerHTML = "<TH>" + fields[0] + "</TH><TD>"
+							+ fields.slice(1).join('</TD><TD>') + "</TD>";
+		}
+	}
+	
+	addHideControl();
+}
+
+function addHideControl() {
+	var cells = document.getElementsByTagName('td');
+
+	for (let i=0; i < cells.length; i++) {
+	  cells[i].onclick = function() { toggleHide(this) };
+	}
+}	
+	
+function toggleHide(ctl) {
+	if(ctl.classList.contains('revealed')) {
+		ctl.classList.remove('revealed');
+	}	else {
+		ctl.classList.add('revealed');
+	}
+}
+
+function setAll(ctl) {
+
+	let bool = ctl.value == 'Hide All';
+	var cells = document.getElementsByTagName('td');
+	
+	for (let i=0; i < cells.length; i++) {
+		if(bool) {
+			if(cells[i].classList.contains('revealed')) {
+				cells[i].classList.remove('revealed');
+			}
+		} else {
+			if(!cells[i].classList.contains('revealed')) {
+				cells[i].classList.add('revealed');
+			}
+		}
+	}
+}
+</script>
+
+<h1>Treasure Map</h1>
+	<p>These are hints for the cryptic crossword portion of this puzzle. 
+		You can see the puzzle or submit your final answer at 
+		<a href='https://darrenspuzzles.blogspot.com/2021/09/treasure-map.html' 
+		title='Go to Darren&apos;s Puzzles blog' target='_blank'>Darren&apos;s Puzzles blog</a>.</p>
+<p>Cryptic clue hints (click to reveal):</p>
+<input class="btn" type="button" value="Show All" onclick="setAll(this)" />
+<input class="btn" type="button" value="Hide All" onclick="setAll(this)" />
+<TABLE id=hints>
+</TABLE>
+<PRE id=data hidden>
+ACROSS
+A1	terribly, not entirely	anagram, deletion	your spirit
+A4	warped	anagram	one with strange friends
+A9	going back, around	reversal, insertion	a long dress
+A10	ejects, turning	deletion, anagram	purple
+A11	spinning	anagram	chooses
+A13	none	charades	partner's child
+A14	hollow	deletion	a helpful utensil
+A15	used to make	hidden	wood
+A16	danced	anagram	it came down
+A18	heart transplant	swap	warning
+A20	According to Spooner	spoonerism	the best
+A21	none	double def	sketched, detective Nancy
+A22	even, flips	evens, reversal	beautifies
+A25	leaders	initials	of the Middle East
+A26	decapitate	deletion	strive
+A27	heard	homophone	prizefighting
+A28	about	anagram	products of mine
+A29	cuckoo	anagram	trunks
+A33	mixing, scrubbing	anagram, deletion	revealing photograph
+A36	I hear	homophone	overcome with horror
+A37	-less, exercises	deletion, anagram	veranda
+A39	even	evens	trick
+A40	none	charades	showing off
+A41	but... is.. at first	substitution	work hard
+A42	some	hidden	get excited
+A43	at last	final letters	challenge
+A44	shaking	anagram	Greeks in military formations
+A45	unendingly	deletion	period of time
+			
+DOWN			
+D1	oddly	odds	leave a streak
+D2	partially	deletion	mighty trees
+D3	none	charades	measure
+D4	none	charades	superhero team
+D5	none	charades	that shape
+D6	smuggled in	hidden	tubes
+D7	leave for	substitution	lodging
+D8	mixed-up, almost	anagram, deletion	a player
+D12	wandering, around	anagram, insertion	slip covers
+D13	has	hidden	a ball
+D16	half	deletion	root
+D17	lost her top	deletion	departed
+D18	sort of	anagram	a sea-god
+D19	in	hidden	dangerous
+D21	crazy, eliminate	anagram, deletion	change
+D23	about	anagram	things related to the kidneys
+D24	sampling	hidden	making mistakes
+D30	none	double def	magical chant, put letters in order
+D31	some	hidden	musical performance
+D32	takes	insertion	Englishman of German descent
+D34	give back	charades, deletion	fine
+D35	trades	substitution	social hour
+D36	capitals	initials	where Indians live
+D37	even	evens	falsehoods
+D38	offers	hidden	distinctive atmosphere
+</PRE>
+
+</BODY>
+</HTML>
