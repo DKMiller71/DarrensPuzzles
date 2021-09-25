@@ -21,6 +21,48 @@ Version: Exolve v1.19 September 9 2021
 <body>
 
 <script>
+function customizeExolve(puz) {
+	recolorBlockedCells(puz, 'white');
+}	
+
+function recolorBlockedCells(puz, colorname) {
+	
+  for (let row = 0; row < puz.gridHeight; row++) {
+    for (let col = 0; col < puz.gridWidth; col++) {
+      if (puz.grid[row][col].isLight) {
+        continue;
+      }
+      const rect = document.createElement('div');
+      rect.className = 'xlv-coloured-cell';
+
+      let isBordT = row>0 && puz.grid[row-1][col].isLight;
+      let isBordL = col>0 && puz.grid[row][col-1].isLight;
+      let isBordR = col<puz.gridWidth-1 && puz.grid[row][col+1].isLight;
+      let isBordB = row<puz.gridHeight-1 && puz.grid[row+1][col].isLight;
+
+      const cellLeft = puz.cellLeftPos(col, 0) + (isBordL ? 2*puz.GRIDLINE : 0);
+      const cellTop = puz.cellTopPos(row, 0) + (isBordT ? 2*puz.GRIDLINE : 0);
+
+      rect.style.left =  '' + cellLeft + 'px';
+      rect.style.top = '' + cellTop + 'px';
+      rect.style.margin = '0px';
+
+			let thisW = puz.cellW + 2*puz.GRIDLINE - ((isBordL?1:0) + (isBordR?1:0) * puz.GRIDLINE);
+			let thisH = puz.cellH + 2*puz.GRIDLINE - ((isBordT?1:0) + (isBordB?1:0) * puz.GRIDLINE);
+
+      rect.style.width = '' + thisW + 'px';
+      rect.style.height = '' + thisH + 'px';
+ 
+			
+      rect.style.backgroundColor = colorname;
+      rect.style.opacity = '1.0';
+      puz.colourGroup.appendChild(rect);
+    }
+  }
+  puz.colourGroup.style.display = '';
+	
+}	
+	
 createExolve(`
 ======REPLACE WITH YOUR PUZZLE BELOW======
 
@@ -77,6 +119,7 @@ exolve-begin
   exolve-option: color-light-label-input:white
   exolve-option: color-light-text-input:white
   exolve-option: color-button:navy color-button-hover:purple
+  exolve-option: color-background:black
 	exolve-end
 
 ======REPLACE WITH YOUR PUZZLE ABOVE======
