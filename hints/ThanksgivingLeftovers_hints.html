@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<HTML lang="en">
+<TITLE>Thanksgiving Leftovers hints</TITLE>
+<BODY>
+<STYLE>
+body {
+	text-align:center
+}
+
+table {
+	margin-left: auto;
+  margin-right: auto;
+  min-width: 600px;
+	
+	-webkit-touch-callout: none; /* iOS Safari */
+	  -webkit-user-select: none; /* Safari */
+	   -khtml-user-select: none; /* Konqueror HTML */
+	     -moz-user-select: none; /* Firefox */
+	      -ms-user-select: none; /* Internet Explorer/Edge */
+	          user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+
+tr, th, td {
+    padding: 2px 10px 2px 10px;
+    text-align: center;
+}
+
+th.ad {
+	text-align:left;
+	padding-top:5px;
+}
+
+h2 {
+	padding-bottom: 0px;
+}
+
+th, td {
+    border-bottom: grey 1px solid;
+}
+
+tr.hint > td {
+	color: #333333;
+	background-color: #333333;
+}
+
+tr.hint > td.revealed { 
+	color: #000000;
+	background-color: #ffffff;
+  padding: 2px 10px 2px 10px;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	transition: background-color .2s;
+}
+</STYLE>
+<script>
+window.onload = init;
+
+function init() {
+
+	let data = document.getElementById("data");
+	if(!data) { return;}
+	
+	let rows = data.innerText.split(/\r?\n/);
+
+	let table = document.getElementById("hints");
+	let tr;
+	
+	for(let i=0; i < rows.length; i++) {
+		let fields = rows[i].split(/\t/);
+		if(fields[0] == '') {}
+		else if(fields[0].match(/^ACROSS$|^DOWN$/i)) {
+			tr = table.insertRow(-1);
+			tr.innerHTML = "<TH colspan=4 class='ad'><h2>" 
+										+ fields[0].charAt(0).toUpperCase() 
+										+ fields[0].slice(1).toLowerCase()
+										+ "</h2></TH>";
+			tr = table.insertRow(-1)
+			tr.innerHTML = "<TH>Clue</TH><TH>indicator(s)</TH><TH>method(s)</TH><TH>definition(s)</TH>"							
+		} else {
+			tr = table.insertRow(-1);
+			tr.classList.add('hint');
+			tr.innerHTML = "<TH>" + fields[0] + "</TH><TD>"
+							+ fields.slice(1).join('</TD><TD>') + "</TD>";
+		}
+	}
+	
+	addHideControl();
+}
+
+function addHideControl() {
+	var cells = document.getElementsByTagName('td');
+
+	for (let i=0; i < cells.length; i++) {
+	  cells[i].onclick = function() { toggleHide(this) };
+	}
+}	
+	
+function toggleHide(ctl) {
+	if(ctl.classList.contains('revealed')) {
+		ctl.classList.remove('revealed');
+	}	else {
+		ctl.classList.add('revealed');
+	}
+}
+
+function setAll(ctl) {
+
+	let bool = ctl.value == 'Hide All';
+	var cells = document.getElementsByTagName('td');
+	
+	for (let i=0; i < cells.length; i++) {
+		if(bool) {
+			if(cells[i].classList.contains('revealed')) {
+				cells[i].classList.remove('revealed');
+			}
+		} else {
+			if(!cells[i].classList.contains('revealed')) {
+				cells[i].classList.add('revealed');
+			}
+		}
+	}
+}
+</script>
+
+<h1>Thanksgiving Leftovers</h1>
+	<p>These are hints for the cryptic crossword. 
+		You can submit your final answer at 
+		<a href='https://darrenspuzzles.blogspot.com/2021/11/thanksgiving-leftovers.html' 
+		title='Go to Darren&apos;s Puzzles blog' target='_blank'>Darren&apos;s Puzzles blog</a>.</p>
+<p>Cryptic clue hints (click to reveal):</p>
+<input class="btn" type="button" value="Show All" onclick="setAll(this)" />
+<input class="btn" type="button" value="Hide All" onclick="setAll(this)" />
+<TABLE id=hints>
+</TABLE>
+<PRE id=data hidden>
+ACROSS			
+A1	loose	anagram	fails to remember
+A5	around	insertion	appreciation
+A10	extremely	deletion	the span
+A11	in	insertion	an immature insect
+A13	around	anagram	film
+A14	none	charades	have children
+A16	leaders	initials	Hindu proverb
+A17	out	deletion	in favor
+A18	arrangement	anagram	sweet
+A19	oddly	odds	imagined it
+A21	almost, crazy, lose	deletion, anagram	polls
+A22	wild	anagram	sponge
+A26	none	charades	puzzle
+A28	hiding in	hidden	brilliant
+A30	nonsense	anagram	much simpler
+A32	about	anagram	belief
+A33	changed top	substitution	actor Danson
+A34	stirred	anagram	started the pot
+A35	apparently	homophone	hum
+A36	leave	deletion	this state
+A37	some	hidden	alcohol
+A38	in	insertion	wipe out
+A39	tangled	anagram	in knots
+A40	none	double definition	kisses, religious symbols
+DOWN			
+D1	turmoil	deletion, anagram	destruction
+D2	none, stir up	charades, anagram	that instrument
+D3	jaunty	anagram	movie critic
+D4	taking-from	deletion	frugality
+D5	out	anagram	big cats
+D6	about, included	anagram, insertion	ecstatic
+D7	backed up	reversal, charades	lumps
+D8	kind of	anagram	lecher
+D9	even, when upset	evens, reversal	woo
+D12	involving	anagram	engaged in sport
+D14	leaves for, first	substitution, deletion	a little sob
+D15	revolutionary, about	reversal, insertion	squash
+D20	none	charades	most calm
+D22	circulating	anagram	nationwide
+D23	back, inside	reversal, hidden	following
+D24	could be	anagram	they&apos;ll just keep everything
+D25	when topless	deletion	classic
+D26	none, outskirts of	charades, deletion	trap
+D27	none	charades	silly fools
+D29	having no, none	deletion, charades	bound up again
+D30	none, recalled	charades, reversal	climbing equipment
+D31	strange, lost the	anagram, deletion	it happens
+D32	had	hidden	wooden box
+D34	in the end	final letters	noble women
+</PRE>
+
+</BODY>
+</HTML>
