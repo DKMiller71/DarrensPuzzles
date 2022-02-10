@@ -16,6 +16,8 @@ See the full Exolve license notice in exolve-m.js.
 <style>
 	body {
 		font-family: "Gill Sans", sans-serif;
+		background: rgb(169,164,249);
+		background: linear-gradient(10deg, rgba(169,164,249,1) 0%, rgba(189,185,250,1) 6%, rgba(240,239,254,1) 20%, rgba(255,255,255,1) 35%, rgba(239,239,255,1) 83%, rgba(172,172,255,1) 90%, rgba(136,136,255,1) 95%, rgba(0,0,242,1) 100%);
 	}
 </style>
 </head>
@@ -25,151 +27,8 @@ See the full Exolve license notice in exolve-m.js.
 
 <script>
 function customizeExolve(puz) {
-    insertBackgroundForLightCells(puz, 'darkred', 'black');
+    redrawLinesForLightCells(puz, 'darkred', 'black');
 } 
-function insertBackgroundForLightCells(puz, innercolor, outercolor) {
-
-  // inner lines:
-
-	  const thisW = puz.cellW + 2*puz.GRIDLINE;
-	  const thisH = puz.cellH + 2*puz.GRIDLINE;
-
-	const lineGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-  puz.svg.appendChild(lineGroup);
-	
-  for (let row = 0; row < puz.gridHeight; row++) {
-    for (let col = 0; col < puz.gridWidth; col++) {
-      if (!puz.grid[row][col].isLight) { continue; }
-
-      const cellL = puz.cellLeftPos(col, 0);
-      const cellT = puz.cellTopPos(row, 0);
-
-      const rect = 
-        document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-
-      rect.setAttributeNS(null, 'x', cellL);
-      rect.setAttributeNS(null, 'y', cellT);
-      rect.setAttributeNS(null, 'width', thisW);
-      rect.setAttributeNS(null, 'height', thisH);
-      rect.setAttributeNS(null, 'fill', innercolor);
-			puz.background.after(rect);
-    }
-  }
-
-  // outer lines:
-  
-  	const barW = 1.5*puz.GRIDLINE;
-
-  for (let row = 0; row < puz.gridHeight; row++) {
-    for (let col = 0; col < puz.gridWidth; col++) {
-      if (!puz.grid[row][col].isLight) { continue; }
-
-      const cellL = puz.cellLeftPos(col, 0);
-      const cellT = puz.cellTopPos(row, 0);
-      const cellR = puz.cellLeftPos(col+1, 0);
-      const cellB = puz.cellTopPos(row+1, 0);
-
-      // Top line (only on first row or cell in previous row blank):
-      
-      if(hasTopLine(puz, row, col)) {
-  	    const line = 
-        	document.createElementNS('http://www.w3.org/2000/svg', 'line');
-	      	line.setAttributeNS(null, 'x1', Math.max(0,cellL-(meetTopLeft(puz, row, col)?barW:0)));
-      		line.setAttributeNS(null, 'y1', cellT);
-      		line.setAttributeNS(null, 'x2', cellR+(meetTopRight(puz, row, col)?barW:1));
-		     	line.setAttributeNS(null, 'y2', cellT);
-		     	line.setAttributeNS(null, 'stroke', outercolor);
-		     	line.setAttributeNS(null, 'stroke-width', 2*barW);
-				lineGroup.appendChild(line);
-      }
-
-      // Left line (only on left column or cell in previous column blank):
-      
-      if(hasLeftLine(puz, row, col)) {
-  	    const line = 
-        	document.createElementNS('http://www.w3.org/2000/svg', 'line');
-	      	line.setAttributeNS(null, 'x1', cellL);
-      		line.setAttributeNS(null, 'y1', Math.max(0,cellT-(meetTopLeft(puz, row, col)?barW:0)));
-      		line.setAttributeNS(null, 'x2', cellL);
-		     	line.setAttributeNS(null, 'y2', cellB+(meetBottomLeft(puz, row, col)?barW:1));
-		     	line.setAttributeNS(null, 'stroke', outercolor);
-		     	line.setAttributeNS(null, 'stroke-width', 2*barW);
-				lineGroup.appendChild(line);
-      }
-
-      // Bottom line (last row, bottom bar, or cell in next row blank):
-      
-      if(hasBottomLine(puz, row, col)) {
-  	    const line = 
-        	document.createElementNS('http://www.w3.org/2000/svg', 'line');
-	      	line.setAttributeNS(null, 'x1', Math.max(0,cellL-(meetBottomLeft(puz, row, col)?barW:0)));
-      		line.setAttributeNS(null, 'y1', cellB);
-      		line.setAttributeNS(null, 'x2', cellR+(meetBottomRight(puz, row, col)?barW:1));
-		     	line.setAttributeNS(null, 'y2', cellB);
-		     	line.setAttributeNS(null, 'stroke', outercolor);
-		     	line.setAttributeNS(null, 'stroke-width', 2*barW);
-				lineGroup.appendChild(line);
-      }
-
-      // Right line (last column, after bar, or cell in next column blank):
-      
-      if(hasRightLine(puz, row, col)) {
-  	    const line = 
-        	document.createElementNS('http://www.w3.org/2000/svg', 'line');
-	      	line.setAttributeNS(null, 'x1', cellR);
-      		line.setAttributeNS(null, 'y1', Math.max(0,cellT-(meetTopRight(puz, row, col)?barW:0)));
-      		line.setAttributeNS(null, 'x2', cellR);
-		     	line.setAttributeNS(null, 'y2', cellB+(meetBottomRight(puz, row, col)?barW:1));
-		     	line.setAttributeNS(null, 'stroke', outercolor);
-		     	line.setAttributeNS(null, 'stroke-width', 2*barW);
-				lineGroup.appendChild(line);
-      }
-    }
-  }
-}
-
-function checkIsLight(puz, row, col) {
-	return (cellInRange(puz, row, col) && puz.grid[row][col].isLight);
-}
-function checkHasUnder(puz, row, col) {
-	return (cellInRange(puz, row, col) && puz.grid[row][col].hasBarUnder);
-}
-function checkHasAfter(puz, row, col) {
-	return (cellInRange(puz, row, col) && puz.grid[row][col].hasBarAfter);
-}
-function cellInRange(puz, row, col) {
-	return ( row >= 0 && row < puz.gridHeight && col >= 0 && col < puz.gridWidth)
-}
-function hasTopLine(puz, row, col) {
-	return (row == 0 || !checkIsLight(puz, row-1, col));
-}
-function hasLeftLine(puz, row, col) {
-	return (col == 0 || !checkIsLight(puz, row, col-1));
-}
-function hasBottomLine(puz, row, col) {
-	return (row == puz.gridHeight-1 || row < 0 || 
-					( checkHasUnder(puz, row, col) || !checkIsLight(puz, row+1, col)));
-}
-function hasRightLine(puz, row, col) {
-	return (checkHasAfter(puz, row, col) || !checkIsLight(puz, row, col+1));
-}
-function meetTopLeft(puz, row, col) {
-	return ( hasTopLine(puz, row, col-1) || hasBottomLine(puz, row-1, col-1)
-					|| hasRightLine(puz, row, col-1) || hasRightLine(puz, row-1, col-1) );
-}
-function meetTopRight(puz, row, col) {
-	return ( hasTopLine(puz, row, col+1) || hasBottomLine(puz, row-1, col+1)
-					|| hasLeftLine(puz, row, col+1) || hasLeftLine(puz, row-1, col+1) );
-}
-function meetBottomLeft(puz, row, col) {
-	return ( (checkHasUnder(puz, row, col) && checkHasAfter(puz, row, col))
-					|| hasBottomLine(puz, row, col-1) || hasTopLine(puz, row+1, col-1)
-					|| hasRightLine(puz, row, col-1) || hasRightLine(puz, row+1, col-1) );
-}
-function meetBottomRight(puz, row, col) {
-	return ( hasBottomLine(puz, row, col+1) || hasTopLine(puz, row+1, col+1)
-					|| hasLeftLine(puz, row, col+1) || hasLeftLine(puz, row+1, col+1) );
-}
 
 createExolve(`
 ======REPLACE WITH YOUR PUZZLE BELOW======
@@ -179,11 +38,16 @@ exolve-begin
   exolve-title: Cross My Heart
   exolve-setter: Darren Miller
   exolve-copyright: 2022 Darren Miller
+  exolve-credits: Testers: Matt K, Greg D
   exolve-width: 15
   exolve-height: 15
   exolve-preamble:
-		No clues are provided for 23A and 24A. You must solve the rest
-		of the puzzle to reveal the final riddle.
+		<ul><li>No clues are provided for 23A and 24A. You must solve the rest
+		of the puzzle to reveal the final riddle.</li>
+		<li>You can submit your final answer or get hints at 
+		<a href='https://darrenspuzzles.blogspot.com/2022/02/cross-my-heart.html' 
+		title='Go to Darren&apos;s Puzzles blog' target='_blank'>Darren&apos;s Puzzles blog</a>.</li>
+		</ul>
   exolve-option: ignore-enum-mismatch
   exolve-option: color-active:lightyellow
   exolve-option: color-input:royalblue color-arrow:lightyellow
@@ -195,8 +59,8 @@ exolve-begin
   exolve-color: hotpink a11 b11 c11 d11 e11 f11 g11 h11 i11 j11 k11 l11 m11 n11 o11
   exolve-color: hotpink a10 b10 c10 d10 e10 f10 g10 h10 i10 j10 k10 l10 m10 n10 o10
   exolve-option: color-background:transparent
-  exolve-option: offset-top:3
-  exolve-option: offset-left:3
+  exolve-option: offset-top:2
+  exolve-option: offset-left:2
   exolve-relabel:
     clear: Clear this word
     reveal: Show hint for method(s)
@@ -217,50 +81,50 @@ exolve-begin
 		 . . . . . . 0 0 0 . . . . . . 
 		 . . . . . . . 0 . . . . . . . 
 	exolve-across:
-		1  Don&apos;t eat anything in Belfast. (4)
-		4  Smear leaders by lampooning unusual remarks. (4)
+		1  Don&#8217;t eat anything in Belfast. (4)
+		4  Smear leaders of Belgium, lampooning unusual remarks. (4)
 		7  Sneak around this pothole oddly. (6)
 		9  Mismanage fee and cause a clamor. (6)
 		11  Quiet, everyone gets a shroud. (4)
 		12  Playfully performs foxtrot out in one-pieces. (7)
-		14  Sneak attack made some afraid. (4)
-		16  Ditzy aide had a stroke of genius. (4)
-		18  At sales, doctors get some travel guides. (7)
-		21  It stinks when Theodore lost the last time. (4)
+		14  Sneak attack has some afraid. (4)
+		16  Ditzy aide has a stroke of genius. (4)
+		18  Some travel guides are damaged at sales. (7)
+		21  No, the last plane left, Theodore - it stinks. (4)
 		23  <i>SEE INSTRUCTIONS</i>
 		24  <i>SEE INSTRUCTIONS</i>
 		31  Repeat the multiple choice section. (4)
-		32  Trio stirs up violent protest. (4)
+		32  Trio stirred up a violent protest. (4)
 		33  In America, licorice is mottled. (6)
 		34  Like-minded, even wounded. (3)
 		36  Yelped wildly in a low voice. (6)
 		37  Tricia leaves patricians for cookware. (4)
-		38  Dismal tune caused ridge to crumble. (5)
-		40  The god of war makes armies lose heart. (4)
-		41  Some parts of fish make girl sick. (4)
+		38  Dismal tune when ridge crumbled. (5)
+		40  The god of war&#8217;s armies lose heart. (4)
+		41  Sick after girl has piece of fish. (4)
 		42  Trees on the borders of Oklahoma and Kansas. (4)
-		43  The burden on America. (4)
+		43  Burden on America. (4)
 		45  Losing steam, webmaster stirred to make coffee. (4)
 		46  A tree found within roadmap legends. (5)
 		47  Skid around the capital of England, then went downhill fast. (5)
 		48  The goal may have been found at last. (3)
 	exolve-down:
-		1  Cut of meat that I left stewing. (5)
+		1  Cut of meat I left stewing. (5)
 		2  Warts came up in a tube. (5)
 		3  Blow the horn at hotel - it bites! (5)
 		4  Cynic abandons cybernetic headpiece. (5)
-		5  Silly Sal&apos;s got old rope. (5)
+		5  Silly Sal&#8217;s got old rope. (5)
 		6  Prepared to skim the front of yearbook. (5)
 		8  Awful night after performance by a doll, for example. (9)
 		10  Accidentally snort fire on the borderlands. (9)
 		11  Spooner says, &ldquo;Nick, pick something for lunch in the park.&rdquo; (6)
-		13  Paid Ron horribly when I left - forgive me? (6)
-		15  Doctor sets out without tea. Why? It&apos;s fashionable. (6)
-		17  Eat your meal with a little tidiness. (4)
+		13  Paid Ron horribly after I left - forgive me? (6)
+		15  Doctor sets out without tea. Why? It&#8217;s fashionable. (6)
+		17  Eat your meal with a little bit of tidiness. (4)
 		19  Take charge of heavy metal. (4)
-		20  Diesel fuel consumes one&apos;s identity. (4)
-		22  Brief, sad announcement about mob hit, having no leads. (4)
-		25  Unusual tale about Charlie is brilliant. (5)
+		20  Diesel fuel consumes one&#8217;s identity. (4)
+		22  Brief, sad announcement of mob hit with no leads. (4)
+		25  Unusual tale about Charlie is a brilliant success. (5)
 		26  Poisons? Sound the alarm bells! (7)
 		27  Gangsters hold sumo wrestling. (8)
 		28  Even odder, R-rated dances make a comeback, beloved. (8)
@@ -268,8 +132,8 @@ exolve-begin
 		30  Yearns for dopes to change, for starters. (5)
 		34  Crude uprising of rebellious characters. (3)
 		35  Exaggerated genius origin! (3)
-		39  Harvesting a grape in disguise. (7)
-		44  Japanese drink for Petes? (4)
+		39  Mixing in grape is getting results. (7)
+		44  Japanese drink for Pete&#8217;s follower? (4)
 		45  Boy went first, then ran. (4)
 exolve-end
 

@@ -16,13 +16,23 @@ Version: Exolve v1.19 September 9 2021
 <script src="exolve/exolve-m.js?v1.19"></script>
 
 <title>A Happy Reset</title>
-
+<style>
+	body {
+		font-family: "Gill Sans", sans-serif;
+		background: rgb(253, 253, 150);
+		background: linear-gradient(10deg, rgba(253, 253, 150,1) 0%, rgba(254, 254, 160,1) 6%, rgba(254,254,200,1) 10%, rgba(255,255,255,1) 15%, rgba(255,255,255,1) 60%, rgba(254,254,200,1) 83%, rgba(253, 253, 170,1) 90%, rgba(253, 253, 160,1) 95%, rgba(253, 253, 150,1) 100%);
+	}
+</style>	
 </head>
 <body>
+<script src="exolve/dkm-exolve-utils.js"></script>
 
 <script>
 function customizeExolve(p) {
-	let c = [
+
+  insertBackgroundForLightCells(p, 'darkpurple');
+
+ 	let c = [
 		p.addCellText(1, 11, '(15)', 10, 33, false, false),
 		p.addCellText(1, 12, '(26)', 10, 33, false, false),
 		p.addCellText(2, 4, '(13,33)', 10, 33, false, false),
@@ -55,8 +65,9 @@ function customizeExolve(p) {
 	]
 	
 	c.forEach(element => element.style.stroke = 'darkred');
-		
-}	
+	c.forEach(element => element.style.strokeWidth = '1');		
+}
+
 createExolve(`
 ======REPLACE WITH YOUR PUZZLE BELOW======
 
@@ -106,7 +117,8 @@ exolve-begin
   exolve-option: color-light-label-input:white
   exolve-option: color-light-text-input:white
   exolve-option: color-button:navy color-button-hover:purple
-	exolve-end
+  exolve-option: color-background:transparent
+exolve-end
 
 ======REPLACE WITH YOUR PUZZLE ABOVE======
 `);

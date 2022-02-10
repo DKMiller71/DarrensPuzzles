@@ -1,4 +1,4 @@
-function insertBackgroundForLightCells(puz, innercolor, outercolor) {
+function redrawLinesForLightCells(puz, innercolor, outercolor) {
 
   // inner lines:
 
@@ -140,4 +140,29 @@ function meetBottomLeft(puz, row, col) {
 function meetBottomRight(puz, row, col) {
 	return ( hasBottomLine(puz, row, col+1) || hasTopLine(puz, row+1, col+1)
 					|| hasLeftLine(puz, row, col+1) || hasLeftLine(puz, row+1, col+1) );
+}
+
+function insertBackgroundForLightCells(puz, colorname) {
+
+  for (let row = 0; row < puz.gridHeight; row++) {
+    for (let col = 0; col < puz.gridWidth; col++) {
+      if (!puz.grid[row][col].isLight) { continue; }
+
+      const cellLeft = puz.cellLeftPos(col, 0);
+      const cellTop = puz.cellTopPos(row, 0);
+      const thisW = puz.cellW + 2*puz.GRIDLINE;
+      const thisH = puz.cellH + 2*puz.GRIDLINE;
+
+      const rect = 
+        document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+
+      rect.setAttributeNS(null, 'x', cellLeft);
+      rect.setAttributeNS(null, 'y', cellTop);
+      rect.setAttributeNS(null, 'width', thisW);
+      rect.setAttributeNS(null, 'height', thisH);
+      rect.setAttributeNS(null, 'fill', colorname);
+
+      puz.background.after(rect);
+    }
+  }
 }
