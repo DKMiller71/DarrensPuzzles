@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!--
+MIT License
+Copyright (c) 2019 Viresh Ratnakar
+See the full Exolve license notice in exolve-m.js.
+-->
+<link rel="stylesheet" type="text/css" href="exolve/exolve-m.css"/>
+<script src="exolve/exolve-m.js"></script>
+
+<title>An En-egg-matic Cryptic by Darren Miller</title>
+
+<style>
+	body {
+		font-family: "Gill Sans", sans-serif;
+		background: rgb(229,224,0);
+		background: linear-gradient(-10deg,
+		 rgba(169,164,0,1) 0%,
+		 rgba(209,205,1,1) 2%,
+		 rgba(240,239,100,1) 5%,
+		 rgba(245,245,255,1) 30%,
+		 rgba(245,245,255,1) 80%,
+		 rgba(239,239,2,1) 93%,
+		 rgba(212,212,5,1) 95%,
+		 rgba(230,230,1,1) 100%)
+		 ;
+	}
+</style>
+</head>
+<body>
+
+<script src="exolve/dkm-exolve-utils.js"></script>
+
+<script>
+function customizeExolve(puz) {
+    redrawLinesForLightCells(puz, 'darkgreen', 'black');
+} 
+
+createExolve(`
+======REPLACE WITH YOUR PUZZLE BELOW======
+
+exolve-begin
+  exolve-id: easter-cryptic-2022
+  exolve-title: An En-egg-matic Cryptic
+  exolve-setter: Darren Miller
+  exolve-copyright: 2022 Darren Miller
+  exolve-width: 13
+  exolve-height: 13
+  exolve-preamble:
+		<ul><li>Once you solve the puzzle, the highlighted squares will give a final riddle.</li>
+		<li>You can submit your final answer or get hints at 
+		<a href='https://darrenspuzzles.blogspot.com/2022/02/cross-my-heart.html' 
+		title='Go to Darren&apos;s Puzzles blog' target='_blank'>Darren&apos;s Puzzles blog</a>.</li>
+		</ul>
+  exolve-option: color-active:lightyellow
+  exolve-option: color-input:royalblue color-arrow:lightyellow
+  exolve-option: color-light-label-input:white
+  exolve-option: color-light-text-input:white
+  exolve-option: color-button:navy color-button-hover:purple
+  exolve-option: clues-panel-lines:20
+  exolve-option: hide-copy-placeholder-buttons
+  exolve-color: fuchsia a7 b6 c5 d6 e7 f6 g5 
+  exolve-color: fuchsia h6 i7 j6 k5 l6 m7
+  exolve-option: color-background:transparent
+  exolve-option: offset-top:2
+  exolve-option: offset-left:2
+  exolve-relabel:
+    clear: Clear this word
+    reveal: Show hint for method(s)
+  exolve-grid:
+		. . . . 0_0 0 0 0_. . . . 
+		. . . 0 0_0 0 0 0_0 . . . 
+		. . 0 0 0 0|0|0 0 0 0 . . 
+		. . 0|0|0 0 0 0 0|0|0 . . 
+		. 0 0 0_0 0+0|0_0 0_0 0 . 
+		. 0|0 0_0_0 0 0 0_0_0|0 . 
+		0 0 0 0 0+0|0|0|0_0 0 0 0 
+		0 0 0_0|0 0 0_0 0|0 0_0 0 
+		0 0 0 0 0|0|0|0|0 0 0 0 0 
+		0 0 0 0|0 0_0 0_0|0 0 0 0 
+		. 0|0|0 0 0_0 0_0 0|0|0 . 
+		. . 0 0 0 0+0|0_0 0 0 . . 
+		. . . . 0 0 0 0 0 . . . . 
+	exolve-across:
+		1  Expert takes questionable antidepressant as interns leave. (5)
+		5  Even D. H. Lawrence uses a seatbelt. (7)
+		7  Lug starts to ovethrow the establishment. (4)
+		9  &ldquo;Oh, woe is me!&rdquo; says a young girl. (4)
+		12  Poetic verse of short hair at the outskirts of Katmandu. (5)
+		13  Stroke some instruments. (5)
+		14  Rages angrily having more wisdom. (5)
+		16  Violent studs beat sensors. (5,4)
+		19  Second-rate street is wide. (5)
+		21  Feisty dance without F by furry snowmen. (5)
+		24  Press heavy metal. (4)
+		25  Most unicorns have calluses. (5)
+		27  Pathway is extremely labyrinthine. (4)
+		28  Arrive at car he crashed. (5)
+		31  Girl left awful bodega to get brick. (5)
+		33  The German hotel? Run! (4)
+		34  Takes tops off cap and iron cover. (5)
+		35  Goes around with big heads. (4)
+		36  Wild sendoff ruffles feathers. (7)
+		37  Section of caesarean section. (4)
+		38  Oddly fear the inevitable conclusion. (4)
+		39  Pygmalion playwright left? That&#8217;s a wrap! (5)
+	exolve-down:
+		2  Vision of a Mr. Ed remake. (5)
+		3  Arrange ginseng in eerie surroundings. (8)
+		4  Speak about mountaintops. (5)
+		5  Time frame that belongs to us, apparently. (4)
+		6  Some of Charlies Angels performed. (4)
+		7  Ink can be funny to a tot. (6)
+		8  As a result, Thaddeus dropped dead. (4)
+		10  Lulu paid fifty for a feast. (4)
+		11  Sis, eat pie, then a little nap. (6)
+		13  Silly rules are lacking energy and bizzare. (7)
+		15  Spray of color in messy bar I own. (7)
+		17  Time with poor revolutionary squad. (5)
+		18  No big change? That&#8217;s right! (5)
+		19  Black or blue, perhaps, at edges of billboard. (4)
+		20  American chorus featuring heavy metal. (6)
+		22  The first sleet storm engulfs the capital of Denmark. (6)
+		23  Looks both ways. (4)
+		25  Irritates coffee shops around hospital. (6)
+		26  First sergeant and Capone have footwear. (6)
+		29  A large landmass is back in the borders of Alabama. (4)
+		30  Goddess has a fiery outburst after I left. (5)
+		32  Big oaf&#8217;s too big for the finals. (4)	
+	exolve-end
+
+======REPLACE WITH YOUR PUZZLE ABOVE======
+`);
+</script>
+</body>
+</html>
