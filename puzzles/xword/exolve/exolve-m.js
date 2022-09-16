@@ -69,8 +69,13 @@ var exolvePuzzles;
  *     at the top of the page (normally just 0).
  * maxDim If non-zero, use this as the suggested max size of the container
  *    in px.
- * saveState If false, state is not saved in local storage. Useful for
- *    creating temporary/preview puzzles.
+ * notTemp If false, state is not saved in local storage and some event
+ *    listeners are not created. Useful for creating temporary/preview puzzles.
+ *    Note that if you create a normal (notTemp=true) puzzle and your web page
+ *    is going to destroy it for some reason during its normal course
+ *    (ExolvePlayer does this, for example), then you should call destroy() on
+ *    the puzzle object before removing all references to it. This will remove
+ *    listeners for 'resize' and printing events, for example.
  */
 function Exolve(puzzleSpec,
                 containerId='',
@@ -78,15 +83,15 @@ function Exolve(puzzleSpec,
                 provideStateUrl=true,
                 visTop=0,
                 maxDim=0,
-                saveState=true) {
-  this.VERSION = 'Exolve v1.41 July 18, 2022';
+                notTemp=true) {
+  this.VERSION = 'Exolve v1.44 September 14, 2022';
   this.id = '';
 
   this.puzzleText = puzzleSpec;
   this.containerId = containerId;
   this.customizer = customizer;
   this.provideStateUrl = provideStateUrl;
-  this.saveState = saveState;
+  this.notTemp = notTemp;
 
   this.gridWidth = 0;
   this.gridHeight = 0;
@@ -221,34 +226,36 @@ function Exolve(puzzleSpec,
   this.fontSize = '';
 
   this.colorScheme = {
-    'background': 'black',
-    'cell': 'white',
     'active': 'mistyrose',
     'active-clue': 'mistyrose',
-    'currclue': 'white',
-    'orphan': 'linen',
-    'input': '#ffb6b4',
-    'light-label': 'black',
-    'light-text': 'black',
-    'light-label-input': 'black',
-    'light-text-input': 'black',
+    'anno': 'darkgreen',
+    'arrow': 'white',
+    'background': 'black',
+    'button': '#4caf50',
+    'button-hover': 'darkgreen',
+    'button-text': 'white',
+    'caret': 'gray',
+    'cell': 'white',
     'circle': 'gray',
     'circle-input': 'gray',
-    'caret': 'gray',
-    'arrow': 'white',
-    'prefill': 'blue',
-    'anno': 'darkgreen',
-    'solved': 'dodgerblue',
-    'solution': 'dodgerblue',
+    'currclue': 'white',
     'def-underline': '#3eb0ff',
-    'separator': 'blue',
     'imp-text': 'darkgreen',
-    'button': '#4caf50',
-    'button-text': 'white',
-    'button-hover': 'darkgreen',
+    'input': '#ffb6b4',
+    'light-label': 'black',
+    'light-label-input': 'black',
+    'light-text': 'black',
+    'light-text-input': 'black',
+    'orphan': 'linen',
+    'overwritten-end': '#bb00bb',
+    'overwritten-start': '#ff00ff',
+    'prefill': 'blue',
+    'separator': 'blue',
     'small-button': 'inherit',
-    'small-button-text': 'darkgreen',
     'small-button-hover': 'lightpink',
+    'small-button-text': 'darkgreen',
+    'solution': 'dodgerblue',
+    'solved': 'dodgerblue',
   }
 
   this.nextLine = 0;
@@ -302,6 +309,14 @@ function Exolve(puzzleSpec,
     'tools-link.hover': 'Show/hide tools: manage storage, see list of ' +
         'control keys and scratch pad',
     'tools-msg': `
+       <p>
+       Overwritten letters will briefly be coloured like
+       <b style="color:${this.colorScheme['overwritten-start']}">this</b>
+       (before fading back to 
+       <b style="color:${this.colorScheme['light-text']}">this</b>)
+       just to draw your attention so that you can fix any accidental
+       typing errors.
+       </p>
        Control keys:
        <ul>
          <li><b>Tab/Shift-Tab:</b>
@@ -309,7 +324,7 @@ function Exolve(puzzleSpec,
          <li><b>Enter, Click/Tap:</b> Toggle current direction</li>
          <li><b>Arrow keys:</b>
              Move to the nearest light square in that direction</li>
-         <li><b>Ctrl-q:</b> Clear this, <b>Ctrl-Q:</b> Clear All!</li>
+         <li><b>Ctrl-q:</b> Clear this, <b>Ctrl-Q:</b> Clear All!, <b>Ctrl-b:</b> Print crossword</li>
          <li><b>Spacebar:</b>
              Place/clear block in the current square if it's diagramless</li>
        </ul>`,
@@ -383,10 +398,12 @@ function Exolve(puzzleSpec,
     'print-font-xlarge': 'Extra Large',
     'print-font-small': 'Small',
     'print-font-other': 'Other',
-    'print-page': 'Print page',
-    'print-page.hover': 'Print the whole page (Ctrl-p or Cmd-p)',
     'print-crossword': 'Print crossword',
     'print-crossword.hover': 'Print just this crossword, hiding any content outside it (Ctrl-b)',
+    'print-page': 'Print page',
+    'print-page.hover': 'Print the whole page (Ctrl-p or Cmd-p)',
+    'print-page-wysiwyg': 'Print wysiwyg',
+    'print-page-wysiwyg.hover': 'Print the whole page without reformatting the crossword',
   };
 
   /**
@@ -402,6 +419,11 @@ function Exolve(puzzleSpec,
       break;
     }
   }
+
+  /** Printing-related */
+  this.printingChanges = null;
+  this.printAsIs = false;
+  this.printOnlyCrossword = false;
 
   // Variables set by exolve-option
   this.hideInferredNumbers = false;
@@ -423,12 +445,37 @@ function Exolve(puzzleSpec,
   this.printIncomplete2Cols = false;
   this.noNinaButton = false;
   this.useWebifi = false;
+  this.hltOverwrittenMillis = 5000;
 
   this.createPuzzle();
 }
 
-// Create the basic HTML structure.
-// Set up globals, version number and user agent in bug link.
+/**
+ * Do clean-up: remove from exolvePuzzles[], remove window listeners.
+ * This only needs to be called if you have a web page from which
+ * you destroy and create new Exolve puzzles repeatedly (such as
+ * ExolvePlayer).
+ */
+Exolve.prototype.destroy = function() {
+  if (this.frame) {
+    this.frame.innerHTML = '';
+    this.frame = null;
+  }
+  if (exolvePuzzles && this.id && exolvePuzzles[this.id]) {
+    delete exolvePuzzles[this.id];
+  }
+  if (this.windowListeners) {
+    for (let e in this.windowListeners) {
+      window.removeEventListener(e, this.windowListeners[e]);
+    }
+    this.windowListeners = {};
+  }
+}
+
+/**
+ * Create the basic HTML structure.
+ * Set up globals, version number and user agent in bug link.
+ */
 Exolve.prototype.init = function() {
   this.parseOverall();
   this.parseRelabel();
@@ -447,7 +494,7 @@ Exolve.prototype.init = function() {
   this.prefix = 'xlv' + this.index;
 
   const basicHTML = `
-    <div class="xlv-frame xlv-flex-col" id="${this.prefix}-frame">
+    <div class="xlv-frame xlv-flex-col" tabindex="-1" id="${this.prefix}-frame">
       <h2 id="${this.prefix}-title" class="xlv-title"></h2>
       <div id="${this.prefix}-setter" class="xlv-setter"></div>
       <div id="${this.prefix}-preamble" class="xlv-preamble"></div>
@@ -510,7 +557,7 @@ Exolve.prototype.init = function() {
             </div> <!-- xlv-status -->
             <div id="${this.prefix}-saving" class="xlv-wide-box xlv-saving">
               <span id="${this.prefix}-saving-msg">
-              ${this.saveState ? this.textLabels['saving-msg'] : ''}
+              ${this.notTemp ? this.textLabels['saving-msg'] : ''}
               </span>
             </div> <!-- xlv-saving -->
             <div id="${this.prefix}-small-print"
@@ -583,15 +630,20 @@ Exolve.prototype.init = function() {
                     </input>
                   </div>
                   <div>
+                    <button id="${this.prefix}-print-crossword"
+                        class="xlv-small-button"
+                        title="${this.textLabels['print-crossword.hover']}">
+                      ${this.textLabels['print-crossword']}
+                    </button>
                     <button id="${this.prefix}-print-page"
                         class="xlv-small-button"
                         title="${this.textLabels['print-page.hover']}">
                       ${this.textLabels['print-page']}
                     </button>
-                    <button id="${this.prefix}-print-crossword"
+                    <button id="${this.prefix}-print-wysiwyg"
                         class="xlv-small-button"
-                        title="${this.textLabels['print-crossword.hover']}">
-                      ${this.textLabels['print-crossword']}
+                        title="${this.textLabels['print-page-wysiwyg.hover']}">
+                      ${this.textLabels['print-page-wysiwyg']}
                     </button>
                   </div>
                 </div>
@@ -828,9 +880,11 @@ Exolve.prototype.init = function() {
   this.submitButton.addEventListener('click', this.submitSolution.bind(this));
 
   const printPage = document.getElementById(this.prefix + '-print-page');
-  printPage.addEventListener('click', this.printNow.bind(this, false));
+  printPage.addEventListener('click', this.printNow.bind(this, 'page'));
   const printCrossword = document.getElementById(this.prefix + '-print-crossword');
-  printCrossword.addEventListener('click', this.printNow.bind(this, true));
+  printCrossword.addEventListener('click', this.printNow.bind(this, 'crossword'));
+  const printWysiwyg = document.getElementById(this.prefix + '-print-wysiwyg');
+  printWysiwyg.addEventListener('click', this.printNow.bind(this, 'wysiwig'));
   this.printFontMenu = document.getElementById(this.prefix + '-print-font');
   this.printFontMenu.addEventListener('change', this.setPrintFont.bind(this, true));
   this.printFontInput = document.getElementById(this.prefix + '-print-font-inp');
@@ -1323,6 +1377,14 @@ Exolve.prototype.parseOption = function(s) {
       }
       this.cluesToRight = true
       continue
+    }
+    if (kv[0] == 'highlight-overwritten-seconds') {
+      const secs = parseFloat(kv[1])
+      if (isNaN(secs) || secs < 0) {
+        this.throwErr('Unexpected val in exolve-option: highlight-overwritten-seconds: ' + kv[1])
+      }
+      this.hltOverwrittenMillis = secs * 1000;
+      continue;
     }
     if (kv[0] == 'offset-left') {
       this.offsetLeft = parseInt(kv[1])
@@ -3712,6 +3774,16 @@ Exolve.prototype.applyStyles = function() {
     #${this.prefix}-frame .xlv-small-button:hover {
       background: ${this.colorScheme['small-button-hover']};
     }
+    @keyframes ${this.prefix}-overwritten-anim {
+      0% {fill: ${this.colorScheme['overwritten-start']}}
+      90% {fill: ${this.colorScheme['overwritten-end']}}
+      95% {fill: ${this.colorScheme['overwritten-start']}}
+      99% {fill: ${this.colorScheme['overwritten-end']}}
+    }
+    #${this.prefix}-frame .xlv-overwritten {
+      animation-duration: ${this.hltOverwrittenMillis}ms;
+      animation-name: ${this.prefix}-overwritten-anim;
+    }
   `;
 }
 
@@ -4181,7 +4253,7 @@ Exolve.prototype.updateAndSaveState = function() {
     state = state + this.STATE_SEP + a.input.value
   }
 
-  if (this.saveState) {
+  if (this.notTemp) {
     try {
       let lsVal = JSON.stringify({
         timestamp: Date.now(),
@@ -5284,7 +5356,7 @@ Exolve.prototype.handleKeyDown = function(e) {
   } else if (e.ctrlKey && e.key == 'b') {
     e.stopPropagation();
     e.preventDefault();
-    this.printNow(true);
+    this.printNow('crossword');
   }
 }
 
@@ -5453,65 +5525,113 @@ Exolve.prototype.updateActiveCluesState = function() {
   }
 }
 
-Exolve.prototype.handleGridInput = function() {
-  this.usingGnav = true
-  let gridCell = this.currCell()
+/**
+ * Highlight-Recent-Overwrites handling:
+ *
+ * When a grid-cell has an entry that gets *changed*, unless it
+ * has a ".overwritten" field already set, we set it it to the
+ * overwritten letter, and kick off a timer (configurable with
+ * exolve-option highlight-overwritten-seconds). We also set the
+ * overwritten text's CSS class to be xlv-overwritten, which kicks
+ * off a timed animation that changes its color slowly.
+ *
+ * At the end of the timer, the function expireOverwrite() gets called on the
+ * cell, which sets .overwritten to null and removes the xlv-overwritten class.
+ *
+ * If the user types into the cell and restores the overwritten
+ * letter, then expireOverwrite() is called immediately.
+ */
+Exolve.prototype.expireOverwrite = function(gridCell) {
   if (!gridCell) {
-    return
+    return;
+  }
+  if (gridCell.cellText) {
+    gridCell.cellText.classList.remove('xlv-overwritten');
+  }
+  if (gridCell.overwritten) {
+    gridCell.overwritten = null;
+  }
+  if (gridCell.overwrittenT) {
+    clearTimeout(gridCell.overwrittenT);
+    gridCell.overwrittenT = null;
+  }
+}
+
+Exolve.prototype.handleGridInput = function() {
+  this.usingGnav = true;
+  let gridCell = this.currCell();
+  if (!gridCell) {
+    return;
   }
   if (!gridCell.isLight && !gridCell.isDgmless) {
     return;
   }
-  let newInput = this.gridInput.value
-  let currDisplayChar = this.stateToDisplayChar(gridCell.currLetter)
+  let newInput = this.gridInput.value;
+  let currDisplayChar = this.stateToDisplayChar(gridCell.currLetter);
   if (gridCell.currLetter != '0' && gridCell.currLetter != '?' &&
       newInput != currDisplayChar && this.langMaxCharCodes == 1) {
     // The "new" input may be before or after the old input.
-    let index = newInput.indexOf(currDisplayChar)
+    const index = newInput.indexOf(currDisplayChar);
     if (index == 0) {
-      newInput = newInput.substr(1)
+      newInput = newInput.substr(1);
     }
   }
-  let displayChar = newInput.substr(0, this.langMaxCharCodes)
-  let wasSpace = displayChar == ' '
+  let displayChar = newInput.substr(0, this.langMaxCharCodes);
+  let wasSpace = displayChar == ' ';
   if (wasSpace) {
     if (gridCell.isDgmless) {
       // spacebar creates a blocked cell in a diagramless puzzle cell
-      displayChar = this.BLOCK_CHAR
+      displayChar = this.BLOCK_CHAR;
     } else {
-      displayChar = ''
+      displayChar = '';
     }
   } else {
-    displayChar = displayChar.toUpperCase()
+    displayChar = displayChar.toUpperCase();
     if (displayChar && !this.isValidDisplayChar(displayChar)) {
       // restore
       this.gridInput.value = gridCell.prefill ? '' :
-          this.stateToDisplayChar(gridCell.currLetter)
-      return
+          this.stateToDisplayChar(gridCell.currLetter);
+      return;
     }
   }
   if (gridCell.prefill) {
     // Changes disallowed
-    this.gridInput.value = ''
-    this.advanceCursor()
-    return
+    this.gridInput.value = '';
+    this.advanceCursor();
+    return;
   }
-  let stateChar = this.displayToStateChar(displayChar)
-  let oldLetter = gridCell.currLetter
-  gridCell.currLetter = stateChar
-  gridCell.textNode.nodeValue = displayChar
-  this.gridInput.value = displayChar
-  if (oldLetter == '1' || stateChar == '1') {
-    let gridCellSym = this.symCell(this.currRow, this.currCol)
+  const stateChar = this.displayToStateChar(displayChar);
+  const oldLetter = gridCell.currLetter;
+  gridCell.currLetter = stateChar;
+  gridCell.textNode.nodeValue = displayChar;
+  this.gridInput.value = displayChar;
+  if (oldLetter == '1' || stateChar == '1') {;
+    let gridCellSym = this.symCell(this.currRow, this.currCol);
     if (gridCellSym.isDgmless) {
-      let symLetter = (stateChar == '1') ? '1' : '0'
-      let symChar = (stateChar == '1') ? this.BLOCK_CHAR : ''
-      gridCellSym.currLetter = symLetter
-      gridCellSym.textNode.nodeValue = symChar
+      let symLetter = (stateChar == '1') ? '1' : '0';
+      let symChar = (stateChar == '1') ? this.BLOCK_CHAR : '';
+      gridCellSym.currLetter = symLetter;
+      gridCellSym.textNode.nodeValue = symChar;
+    }
+  }
+  if (displayChar != '' && stateChar != '0' &&
+      stateChar != oldLetter && oldLetter != '0' && oldLetter != '?' &&
+      this.hltOverwrittenMillis > 0) {
+    if (!gridCell.overwritten) {
+      /**
+       * We have newly overwritten an existing non-blank entry with a new
+       * non-blank entry.
+       */
+      gridCell.overwritten = oldLetter;
+      gridCell.cellText.classList.add('xlv-overwritten');
+      gridCell.overwrittenT = setTimeout(
+          this.expireOverwrite.bind(this, gridCell), this.hltOverwrittenMillis);
+    } else if (gridCell.overwritten == stateChar) {
+      this.expireOverwrite(gridCell);
     }
   }
 
-  let cluesAffected = []
+  let cluesAffected = [];
   let index = this.getDirClueIndex('A', gridCell.acrossClueLabel);
   if (index && this.clues[index]) {
     cluesAffected.push(index);
@@ -5524,19 +5644,19 @@ Exolve.prototype.handleGridInput = function() {
   if (index && this.clues[index]) {
     cluesAffected.push(index);
   }
-  let otherClues = gridCell.nodirClues
+  let otherClues = gridCell.nodirClues;
   if (otherClues) {
-    cluesAffected = cluesAffected.concat(otherClues)
+    cluesAffected = cluesAffected.concat(otherClues);
   }
   for (ci of cluesAffected) {
-    this.updateClueState(ci, false, null)
+    this.updateClueState(ci, false, null);
   }
 
-  this.updateAndSaveState()
+  this.updateAndSaveState();
 
   if (wasSpace ||
       (this.isValidDisplayChar(displayChar) && this.langMaxCharCodes == 1)) {
-    this.advanceCursor()
+    this.advanceCursor();
   }
 }
 
@@ -5563,10 +5683,15 @@ Exolve.prototype.createListeners = function() {
   document.getElementById(this.prefix + '-preamble').addEventListener(
     'click', boundDeactivator);
   
-  window.addEventListener('resize', this.handleResize.bind(this));
-
-  window.addEventListener('beforeprint', this.handleBeforePrint.bind(this));
-  window.addEventListener('afterprint', this.handleAfterPrint.bind(this));
+  this.windowListeners = {};
+  if (this.notTemp) {
+    this.windowListeners['resize'] = this.handleResize.bind(this);
+    this.windowListeners['beforeprint'] = this.handleBeforePrint.bind(this);
+    this.windowListeners['afterprint'] = this.handleAfterPrint.bind(this);
+    for (let e in this.windowListeners) {
+      window.addEventListener(e, this.windowListeners[e]);
+    }
+  }
 }
 
 Exolve.prototype.recolourCells = function(scale=1) {
@@ -6684,23 +6809,49 @@ Exolve.prototype.manageStorage = function(e) {
   }
 }
 
-Exolve.prototype.printNow = function(onlyCrossword) {
-  this.printOnlyCrossword = onlyCrossword;
+/**
+ * mode can be one of: 'page' 'crossword' 'wysiwyg'
+ */
+Exolve.prototype.printNow = function(mode) {
+  if (mode == 'page') {
+    this.printAsIs = false;
+    this.printOnlyCrossword = false;
+  } else if (mode == 'crossword') {
+    this.printAsIs = false;
+    this.printOnlyCrossword = true;
+  } else {
+    /* wysiwyg */
+    this.printAsIs = true;
+    this.printOnlyCrossword = false;
+  }
   window.print();
+  /**
+   * As of Sept 2022, Chrome has a bug wherein sometimes (usually after the
+   * first page load), window.print() does not conclude with an 'afterprint'
+   * event. window.print() is modal and handleAfterPrint() can be safely
+   * called twice, so just call it here.
+   */
+  this.handleAfterPrint();
 }
 
 Exolve.prototype.handleAfterPrint = function() {
   if (this.printingChanges) {
+    this.printAsIs = false;
+    this.printOnlyCrossword = false;
     this.columnarLayout = this.printingChanges.columnarLayout;
-    if (this.printingChanges.moves) {
-      // Undo the moves.
-      for (let i = 0; i < this.printingChanges.moves.length; i++) {
-        const move = this.printingChanges.moves[i];
-        if (move.hasOwnProperty('sibling')) {
-          move.target.insertBefore(move.elem, move.sibling);
-        } else {
-          move.target.insertAdjacentElement('afterbegin', move.elem);
+    if (this.printingChanges.hiddenDisplays) {
+      for (let display in this.printingChanges.hiddenDisplays) {
+        const elts = this.printingChanges.hiddenDisplays[display];
+        for (let elt of elts) {
+          elt.style.display = display;
         }
+      }
+    }
+    if (this.printingChanges.moves) {
+      // Undo the moves in reverse order.
+      for (let i = this.printingChanges.moves.length - 1; i >= 0; i--) {
+        const move = this.printingChanges.moves[i];
+        move.target.insertBefore(move.elem, move.sibling);
       }
     }
     if (this.printingChanges.extras) {
@@ -6779,7 +6930,6 @@ Exolve.prototype.getPrintSettings = function() {
   const font = (this.printFontInput ? this.printFontInput.value : '18px') || '18px';
 
   const onlyCrossword = this.printOnlyCrossword || false;
-  this.printOnlyCrossword = false;
   return {
     page: page,
     font: font,
@@ -6794,7 +6944,18 @@ Exolve.prototype.handleBeforePrint = function() {
   if (this.printAsIs) {
     return;
   }
-  this.handleAfterPrint();  // Unnecessary, but can't hurt to be sure.
+  /**
+   * If some other crossword on this same web page is trying to get printed
+   * with printOnlyCrossword=true or printAsIs=true, then bail out.
+   */
+  for (let id in exolvePuzzles) {
+    const other = exolvePuzzles[id];
+    if (typeof other === 'object' && other !== null &&
+        other.id && other.id != this.id &&
+        (other.printOnlyCrossword || other.printAsIs)) {
+      return;
+    }
+  }
 
   this.printingChanges = {
     'columnarLayout': this.columnarLayout,
@@ -6804,6 +6965,7 @@ Exolve.prototype.handleBeforePrint = function() {
     'pageYOffset': window.pageYOffset,
     'extras': [],
     'moves': [],
+    'hiddenDisplays': {},
   };
   // Unhighlight current cell/clue (handleAfterPrint() will restore).
   this.deactivator();
@@ -6811,30 +6973,45 @@ Exolve.prototype.handleBeforePrint = function() {
   const settings = this.getPrintSettings();
 
   if (settings.onlyCrossword) {
+    /**
+     * Note: prior to v1.44, the code used to move all body children
+     * into the "hider" element. But this somehow caused problems with
+     * the exolve stylesheet in "widgets". Now we only move non-element
+     * non-script/link nodes. Element nodes directly get their style.display
+     * set to none.
+     */
     const puzSibling = this.frame.nextSibling;
     const puzParent = this.frame.parentNode;
-
-    const hider = document.createElement('div');
-    hider.className = 'xlv-dont-print';
-    const topNodes = [];
-    for (let i = 0; i < document.body.childNodes.length; i++) {
-      topNodes.push(document.body.childNodes[i]);
-    }
-    // topNodes[] is not a live list, unlike d.b.childNodes[]
-    for (let node of topNodes) {
-      if (node.isSameNode(this.frame)) continue;
-      hider.insertBefore(node, null);
-      this.printingChanges.moves.push(
-          {'elem': node, 'target': document.body, 'sibling': null});
-    }
-    document.body.insertAdjacentElement('beforeend', hider);
-    this.printingChanges.extras.push(hider);
-
-    // Exolve frame is moved after siblings, so it can be reinstated wrt an
-    // already reinstated sibling later, if one exists.
     document.body.insertAdjacentElement('afterbegin', this.frame);
     this.printingChanges.moves.push(
         {'elem': this.frame, 'target': puzParent, 'sibling': puzSibling});
+
+    const hider = document.createElement('div');
+    hider.className = 'xlv-dont-print';
+    const topNonEltNodes = [];
+    for (let i = 0; i < document.body.childNodes.length; i++) {
+      const node = document.body.childNodes[i];
+      if (node.nodeType == Node.ELEMENT_NODE) {
+        if (node.nodeName == 'LINK' || node.nodeName == 'SCRIPT') continue;
+        if (node.isSameNode(this.frame)) continue;
+        const display = node.style.display;
+        if (!this.printingChanges.hiddenDisplays[display]) {
+          this.printingChanges.hiddenDisplays[display] = [];
+        }
+        this.printingChanges.hiddenDisplays[display].push(node);
+        node.style.display = 'none';
+        continue;
+      }
+      topNonEltNodes.push({'node': node, 'sibling': node.nextSibling});
+    }
+    // topNonEltNodes[] is not a live list, unlike d.b.childNodes[]
+    for (let nodeSib of topNonEltNodes) {
+      hider.insertBefore(nodeSib.node, null);
+      this.printingChanges.moves.push(
+          {'elem': nodeSib.node, 'target': document.body, 'sibling': nodeSib.sibling});
+    }
+    document.body.insertAdjacentElement('beforeend', hider);
+    this.printingChanges.extras.push(hider);
 
     const customStyles = document.createElement('style');
     customStyles.insertAdjacentHTML('beforeend', `
@@ -6860,51 +7037,58 @@ Exolve.prototype.handleBeforePrint = function() {
     size: ${settings.page};
     margin: ${settings.pageMarginIn}in;
   }
-  body {
-    zoom: 100%;
-    margin: 0;
-  }
-  #${this.prefix}-frame {
-    font-size: ${settings.font};
-    width: 992px;
-  }
-  #${this.prefix}-frame .xlv-preamble {
-    margin: 8px 0 20px;
-  }
-  #${this.prefix}-frame .xlv-clues {
-    padding-bottom: 0;
-    margin-bottom: 0;
-  }
-  .xlv-controls,
-  .xlv-status,
-  .xlv-saving,
-  .xlv-button,
-  .xlv-small-button,
-  .xlv-small-print,
-  .xlv-dont-print,
-  .xlv-postscript {
-    display: none;
-  }
-  #${this.prefix}-frame .xlv-clues-box {
-    max-height: none !important;
-  }
-  #${this.prefix}-frame .xlv-clues,
-  #${this.prefix}-frame .xlv-clues-columnar,
-  #${this.prefix}-frame .xlv-clues-flex {
-    display: block;
-  }
-  #${this.prefix}-frame .xlv-clues-panel {
-    margin-right: 0;
-  }
-  .xlv-coloured-cell, .xlv-clues {
-    color-adjust: exact;
-    -webkit-print-color-adjust: exact;
-  }
-  .xlv-print-break {
-    break-after: page;
-    page-break-after: always;
-    break-inside: unset;
-    page-break-inside: unset;
+  @media all {
+    body {
+      zoom: 100%;
+      margin: 0;
+    }
+    #${this.prefix}-frame {
+      width: 992px;
+    }
+    #${this.prefix}-frame .xlv-preamble {
+      margin: 8px 0 20px;
+    }
+    #${this.prefix}-frame .xlv-clues {
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
+    #${this.prefix}-frame div,
+    #${this.prefix}-frame table {
+      color: black;
+      font-size: ${settings.font};
+    }
+    .xlv-button,
+    .xlv-clear-area,
+    .xlv-controls,
+    .xlv-dont-print,
+    .xlv-postscript,
+    .xlv-saving,
+    .xlv-small-button,
+    .xlv-small-print,
+    .xlv-status {
+      display: none;
+    }
+    #${this.prefix}-frame .xlv-clues-box {
+      max-height: none !important;
+    }
+    #${this.prefix}-frame .xlv-clues,
+    #${this.prefix}-frame .xlv-clues-columnar,
+    #${this.prefix}-frame .xlv-clues-flex {
+      display: block;
+    }
+    #${this.prefix}-frame .xlv-clues-panel {
+      margin-right: 0;
+    }
+    .xlv-coloured-cell, .xlv-clues {
+      color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+    .xlv-print-break {
+      break-after: page;
+      page-break-after: always;
+      break-inside: unset;
+      page-break-inside: unset;
+    }
   }
   `;
   this.frame.appendChild(customStyles);
@@ -6935,7 +7119,7 @@ Exolve.prototype.addPrintedCluesTable = function(elem, width, num) {
   const table = document.createElement('table');
   table.id = this.prefix + '-printed-clues-table-' + num;
   box.appendChild(table);
-  elem.insertAdjacentElement('afterbegin', box);
+  elem.insertAdjacentElement('beforeend', box);
   return table;
 }
 
@@ -7073,21 +7257,22 @@ Exolve.prototype.printTwoColumns = function(settings) {
   }
 
   // Move clue #s [0, best1end) to the first column.
-  for (let c = best1end - 1; c >= 0; c--) {
+  for (let c = 0; c < best1end; c++) {
     const clue = clues[c];
-    let newTable = null;
     if (clue.heading) {
-      printedClues1.insertAdjacentElement('afterbegin', clue.heading);
       this.printingChanges.moves.push(
-          {'target': cluesPanels[clue.p], 'elem': clue.heading});
-      newTable = this.addPrintedCluesTable(printedClues1, COLUMN_WIDTH, extraTableNum++);
+          {'target': cluesPanels[clue.p], 'elem': clue.heading,
+            'sibling': clue.heading.nextSibling});
+      if (printedTable1.children.length > 0) {
+        printedTable1 = this.addPrintedCluesTable(printedClues1,
+            COLUMN_WIDTH, extraTableNum++);
+      }
+      printedTable1.insertAdjacentElement('beforebegin', clue.heading);
     }
-    printedTable1.insertAdjacentElement('afterbegin', clue.tr);
     this.printingChanges.moves.push(
-        {'target': cluesTables[clue.p], 'elem': clue.tr});
-    if (newTable) {
-      printedTable1 = newTable;
-    }
+        {'target': cluesTables[clue.p], 'elem': clue.tr,
+          'sibling': clue.tr.nextSibling});
+    printedTable1.insertAdjacentElement('beforeend', clue.tr);
   }
 
   this.paginate(settings);
@@ -7233,12 +7418,11 @@ Exolve.prototype.printThreeColumns = function(settings) {
     const h1 = clues[i].h;
     for (let j = i + 1; j < clues.length; j++) {
       const h2 = clues[j].h - clues[i].h;
-      if (h2 > h1 + minH) break;
-      if (Math.abs(h1 - h2) > minH) continue;
+      const gap12 = Math.abs(h2 - h1);
       const h3 = h - clues[j].h;
-      let gap = Math.max(h1, h2) + gridPanelH - h3;
-      if (gap > bestGap) break;
-      gap = Math.abs(gap);
+      const gap13 = Math.abs(h1 + gridPanelH - h3);
+      const gap23 = Math.abs(h2 + gridPanelH - h3);
+      const gap = gap12 + gap23 + gap13;
       if (gap < bestGap) {
         bestGap = gap;
         best1end = i + 1;
@@ -7249,27 +7433,29 @@ Exolve.prototype.printThreeColumns = function(settings) {
 
   // Move clue #s [0, best1end) to the first column and
   // [best1end, best2end) to the second column.
-  for (let c = best2end - 1; c >= 0; c--) {
+  for (let c = 0; c < best2end; c++) {
     const clue = clues[c];
-    let newTable = null;
+    let tableDest = (c < best1end) ? printedTable1 : printedTable2;
     if (clue.heading) {
-      const dest = (c < best1end) ? printedClues1 : printedClues2;
-      dest.insertAdjacentElement('afterbegin', clue.heading);
       this.printingChanges.moves.push(
-          {'target': cluesPanels[clue.p], 'elem': clue.heading});
-      newTable = this.addPrintedCluesTable(dest, COLUMN_WIDTH, extraTableNum++);
-    }
-    const dest = (c < best1end) ? printedTable1 : printedTable2;
-    dest.insertAdjacentElement('afterbegin', clue.tr);
-    this.printingChanges.moves.push(
-        {'target': cluesTables[clue.p], 'elem': clue.tr});
-    if (newTable) {
-      if (c < best1end) {
-        printedTable1 = newTable;
-      } else {
-        printedTable2 = newTable;
+          {'target': cluesPanels[clue.p], 'elem': clue.heading,
+           'sibling': clue.heading.nextSibling});
+      if (tableDest.children.length > 0) {
+        const cluesDest = (c < best1end) ? printedClues1 : printedClues2;
+        tableDest = this.addPrintedCluesTable(cluesDest, COLUMN_WIDTH,
+            extraTableNum++);
+        if (c < best1end) {
+          printedTable1 = tableDest;
+        } else {
+          printedTable2 = tableDest;
+        }
       }
+      tableDest.insertAdjacentElement('beforebegin', clue.heading);
     }
+    this.printingChanges.moves.push(
+        {'target': cluesTables[clue.p], 'elem': clue.tr,
+         'sibling': clue.tr.nextSibling});
+    tableDest.insertAdjacentElement('beforeend', clue.tr);
   }
 
   this.paginate(settings);
