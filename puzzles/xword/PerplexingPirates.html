@@ -150,7 +150,7 @@ let extractModal;
 
 function doCloseModal() {
 	if(extractModal) { 
-		if(extractModal.style.display == "none") { return; }
+		if(extractModal.style.display == "none") { return;	}
 		extractModal.style.display = "none";
 		window.getSelection().removeAllRanges();
 	}
@@ -193,6 +193,8 @@ function getMarkedCells(pid) {
 			extractModal.style.display = "block";
 		}
 	}
+
+	return false;
 }
 
 function selectall(elem) {
@@ -206,7 +208,7 @@ function selectall(elem) {
 
 function customizeExolve(p) {
 	markupCells(p, markedCells, 10, 6, 'darkblue');
-
+	
   const b = document.createElement('button');
   b.className = 'xlv-button';
   b.innerHTML = 'Extract cells';
@@ -217,137 +219,123 @@ function customizeExolve(p) {
   p.buttonRow1.appendChild(b);	
 }
 
-function decryptStringWithXOR(input,key) {
-  
-  const utf8Encode = new TextEncoder();
-	var c = utf8Encode.encode(window.atob(input));
-	var kb = utf8Encode.encode(key);
-	
- 	for(var i=0; i<c.length; i++) {
-		for(var r=0; r<kb.length; r++) {
-			var k = r % kb.length;
-		  c[i] = c[i] ^ kb[k];
-	 	}
-	}
-  
-	return (new TextDecoder()).decode(c);
-}
+createExolve(`
+======REPLACE WITH YOUR PUZZLE BELOW======
 
-const exolvedata = `
-	TExMTExMIzQhPTAyNFEmOCU5USg+JCNRISQrKz00UTM0PT4mTExMTExMe3sUCR4dBxRcEx
-	QWGB97UVEUCR4dBxRcGBVLURUaHFwBGAMQBRQCXENBQ0N7UVEUCR4dBxRcBRgFHRRLUSEU
-	AwEdFAkYHxZRIRgDEAUUAntRURQJHh0HFFwCFAUFFANLUTUQAwMUH1E8GB0dFAN7UVEUCR
-	4dBxRcEh4BCAMYFhkFS1FDQUNDUTUQAwMUH1E8GB0dFAN7UVEUCR4dBxRcEgMUFRgFAktR
-	JRQCBRQDAktRNgMUFlE1XVEwHwUZHh8IUTl7UVEUCR4dBxRcBhgVBRlLUUBEe1FRFAkeHQ
-	cUXBkUGBYZBUtRQER7UVEUCR4dBxRcAQMUEBwTHRRLe3h4JhRREAIaFBVRAh4cFFEBGAMQ
-	BRQCURBRAAQUAgUYHh9dURMEBVEFGRQYA1EQHwIGFAMCUQYUAxRRAxAFGRQDURIDCAEFGB
-	JfUTwQCBMUUQgeBFESEB9RGRQdAU5Re3h4TQQdT00dGE8+HxIUUQgeBFECHh0HFFEFGRRR
-	AQQLCx0UXVEFGRRRTRBRGQMUF0xWUlZRHh8SHRgSGkxWAxQFBAMfURYUBTwQAxoUFTIUHR
-	0CWVMVGhxcARgDEAUUAlxDQUNDU1hWTx8EHBMUAxQVUQIABBADFAJNXhBPUQYYHR1RFhgH
-	FFEQURcYHxAdUQMYFRUdFF9NXh0YT3t4eE0dGE8oHgRREhAfUQIEExwYBVEIHgQDURcYHx
-	AdURAfAgYUA1EeA1EWFAVRGRgfBQJREAVRe3h4TRBRGQMUF0xWGQUFAQJLXl4VEAMDFB8C
-	AQQLCx0UAl8THR4WAgEeBV8SHhxeQ0FDQ15BSF4BFAMBHRQJGB8WXAEYAxAFFAJfGQUcHV
-	ZRe3h4BRgFHRRMVjYeUQUeUTUQAwMUH1cQAR4CSgJRIQQLCx0UAlETHR4WVlEFEAMWFAVM
-	Vi4THRAfGlZPNRADAxQfVxABHgJKAlEhBAsLHRQCURMdHhZNXhBPX01eHRhPe3h4TV4EHU
-	97UVEUCR4dBxRcHgEFGB4fS1ESHh0eA1wQEgUYBxRLHRgWGQUIFB0dHgZ7UVEUCR4dBxRc
-	HgEFGB4fS1ESHh0eA1wYHwEEBUsDHggQHRMdBBRREh4dHgNcEAMDHgZLHRgWGQUIFB0dHg
-	Z7UVEUCR4dBxRcHgEFGB4fS1ESHh0eA1wdGBYZBVwdEBMUHVwYHwEEBUsGGRgFFHtRURQJ
-	Hh0HFFweAQUYHh9LURIeHR4DXB0YFhkFXAUUCQVcGB8BBAVLBhkYBRR7UVEUCR4dBxRcHg
-	EFGB4fS1ESHh0eA1wTBAUFHh9LHxAHCFESHh0eA1wTBAUFHh9cGR4HFANLAQQDAR0Ue1FR
-	FAkeHQcUXB4BBRgeH0tREh0EFAJcARAfFB1cHRgfFAJLQ0F7UVEUCR4dBxRcHgEFGB4fS1
-	EZGBUUXBIeAQhcAR0QEhQZHh0VFANcEwQFBR4fAntRURQJHh0HFFwDFB0QExQdS3tRUVFR
-	Eh0UEANLUTIdFBADUQUZGAJRBh4DFXtRUVFRAxQHFBAdS1EiGR4GURkYHwVRFx4DURwUBR
-	keFVkCWHtRURQJHh0HFFwWAxgVS3t4eEEuQVFBLkFRQS5BUUEuQQ1BDUFRQS5BUUEuQQ1B
-	UXt4eEEuQVFBLkFRQS5BUUENQQ1BUUFRQS5BUUEuQVFBUXt4eEFRQVFBUUFRQVpBDUENQV
-	FBUUFRQVpBUUFRQVFBUXt4eEENQVFBUUFRQS5BUUENQQ1BUUEuQS5BDUENQQ1BUXt4eEFR
-	QS5BUUFRQQ1BDUENQS5BUUENQQ1BLkFRQS5BUXt4eEENQQ1BDUENQVFBLkFRQVFBLkENQV
-	FBLkFRQVFBLnt4eEFRQVFBUUFRQQ1BLkFRQVFBLkFRQVFBLkEuQVFBLnt4eEEuQVFBLkEu
-	QVFBUUFaQQ1BUUEuQVFBUUFRQVFBUXt4eEEuQVFBUUEuQVFBUUEuQVFBUUFaQVFBUUFRQV
-	FBUXt4eEFRQS5BUUEuQQ1BUUFRQS5BUUFRQQ1BDUENQVpBUXt4eEFRQVFBUUENQVpBLkFR
-	QQ1BDUENQS5BUUFRQVFBUXt4eEENQQ1BDUFRQS5BUUENQQ1BUUFRQS5BUUFRQQ1BUXt4eE
-	FRQVFBLkENQS5BUUFRQQ1BDUENQS5BUUEuQVFBLnt4eEFRQVFBLkFRQS5BUUENQQ1BLkFR
-	QS5BUUEuQVFBLnt4eEENQVFBUUFRQVFBDUENQVFBUUFRQVFBUUFRQVFBUVFRUVFRUVFRUV
-	FRUVFRUVFRUVFRUVFRUVFRUVFRe3gUCR4dBxRcEBIDHgICS3t4eEBRUT4VFV1REwQdHRgU
-	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
-	TExMTHs=
-`;
+exolve-begin
+  exolve-id: dkm-pirates-2022
+  exolve-title: Perplexing Pirates
+  exolve-setter: Darren Miller
+  exolve-copyright: 2022 Darren Miller
+  exolve-credits: Testers: Greg D, Anthony H
+  exolve-width: 15
+  exolve-height: 15
+  exolve-preamble:
+		We asked some pirates a question, but their answers were rather cryptic. Maybe you can help? 
+		<ul><li>Once you solve the puzzle, the <a href='#' onclick='return getMarkedCells("dkm-pirates-2022")'>numbered squares</a> will give a final riddle.</li>
+		<li>You can submit your final answer or get hints at 
+		<a href='https://darrenspuzzles.blogspot.com/2022/09/perplexing-pirates.html' 
+		title='Go to Darren&apos;s Puzzles blog' target='_blank'>Darren&apos;s Puzzles blog</a>.</li>
+		</ul>
+  exolve-option: color-active:lightyellow
+  exolve-option: color-input:royalblue color-arrow:lightyellow
+  exolve-option: color-light-label-input:white
+  exolve-option: color-light-text-input:white
+  exolve-option: color-button:navy color-button-hover:purple
+  exolve-option: clues-panel-lines:20
+  exolve-option: hide-copy-placeholder-buttons
+  exolve-relabel:
+    clear: Clear this word
+    reveal: Show hint for method(s)
+  exolve-grid:
+		0_0 0_0 0_0 0_0|0|0 0_0 0_0|0 
+		0_0 0_0 0_0 0|0|0 0 0_0 0_0 0 
+		0 0 0 0 0+0|0|0 0 0 0+0 0 0 0 
+		0|0 0 0 0_0 0|0|0 0_0_0|0|0|0 
+		0 0_0 0 0|0|0|0_0 0|0|0_0 0_0 
+		0|0|0|0|0 0_0 0 0_0|0 0_0 0 0_
+		0 0 0 0 0|0_0 0 0_0 0 0_0_0 0_
+		0_0 0_0_0 0 0+0|0 0_0 0 0 0 0 
+		0_0 0 0_0 0 0_0 0 0+0 0 0 0 0 
+		0 0_0 0_0|0 0 0_0 0 0|0|0|0+0 
+		0 0 0 0|0+0_0 0|0|0|0_0 0 0 0 
+		0|0|0|0 0_0 0|0|0 0 0_0 0 0|0 
+		0 0 0_0|0_0 0 0|0|0|0_0 0_0 0_
+		0 0 0_0 0_0 0|0|0_0 0_0 0_0 0_
+		0|0 0 0 0 0|0|0 0 0 0 0 0 0 0                              
+	exolve-across:
+		1  Odd, bullies with bad flus are extremely happy (8)
+		7  Crazy Horse is a Canadian bumpkin (5)
+		11  A panic about tea confused the leader (7)
+		13  Half of arena&#8217;s level is even more disgusting (7)
+		14  I say, you, sirs, are addicts (5)
+		16  A bit of land is at the heart of Toledo (4)
+		17  Fifth letters sound calm (4)
+		19  Some clientele venting before noon (6)
+		20  Followers of Andrew admire leader he had been (4)
+		21  Military leaders swinging sabers, wasting energy  (5)
+		23  Core evangelists come together (3)
+		26  Spots idiots without eyes (4)
+		28  A wheel, they say, is something that may be worn (6)
+		30  Win play? Caps off for a fine finish (5)
+		32  They smell Moses&#8217; top becoming a bit noxious (5)
+		33  Giving direction to mom dancing badly (10)
+		34  Wear your best when interrupting Padre&#8217;s supper (5,2)
+		36  Rod and I repaired a human-like robot (7)
+		40  Bitter butcher targets inn (10)
+		42  Psychic ability at a library? On reflection, that&#8217;s a mistake! (5)
+		43  Make amends at early afternoon (5)
+		44  Open wide to eat lid somehow (6)
+		47  Brief spasm at relaxing locations (4)
+		50  United capitals of old New England (3)
+		52  You get into spot with a stream (5)
+		54  Creative representations of parties lacking pie (4)
+		56  Spoke right before angry Saudi (6)
+		57  Entertainer has communion bread (4)
+		58  Sample of antifreeze at no charge (4)
+		59  Lead or hard rock, maybe (5)
+		60  Tom, iron out the screen (7)
+		61  Communication is a disaster and almost out of date (7)
+		62  I left fianc&eacute; incomplete. Why? It&#8217;s complicated (5)
+		63  Shower of disgusting rat pelts (8)
+	exolve-down:
+		2  Tampering with Earl&#8217;s energy, Ray? (5)
+		3  Awful trespassers rap out beats (8)
+		4  Party hosts fashionable elite (6)
+		5  Simply ingenious guards? Not so (5)
+		6  A wren&#8217;s mess goes here (6)
+		7  Very healthy whales have no wings. (4)
+		8  Even when sent back, I&#8217;d never test a horse (5)
+		9  Spooner said, &ldquo;See, Rhett? Put everything back to normal!&rdquo; (5)
+		10  Roiling gray sea yielding a slick (6)
+		12  Contemplations about ignoring climate? It never ends (3-4)
+		14  Loose, messy bun in capital of Denmark (6)
+		15  Slip away when asleep at sea (6)
+		18  Silly Olivia spent $5 for sauce (5)
+		22  Smarter southern fool on lead-free pier (7)
+		24  Male and not mad, but slender (4)
+		25  Sets fire to e-readers (7)
+		27  Most awful German sausage, reportedly (5)
+		29  Force shot out of imp&#8217;s hotel (5)
+		31  Herb has a nice change of suit (5)
+		35  Go back to extreme uptown party (4)
+		36  Rearrange a rag, man! (7)
+		37  Gruffest informant harbors spies (8)
+		38  Refuse hot pot yogurt? That&#8217;s not odd! (3,3)
+		39  Study short tale about teeth (6)
+		41  Why leave today&#8217;s work to amphibians? (5)
+		43  Breathless condition at ham&#8217;s performance (6)
+		45  Sinister is out, possibly with something added in (6)
+		46  Go to wild party in the middle of Scotland (6)
+		48  Expert of evidence (5)
+		49  Luxurious fabric? Overcompensating a little? (5)
+		51  Most reviewers have water jugs (5)
+		53  Pegasus comes back with proper handling (5)
+		55  Destroyers surround legendary city (4)
+	exolve-end
 
-let params = new URLSearchParams(document.location.search);
-let query = params.get('key');
-
-if(query) {
-	let key = query instanceof Array ? query[0] : query;
-	exdata = decryptStringWithXOR(exolvedata, key);
-	
-	if(exdata.match(/[^\s\x20-\x7E]/)) {
-		// bad characters or key didn't match
-	} else if(exdata.match(/exolve/)) {
-		createExolve(exdata);		
-	} 
-}
-
-
+======REPLACE WITH YOUR PUZZLE ABOVE======
+`);
 </script>
 </body>
 </html>
