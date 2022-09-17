@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!--
+MIT License
+Copyright (c) 2019 Viresh Ratnakar
+See the full Exolve license notice in exolve-m.js.
+-->
+<link rel="stylesheet" type="text/css" href="exolve/exolve-m.css"/>
+<script src="exolve/exolve-m.js"></script>
+
+<title>Perplexing Pirates by Darren Miller</title>
+
+<style>
+	body {
+		font-family: "Gill Sans", sans-serif;
+	}
+
+	@media print {
+		.extractButton {
+		     visibility: hidden;
+	   }
+	}
+
+	/* The Modal (background) */
+	.modal {
+	  display: none; /* Hidden by default */
+	  position: fixed; /* Stay in place */
+	  z-index: 5; /* Sit on top */
+	  padding-top: 100px; /* Location of the box */
+	  left: 0;
+	  top: 0;
+	  width: 100%; /* Full width */
+	  height: 100%; /* Full height */
+	  overflow: auto; /* Enable scroll if needed */
+	  background-color: rgb(0,0,0); /* Fallback color */
+	  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+	}
+	/* Modal Content */
+	.modal-content {
+	  position: relative;
+	  background-color: #fefefe;
+	  margin: auto;
+	  padding: 0;
+	  border: 1px solid #888;
+	  width: 80%;
+	  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+	  -webkit-animation-name: animatetop;
+	  -webkit-animation-duration: 0.4s;
+	  animation-name: animatetop;
+	  animation-duration: 0.4s
+	}
+
+	/* Add Animation */
+	@-webkit-keyframes animatetop {
+	  from {top:-300px; opacity:0} 
+	  to {top:0; opacity:1}
+	}
+
+	@keyframes animatetop {
+	  from {top:-300px; opacity:0}
+	  to {top:0; opacity:1}
+	}
+
+	/* The Close Button */
+	.modal-close {
+	  color: white;
+	  float: right;
+	  font-size: 28px;
+	  font-weight: bold;
+	}
+
+	.modal-close:hover,
+	.modal-close:focus {
+	  color: #000;
+	  text-decoration: none;
+	  cursor: pointer;
+	}
+
+	.modal-header {
+	  padding: 2px 16px;
+	  background-color: navy;
+	  color: white;
+	}
+
+	.modal-body {
+		padding: 16px;
+		text-align: center;
+		font-family: Consolas, monospace;
+		font-size: larger;
+		letter-spacing: -3px;
+	}
+
+	.modal-footer {
+	  padding: 2px 16px;
+	  background-color: #5cb85c;
+	  color: white;
+	}
+</style>
+</head>
+<body>
+
+<script src="exolve/dkm-exolve-utils.js"></script>
+<div id="extractModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="modal-close">&times;</span>
+      <h3>Extraction</h3>
+    </div>
+    <div class="modal-body" onclick="selectall(this);">
+    </div>
+  </div>
+
+</div>
+<script>
+
+let markedCells = [
+	'o10', 'g13', 'f8', 'i9', 'a1', 'h14', 
+	'j7', 'a3', 'n8', 'j8', 'k11', 'e14', 
+	'l5', 'g6', 'j5', 'c5', 'o5', 'n14', 
+	'g4', 'e3', 'i15', 'e12', 'm8', 'k12',
+	'k10', 'e2', 'n6', 'j1', 'l13', 'f10',
+	'f4', 'f12', 'h2', 'm12', 'c9', 'd13',
+	'a11', 'a13', 'm3', 'i3', 'm7', 'd2',
+	'f3', 'n3', 'd3', 'o7', 'n4', 'a4',
+	'o1', 'g15', 'i11', 'b15', 'g9', 'j3',
+	'c8', 'e7', 'h1', 'c7', 'j15', 'm15', 
+	'e15', 'k13', 'e10'
+];
+
+function markupCells(p, cells, ht, basewid, labelcolor='') {
+	for(let i=0; i<cells.length; i++) {
+		let coords = p.parseCellLocation(cells[i]);   // [row,col]
+		let wid = (i+1).toString().length*basewid-1;
+		let c = p.addCellText(coords[0], coords[1], (i+1), ht, wid, false, true);
+		c.style['stroke-width'] = 0.7;
+		if(labelcolor) {
+			c.style.stroke = labelcolor;	
+		}
+	}
+	
+	p.cellActivator(0,0); 
+}
+
+let extractModal;
+
+function doCloseModal() {
+	if(extractModal) { 
+		if(extractModal.style.display == "none") { return; }
+		extractModal.style.display = "none";
+		window.getSelection().removeAllRanges();
+	}
+}
+
+function getMarkedCells(pid) {
+
+	let p = exolvePuzzles[pid];
+	let result = '';
+	for(let i=0; i<markedCells.length; i++) {
+		if (result) { result += ' '; }
+		let coords = p.parseCellLocation(markedCells[i]);   // [row,col]
+		let gridCell = p.grid[coords[0]][coords[1]];
+		if (gridCell.currLetter == '0' || gridCell.currLetter == '?') {
+			result += "_";
+		} else {
+			result += gridCell.currLetter;
+		}
+	}
+	// Get the modal
+	if (!extractModal) {
+		extractModal = document.getElementById("extractModal");
+	
+		if(extractModal) {
+			var span = document.getElementsByClassName("modal-close");
+			span[0].onclick = doCloseModal;
+			window.onclick = function(e) {
+				if(e.target == extractModal) { doCloseModal(); }
+			}
+			document.addEventListener('keydown', (event) => {
+  			if (event.key === 'Escape') { doCloseModal(); }
+  		});
+		}
+	}
+
+	if(extractModal) {
+		var modalBody = document.getElementsByClassName("modal-body");
+		if(modalBody) {
+			modalBody[0].innerHTML = result;
+			extractModal.style.display = "block";
+		}
+	}
+}
+
+function selectall(elem) {
+	if (window.getSelection) {
+    var range = document.createRange();
+    range.selectNode(elem);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+  }
+}
+
+function customizeExolve(p) {
+	markupCells(p, markedCells, 10, 6, 'darkblue');
+
+  const b = document.createElement('button');
+  b.className = 'xlv-button';
+  b.innerHTML = 'Extract cells';
+  b.title = 'Extract cells'
+  b.addEventListener('click', (evt) => {
+    getMarkedCells(p.id);
+  });
+  p.buttonRow1.appendChild(b);	
+}
+
+function decryptStringWithXOR(input,key) {
+  
+  const utf8Encode = new TextEncoder();
+	var c = utf8Encode.encode(window.atob(input));
+	var kb = utf8Encode.encode(key);
+	
+ 	for(var i=0; i<c.length; i++) {
+		for(var r=0; r<kb.length; r++) {
+			var k = r % kb.length;
+		  c[i] = c[i] ^ kb[k];
+	 	}
+	}
+  
+	return (new TextDecoder()).decode(c);
+}
+
+const exolvedata = `
+	TExMTExMIzQhPTAyNFEmOCU5USg+JCNRISQrKz00UTM0PT4mTExMTExMe3sUCR4dBxRcEx
+	QWGB97UVEUCR4dBxRcGBVLURUaHFwBGAMQBRQCXENBQ0N7UVEUCR4dBxRcBRgFHRRLUSEU
+	AwEdFAkYHxZRIRgDEAUUAntRURQJHh0HFFwCFAUFFANLUTUQAwMUH1E8GB0dFAN7UVEUCR
+	4dBxRcEh4BCAMYFhkFS1FDQUNDUTUQAwMUH1E8GB0dFAN7UVEUCR4dBxRcEgMUFRgFAktR
+	JRQCBRQDAktRNgMUFlE1XVEwHwUZHh8IUTl7UVEUCR4dBxRcBhgVBRlLUUBEe1FRFAkeHQ
+	cUXBkUGBYZBUtRQER7UVEUCR4dBxRcAQMUEBwTHRRLe3h4JhRREAIaFBVRAh4cFFEBGAMQ
+	BRQCURBRAAQUAgUYHh9dURMEBVEFGRQYA1EQHwIGFAMCUQYUAxRRAxAFGRQDURIDCAEFGB
+	JfUTwQCBMUUQgeBFESEB9RGRQdAU5Re3h4TQQdT00dGE8+HxIUUQgeBFECHh0HFFEFGRRR
+	AQQLCx0UXVEFGRRRTRBRGQMUF0xWUlZRHh8SHRgSGkxWAxQFBAMfURYUBTwQAxoUFTIUHR
+	0CWVMVGhxcARgDEAUUAlxDQUNDU1hWTx8EHBMUAxQVUQIABBADFAJNXhBPUQYYHR1RFhgH
+	FFEQURcYHxAdUQMYFRUdFF9NXh0YT3t4eE0dGE8oHgRREhAfUQIEExwYBVEIHgQDURcYHx
+	AdURAfAgYUA1EeA1EWFAVRGRgfBQJREAVRe3h4TRBRGQMUF0xWGQUFAQJLXl4VEAMDFB8C
+	AQQLCx0UAl8THR4WAgEeBV8SHhxeQ0FDQ15BSF4BFAMBHRQJGB8WXAEYAxAFFAJfGQUcHV
+	ZRe3h4BRgFHRRMVjYeUQUeUTUQAwMUH1cQAR4CSgJRIQQLCx0UAlETHR4WVlEFEAMWFAVM
+	Vi4THRAfGlZPNRADAxQfVxABHgJKAlEhBAsLHRQCURMdHhZNXhBPX01eHRhPe3h4TV4EHU
+	97UVEUCR4dBxRcHgEFGB4fS1ESHh0eA1wQEgUYBxRLHRgWGQUIFB0dHgZ7UVEUCR4dBxRc
+	HgEFGB4fS1ESHh0eA1wYHwEEBUsDHggQHRMdBBRREh4dHgNcEAMDHgZLHRgWGQUIFB0dHg
+	Z7UVEUCR4dBxRcHgEFGB4fS1ESHh0eA1wdGBYZBVwdEBMUHVwYHwEEBUsGGRgFFHtRURQJ
+	Hh0HFFweAQUYHh9LURIeHR4DXB0YFhkFXAUUCQVcGB8BBAVLBhkYBRR7UVEUCR4dBxRcHg
+	EFGB4fS1ESHh0eA1wTBAUFHh9LHxAHCFESHh0eA1wTBAUFHh9cGR4HFANLAQQDAR0Ue1FR
+	FAkeHQcUXB4BBRgeH0tREh0EFAJcARAfFB1cHRgfFAJLQ0F7UVEUCR4dBxRcHgEFGB4fS1
+	EZGBUUXBIeAQhcAR0QEhQZHh0VFANcEwQFBR4fAntRURQJHh0HFFwDFB0QExQdS3tRUVFR
+	Eh0UEANLUTIdFBADUQUZGAJRBh4DFXtRUVFRAxQHFBAdS1EiGR4GURkYHwVRFx4DURwUBR
+	keFVkCWHtRURQJHh0HFFwWAxgVS3t4eEEuQVFBLkFRQS5BUUEuQQ1BDUFRQS5BUUEuQQ1B
+	UXt4eEEuQVFBLkFRQS5BUUENQQ1BUUFRQS5BUUEuQVFBUXt4eEFRQVFBUUFRQVpBDUENQV
+	FBUUFRQVpBUUFRQVFBUXt4eEENQVFBUUFRQS5BUUENQQ1BUUEuQS5BDUENQQ1BUXt4eEFR
+	QS5BUUFRQQ1BDUENQS5BUUENQQ1BLkFRQS5BUXt4eEENQQ1BDUENQVFBLkFRQVFBLkENQV
+	FBLkFRQVFBLnt4eEFRQVFBUUFRQQ1BLkFRQVFBLkFRQVFBLkEuQVFBLnt4eEEuQVFBLkEu
+	QVFBUUFaQQ1BUUEuQVFBUUFRQVFBUXt4eEEuQVFBUUEuQVFBUUEuQVFBUUFaQVFBUUFRQV
+	FBUXt4eEFRQS5BUUEuQQ1BUUFRQS5BUUFRQQ1BDUENQVpBUXt4eEFRQVFBUUENQVpBLkFR
+	QQ1BDUENQS5BUUFRQVFBUXt4eEENQQ1BDUFRQS5BUUENQQ1BUUFRQS5BUUFRQQ1BUXt4eE
+	FRQVFBLkENQS5BUUFRQQ1BDUENQS5BUUEuQVFBLnt4eEFRQVFBLkFRQS5BUUENQQ1BLkFR
+	QS5BUUEuQVFBLnt4eEENQVFBUUFRQVFBDUENQVFBUUFRQVFBUUFRQVFBUVFRUVFRUVFRUV
+	FRUVFRUVFRUVFRUVFRUVFRUVFRe3gUCR4dBxRcEBIDHgICS3t4eEBRUT4VFV1REwQdHRgU
+	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
+	TExMTExMew==
+`;
+
+let params = new URLSearchParams(document.location.search);
+let query = params.get('key');
+
+if(query) {
+	let key = query instanceof Array ? query[0] : query;
+	exdata = decryptStringWithXOR(exolvedata, key);
+	
+	if(exdata.match(/[^\s\x20-\x7E]/)) {
+		// bad characters or key didn't match
+	} else if(exdata.match(/exolve/)) {
+		createExolve(exdata);		
+	} 
+}
+
+
+</script>
+</body>
+</html>
