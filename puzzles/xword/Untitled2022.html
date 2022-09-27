@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!--
+MIT License
+Copyright (c) 2019 Viresh Ratnakar
+See the full Exolve license notice in exolve-m.js.
+-->
+<link rel="stylesheet" type="text/css" href="exolve/exolve-m.css"/>
+<script src="exolve/exolve-m.js"></script>
+
+<title>Untitled by Darren Miller</title>
+
+<style>
+	body {
+		font-family: "Gill Sans", sans-serif;
+	}
+
+	@media print {
+		.extractButton {
+		     visibility: hidden;
+	   }
+	}
+
+	/* The Modal (background) */
+	.modal {
+	  display: none; /* Hidden by default */
+	  position: fixed; /* Stay in place */
+	  z-index: 5; /* Sit on top */
+	  padding-top: 100px; /* Location of the box */
+	  left: 0;
+	  top: 0;
+	  width: 100%; /* Full width */
+	  height: 100%; /* Full height */
+	  overflow: auto; /* Enable scroll if needed */
+	  background-color: rgb(0,0,0); /* Fallback color */
+	  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+	}
+	/* Modal Content */
+	.modal-content {
+	  position: relative;
+	  background-color: #fefefe;
+	  margin: auto;
+	  padding: 0;
+	  border: 1px solid #888;
+	  width: 80%;
+	  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+	  -webkit-animation-name: animatetop;
+	  -webkit-animation-duration: 0.4s;
+	  animation-name: animatetop;
+	  animation-duration: 0.4s
+	}
+
+	/* Add Animation */
+	@-webkit-keyframes animatetop {
+	  from {top:-300px; opacity:0} 
+	  to {top:0; opacity:1}
+	}
+
+	@keyframes animatetop {
+	  from {top:-300px; opacity:0}
+	  to {top:0; opacity:1}
+	}
+
+	/* The Close Button */
+	.modal-close {
+	  color: white;
+	  float: right;
+	  font-size: 28px;
+	  font-weight: bold;
+	}
+
+	.modal-close:hover,
+	.modal-close:focus {
+	  color: #000;
+	  text-decoration: none;
+	  cursor: pointer;
+	}
+
+	.modal-header {
+	  padding: 2px 16px;
+	  background-color: navy;
+	  color: white;
+	}
+
+	.modal-body {
+		padding: 16px;
+		text-align: center;
+		font-family: Consolas, monospace;
+		font-size: larger;
+		letter-spacing: -3px;
+	}
+
+	.modal-footer {
+	  padding: 2px 16px;
+	  background-color: #5cb85c;
+	  color: white;
+	}
+</style>
+</head>
+<body>
+
+<script src="exolve/dkm-exolve-utils.js"></script>
+<script>
+function decryptStringWithXOR(input,key) {
+  
+  const utf8Encode = new TextEncoder();
+	var c = utf8Encode.encode(window.atob(input));
+	var kb = utf8Encode.encode(key);
+	
+ 	for(var i=0; i<c.length; i++) {
+		for(var r=0; r<kb.length; r++) {
+			var k = r % kb.length;
+		  c[i] = c[i] ^ kb[k];
+	 	}
+	}
+  
+	return (new TextDecoder()).decode(c);
+}
+
+const exolvedata = `
+	TExMTExMIzQhPTAyNFEmOCU5USg+JCNRISQrKz00UTM0PT4mTExMTExMe3sUCR4dBxRcEx
+	QWGB97UVEUCR4dBxRcGBVLURUaHFwEHwUYBR0UFVxDQUNDe1FRFAkeHQcUXAUYBR0US1Ek
+	HwUYBR0UFXtRURQJHh0HFFwCFAUFFANLUTUQAwMUH1E8GB0dFAN7UVEUCR4dBxRcEh4BCA
+	MYFhkFS1FDQUNDUTUQAwMUH1E8GB0dFAN7UVEUCR4dBxRcBhgVBRlLUUBEe1FRFAkeHQcU
+	XBkUGBYZBUtRQER7UVEUCR4dBxRcHgEFGB4fS1ESHh0eA1wQEgUYBxRLHRgWGQUIFB0dHg
+	Z7UVEUCR4dBxRcHgEFGB4fS1ESHh0eA1wYHwEEBUsDHggQHRMdBBRREh4dHgNcEAMDHgZL
+	HRgWGQUIFB0dHgZ7UVEUCR4dBxRcHgEFGB4fS1ESHh0eA1wdGBYZBVwdEBMUHVwYHwEEBU
+	sGGRgFFHtRURQJHh0HFFweAQUYHh9LURIeHR4DXB0YFhkFXAUUCQVcGB8BBAVLBhkYBRR7
+	UVEUCR4dBxRcHgEFGB4fS1ESHh0eA1wTBAUFHh9LHxAHCFESHh0eA1wTBAUFHh9cGR4HFA
+	NLAQQDAR0Ue1FRFAkeHQcUXB4BBRgeH0tREh0EFAJcARAfFB1cHRgfFAJLQ0F7UVEUCR4d
+	BxRcHgEFGB4fS1EZGBUUXBIeAQhcAR0QEhQZHh0VFANcEwQFBR4fAntRURQJHh0HFFwDFB
+	0QExQdS3tRUVFREh0UEANLUTIdFBADUQUZGAJRBh4DFXtRUVFRAxQHFBAdS1EiGR4GURkY
+	HwVRFx4DURwUBRkeFVkCWHtRURQJHh0HFFwWAxgVS3t4eFFfUUFRQVFBUUFRQVFBUUFRQV
+	FfUUFRQVFBUUFRQVF7eHhRX1FfUUFRX1FBUV9RQVFfUUFRX1FBUV9RQVFfUUFRe3h4UUFR
+	QVFBUUFRQVFBUUFRQVFBUUFRQVFBUUFRQVFBUXt4eFFBUV9RQVFfUUFRX1FBUV9RQVFfUU
+	FRX1FBUV9RQVF7eHhRQVFBUUFRQVFBUV9RQVFBUUFRQVFBUUFRQVFBUUFRe3h4UUFRX1FB
+	UV9RQVFfUUFRX1FfUV9RQVFfUUFRX1FfUXt4eFFBUUFRQVFBUUFRQVFBUV9RQVFBUUFRQV
+	FBUUFRX1F7eHhRQVFfUUFRX1FfUV9RQVFfUUFRX1FfUV9RQVFfUUFRe3h4UV9RQVFBUUFR
+	QVFBUUFRX1FBUUFRQVFBUUFRQVFBUXt4eFFfUV9RQVFfUUFRX1FfUV9RQVFfUUFRX1FBUV
+	9RQVF7eHhRQVFBUUFRQVFBUUFRQVFBUUFRX1FBUUFRQVFBUUFRe3h4UUFRX1FBUV9RQVFf
+	UUFRX1FBUV9RQVFfUUFRX1FBUXt4eFFBUUFRQVFBUUFRQVFBUUFRQVFBUUFRQVFBUUFRQV
+	F7eHhRQVFfUUFRX1FBUV9RQVFfUUFRX1FBUV9RQVFfUV9Re3h4UUFRQVFBUUFRQVFfUUFR
+	QVFBUUFRQVFBUUFRQVFfUXt4FAkeHQcUXBASAx4CAkt7eHhAUVE1GAIFBAMTFBVRGRQYA1
+	EXHh0dHgYCUSUeHFEQHxVRMhkQAx0YFFEFHlETFFEcHgMUURQQAhgdCFEDFBwUHBMUAxQV
+	UVlJWHt4eEdRUT0eBBgCGBAfEFETHghRBhgFGVEFGRRRIgEQHxgCGVEfEBwUUVlEWHt4eE
+	hRUSUZFAhRAhAYFV1RVx0VAAQeSiIYA11REh4cFFEfEAcYFhAFFFE0FVEQHR1RBRkUUQYQ
+	CFEQAx4EHxVXAxUABB5KUVlARFh7eHhAQVFRPx4FGRgfFlEDHgUCURMQFR0IUR0YGhRRAR
+	QDEhlRWURYe3h4QEBRUSIUEFESAxATUThRHBgJFBVRBhgFGVEQUR0eBVEeF1ETFBAfAlFZ
+	SFh7eHhAQ1FRNAkBFAMYFB8SFFEeF1EWGAMdURQfFRgfFlEEAVESHhwYHxZRExASGlEDFB
+	YEHRADHQhRWUZYe3h4QEJRUSIZFFEYHxgFGBAdHQhREAIaFBVRFx4DUQIeHBRREwQfFR0U
+	AlFZR1h7eHhARFFRNx4EHxUUAxgfFlECBRQQHAIZGAECURsUBQUYAh4fURkUHAFRBR5RAx
+	QQEhlRFAAEGB0YEwMYBBxRWUdYe3h4QEZRUSMUEBVRAhQSAxQFURwUAgIQFhRRGB9RNRQd
+	EAYQAxRRBR4cE1FZRlh7eHhASFFRIRkeBR4WAxABGVEeHxRREhAdHRgWAxABGRQDURkeHR
+	UYHxZREFEDGB8WUVlEXUVYe3h4Q0BRUSIEAgEUEgVRBxgdHRAYH1EXFAMFGB0YCxQVUQUe
+	HlEcBBIZUVlEWHt4eENDUVEhFAEBFANRBhADHwJRAhkYAVEQEx4EBVEIHgQfFlEBBB8aAl
+	FZQERYe3h4Q0JRUTgFV1JJQ0BGSgJRAgYUFAVRAR0QCBgfFlEWBBgFEAMCUQYYBRkeBAVR
+	GAVRWURYe3h4Q0VRUSIUARADEAUUFVE3AxgCExQUURwQHxYdFBVRBQMUFFFZSVh7eBQJHh
+	0HFFwVHgYfS3t4eENRUTIZGB0dGB8WUQUEHxRRBhgFGVESAxgcGB8QHVEYH1EVHhgfFlEY
+	BVEQBhcEHR0IUVlCXEBDWHt4eEJRUTYDHgQBGB8WUR4XUQQdEhQDAlEEAQIUBVEQEx4EBV
+	EFFBBRWUZYe3h4RVFROR4FFB1RBhgFGVEEHx0YHBgFFBVREh4EAhIeBAJdUQIFGAMDFBVR
+	EwQFURMdEB8VUVlIWHt4eERRUTAXBRQDURBRHRQXBV1REAMDGAcUURMIURwYAgUQGhRREA
+	VRMBwQCx4fXVEBFAMZEAECUVlEWHt4eEdRUT0UFwVRExgWURQUHVECAAQYAxwYHxZdURAC
+	UQgeBFESEB9RAR0QGB8dCFEDFBAVUVlGWHt4eEZRUTcDCFETFBQXURIEBR0UBVEcGAkUFV
+	EGGAUZUR4VFVEFHhcEUQYZFB9RAhwQHR1REhkQHxYUAlEZEAcUUR0QAxYUUQMUAgQdBQJR
+	WUhdR1h7eHhJUVE4UR0UFwVRNRAfGBQdURMDHhoUH1EQHxVRBhQYFhkUFVEVHgYfUVlEWH
+	t4eEhRUSIBHh4fFANRGRQQAxVREgQDAhQCURAFUQUZFFEXBB8XEBgDUVlHWHt4eEBCUVEi
+	GB0YEh4fUQIQHxUGGBIZUQIZHgFREB0cHgIFUQIUHwVRExASGlEFHlEFGRRREx4DFRQDAl
+	FZSFh7eHhARVFRMh4cFAJRExASGlEQAx4EHxVREwQFURMEAx8CUQYYBRkeBAVRBR4BAlFZ
+	QFxEWHt4eEBHUVE8Hh0UUQYDFAIFHRQCUR0UHgEQAxUUAgIUAlEGGAUZHgQFUQIeFRACUV
+	lGWHt4eEBJUVEyAxgBAR0UURUUAhgWHxQVURBRAgEUFBUIUQIZGAFRWUZYe3h4QEhRUT0U
+	EBUUAwJRHhdRAQMYBxAFFFEQAxwYFAJRBhgdHVEfFBQVUQIeHBRRAh4dFRgUAwJRWURYe3
+	h4Q0FRUTMYBQUUA1EQEhgVURQfFgQdFwJRAxgfFh0UEBUUA1FZRFh7eBQJHh0HFFwUHxV7
+	e0xMTExMTCM0IT0wMjRRJjglOVEoPiQjUSEkKys9NFEwMz4nNExMTExMTHs=
+`;
+
+let params = new URLSearchParams(document.location.search);
+let query = params.get('key');
+
+if(query) {
+	let key = query instanceof Array ? query[0] : query;
+	exdata = decryptStringWithXOR(exolvedata, key);
+	
+	if(exdata.match(/[^\s\x20-\x7E]/)) {
+		// bad characters or key didn't match
+	} else if(exdata.match(/exolve/)) {
+		createExolve(exdata);		
+	} 
+}
+
+</script>
+</body>
+</html>
