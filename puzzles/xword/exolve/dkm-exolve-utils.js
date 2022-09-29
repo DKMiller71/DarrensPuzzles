@@ -166,3 +166,50 @@ function insertBackgroundForLightCells(puz, colorname) {
     }
   }
 }
+
+// Report size to parent frame if listening
+
+var lastSize = 0;
+var reportSizeTimer = null;
+
+function waitAndReportSize() {
+  if(reportSizeTimer) { clearTimeout(reportSizeTimer); }
+  reportSizeTimer = setTimeout(reportSize, 150);
+}
+
+function reportSize() {
+
+  var el = document.getElementById('scroll-wrapper');
+  if(!el) { return; }
+  var newsize = Math.max(
+    el.scrollHeight, el.offsetHeight, el.clientHeight
+  );
+
+  if(lastSize == newsize) { return; }
+  if(newsize == 0) { return; }
+  top.postMessage('gasframe.height:' + el.scrollHeight, '*');
+  lastSize = newsize;
+}
+
+const list = document.body;
+
+// options
+const config = {
+  attributes: true,
+  childList: true,
+  characterData: true,
+  subtree: true
+};
+
+if (window.self !== window.top) {
+// page is in an iFrame");
+ 
+	// instance
+	const observer = new MutationObserver(waitAndReportSize);
+
+	observer.observe(list, config);
+
+	document.addEventListener('DOMContentLoaded', (event) => {
+	  waitAndReportSize();
+	})
+}
