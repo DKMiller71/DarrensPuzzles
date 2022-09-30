@@ -10,36 +10,138 @@ See the full Exolve license notice in exolve-m.js.
 -->
 <link rel="stylesheet" type="text/css" href="exolve/exolve-m.css"/>
 <script src="exolve/exolve-m.js"></script>
-
 <title>Cryptic 2022-09 by Darren Miller</title>
 
 <style>
 	body {
 		font-family: "Gill Sans", sans-serif;
 	}
+	@media print {
+		.extractButton {
+		     visibility: hidden;
+	   }
+	}
+
+	/* The Modal (background) */
+	.modal {
+	  display: none; /* Hidden by default */
+	  position: fixed; /* Stay in place */
+	  z-index: 5; /* Sit on top */
+	  padding-top: 100px; /* Location of the box */
+	  left: 0;
+	  top: 0;
+	  width: 100%; /* Full width */
+	  height: 100%; /* Full height */
+	  overflow: auto; /* Enable scroll if needed */
+	  background-color: rgb(0,0,0); /* Fallback color */
+	  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+	}
+	/* Modal Content */
+	.modal-content {
+	  position: relative;
+	  background-color: #fefefe;
+	  margin: auto;
+	  padding: 0;
+	  border: 1px solid #888;
+	  width: 80%;
+	  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+	  -webkit-animation-name: animatetop;
+	  -webkit-animation-duration: 0.4s;
+	  animation-name: animatetop;
+	  animation-duration: 0.4s
+	}
+
+	/* Add Animation */
+	@-webkit-keyframes animatetop {
+	  from {top:-300px; opacity:0} 
+	  to {top:0; opacity:1}
+	}
+
+	@keyframes animatetop {
+	  from {top:-300px; opacity:0}
+	  to {top:0; opacity:1}
+	}
+
+	/* The Close Button */
+	.modal-close {
+	  color: white;
+	  float: right;
+	  font-size: 28px;
+	  font-weight: bold;
+	}
+
+	.modal-close:hover,
+	.modal-close:focus {
+	  color: #000;
+	  text-decoration: none;
+	  cursor: pointer;
+	}
+
+	.modal-header {
+	  padding: 2px 16px;
+	  background-color: navy;
+	  color: white;
+	}
+
+	.modal-body {
+		padding: 16px;
+		text-align: center;
+		font-family: Consolas, monospace;
+		font-size: larger;
+	}
+
+	.modal-footer {
+	  padding: 2px 16px;
+	  background-color: #5cb85c;
+	  color: white;
+	}
 </style>
 </head>
 <body>
-<script src="exolve/dkm-exolve-utils.js"></script>
-<div id='scroll-wrapper'>
+<div id="popupModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="modal-close">&times;</span>
+      <h3>Check Puzzle</h3>
+    </div>
+    <div class="modal-body" onclick="selectall(this);">
+    </div>
+  </div>
+
+</div>
+<div id='scroll-wrapper'><div id="exolve"></div>
 <script>
+
+function customizeExolve(p) {
+  const b = document.createElement('button');
+  b.className = 'xlv-button';
+  b.innerHTML = 'Check puzzle';
+  b.title = 'Check puzzle'
+  b.addEventListener('click', (evt) => {
+    checkPuzzle();
+  });
+  p.buttonRow1.appendChild(b);	
+}
 
 createExolve(`
 ======REPLACE WITH YOUR PUZZLE BELOW======
 
 exolve-begin
-  exolve-id: dkm-untitled-202209
+  exolve-id: dkm-cryptic-202209
   exolve-title: Cryptic 2022-09
   exolve-setter: Darren Miller
   exolve-copyright: 2022 Darren Miller
   exolve-width: 15
-  exolve-height: 15
-  exolve-option: color-active:lightyellow
+  exolve-height: 15	exolve-option: color-active:lightyellow
   exolve-option: color-input:royalblue color-arrow:lightyellow
   exolve-option: color-light-label-input:white
   exolve-option: color-light-text-input:white
   exolve-option: color-button:navy color-button-hover:purple
   exolve-option: clues-panel-lines:20
+  exolve-option: color-overwritten-start:green
+  exolve-option: highlight-overwritten-seconds:0.5
   exolve-option: hide-copy-placeholder-buttons
   exolve-relabel:
     clear: Clear this word
@@ -94,7 +196,188 @@ exolve-begin
 
 ======REPLACE WITH YOUR PUZZLE ABOVE======
 `);
+
+let popupModal;
+
+function doCloseModal() {
+	if(popupModal) { 
+		if(popupModal.style.display == "none") { return;	}
+		popupModal.style.display = "none";
+		window.getSelection().removeAllRanges();
+	}
+}
+
+function showModal(msg) {
+	// Get the modal
+	if (!popupModal) {
+		popupModal = document.getElementById("popupModal");
+	
+		if(popupModal) {
+			var span = document.getElementsByClassName("modal-close");
+			span[0].onclick = doCloseModal;
+			window.onclick = function(e) {
+				if(e.target == popupModal) { doCloseModal(); }
+			}
+			document.addEventListener('keydown', (event) => {
+  			if (event.key === 'Escape') { doCloseModal(); }
+  		});
+		}
+	}
+
+	if(popupModal) {
+		var modalBody = document.getElementsByClassName("modal-body");
+		if(modalBody) {
+			modalBody[0].innerHTML = msg;
+			popupModal.style.display = "block";
+		}
+	}
+}
+
+var puzid = 'dkm-cryptic-202209';
+
+var exolveanswers = {
+	A1:  'f01f6ae7c3f1b58f61ca1ccabf8215fc88c7060e9b4512a005693bb2a7cb6fd6',
+	A6:  '0d6fda019c2504de9240206f3a7936e49a1190354fb65f8e1c171683b476d2cf',
+	A9:  '653189f14d830e7b75d046a840fe1fbd8e125a7ee1d0340982ce45168150ae34',
+	A10: '08f307d66900dbd66793d6da914d5296f6dbfcd60d628483fbf01a4580d8da36',
+	A11: '53489f3dd99ac1aa275c98090982672dc36f16de496041236a6855c4c2c66d9b',
+	A12: 'cf1f6c61103ebae481141e41299150209adc3842f0c182acabb87c31c941fa8f',
+	A13: '7ed992fdfddeccdfe37730e171ddb703c3ac9dd8d2611ac23091c7c65e2e4eda',
+	A15: '0b6a45ce5d885c9ee0b5c1086371f3480d7c29c78de0fd37cda3e20fb0a16b67',
+	A17: 'd51c3f133e8c00336f39e1f61011b7944f9c49a1a32404032e5b55f360024d28',
+	A19: '09607f7dcc5f63d37895cc4fcf6ba15f400d6fa14d18b153cf4126e033e7ca64',
+	A21: 'c0d939d3eff82a12270124876f7c82edb41543c0a27c068a1b369a4282dc9197',
+	A22: '988bbc9e9f3f65d2ed72a07d9e91e812429ab9b710e1c685f00f07c83efdf9b2',
+	A23: '0d7be9477d19d6e73b4e3c13c6ae48b418725e29ab8e0bab31c1ca3da543e9bd',
+	A24: '72522d3217fb90381ebad9463334876549eb87a543803472fa6d4e4429bbd0d4',
+	D2:  '79346b5ce86db655e32953aea6e90bd72a8ba838cccab15fb8a0789ca53a2aed',
+	D3:  '033278922ccddea3f3795b4e31b3f21e7407e2f449791fcf8d880886a344e33d',
+	D4:  '0a17fb55d90f7388987e37be4ee8c988746eaa1f63e505e6ed5f4906e1ae3e88',
+	D5:  '83f1c699f315d25c44e643b7b73598ca68848e3ecf671b062f36c2d015f35931',
+	D6:  'a214d49fc3415bc99e4369960c623f470018629588b6591ba5eff4402c6f82ec',
+	D7:  'c62e14c09fd46bbf012f5148dfa5415182c35cf8beaaefb1ae833ff1d8b8ed08',
+	D8:  'e035cda6006b1695958f514378a4885058546a1e4a7678efa593b4b84cd8cb51',
+	D9:  'acaf503c65018c708c2fdf1e8e1e25cde93f54200566a672d9d4c1d27a80b189',
+	D13: '3516dad9c5fb4189f39c4d1be9923f07436c7bcc5558191919da40b3e46b8c81',
+	D14: 'fbaaa884961997deaf02cf807819c142de9a8e6d200820973c2f6a0915c30e4d',
+	D16: 'd5231ffaa314439bce48c74d331239c43a989e00bc75882dcfd9dd0115e4f227',
+	D18: 'e693327c4bcec84c4a610d11879cf658d5759fa57d7656d6d9514eb9d6992ffe',
+	D19: '18ec6003e2573c3e2eda7a02764275ab44f9b8a2e20fb73e4729b943c129b543',
+	D20: '74fb207236db64995afcbe66a59121f3b852c17d3d79b09c4235a6b1976dbc2e'
+}
+
+function sha256hash(string) {
+  const utf8 = new TextEncoder().encode(string);
+  return crypto.subtle.digest('SHA-256', utf8).then((hashBuffer) => {
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray
+      .map((bytes) => bytes.toString(16).padStart(2, '0'))
+      .join('');
+    return hashHex;
+  });
+}
+
+function getLight(puz, clueIndex) {
+  let light = ''
+  for (let rowcol of puz.clues[clueIndex].cells) {
+    light = light + puz.grid[rowcol[0]][rowcol[1]].currLetter
+  }
+  return light
+}
+
+var checklock = 0;
+var answer_hashes = {};
+var hashpromises = [];
+
+function checkPuzzle() {
+
+	if(checklock) { return false; }
+	answer_hashes = {};
+	hashpromises = [];
+	
+	var puz = exolvePuzzles[puzid];
+	
+	if(!puz) { return; }
+
+	checklock = 1;	
+	const keys = Object.keys(exolveanswers);
+	var p;
+
+	for (var k=0; k < keys.length; k++) {
+		var light = getLight(puz, keys[k]);
+		if(light.match(/0/)) {
+			p = Promise.resolve('');
+			answer_hashes[keys[k]] = p;
+			hashpromises.push(p);
+		} else {
+			p = sha256hash(light);			
+			answer_hashes[keys[k]] = p;
+			hashpromises.push(p);
+		}
+	}
+	
+	if(hashpromises.length>0) {
+		Promise.all(hashpromises).then(processAnswers());
+		return false;
+	}
+
+	processAnswers();
+	return false;
+}
+
+async function processAnswers() {
+	
+	var incomplete_count = 0;
+	var incorrect_count = 0;
+	var incorrect_msg = '';
+	
+	var puz = exolvePuzzles[puzid];
+	
+	if(!puz) { return; }
+	
+	const keys = Object.keys(exolveanswers);
+	
+	for (var k=0; k < keys.length; k++) {
+		if (!answer_hashes.hasOwnProperty(keys[k])) {
+			// console.log(keys[k]+': missing hash');
+		} else {
+			var ans = await answer_hashes[keys[k]];
+			if(ans == '') {
+				incomplete_count++;
+			} else {
+				if(ans != answers[keys[k]]) {
+					if(incorrect_count) { incorrect_msg +=', '; }
+					incorrect_msg += keys[k];
+					incorrect_count++;
+				}
+			}
+		}
+	}
+
+	var msg = '';
+	if(!(incorrect_count||incomplete_count)) {
+		msg = 'Correct!';
+	} else {
+		if(incorrect_count) {
+			msg = 'Incorrect answer'
+					+ (incorrect_count > 1 ? 's' : '')
+					+ ': ' + incorrect_msg;
+		
+			if(incomplete_count>0) { msg += ' and ' }			
+		}
+
+		if(incomplete_count>0) {
+			msg += incomplete_count + ' incomplete answer'
+					+ (incomplete_count > 1 ? 's' : '')
+		}
+		msg += '.';
+	}
+	showModal(msg);
+	checklock = 0;
+}
+
 </script>
+<script src="exolve/dkm-exolve-utils.js"></script>
 </div>
 </body>
 </html>
