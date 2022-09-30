@@ -115,14 +115,25 @@ See the full Exolve license notice in exolve-m.js.
 <script>
 
 function customizeExolve(p) {
-  const b = document.createElement('button');
+  let b = document.createElement('button');
   b.className = 'xlv-button';
   b.innerHTML = 'Check puzzle';
   b.title = 'Check puzzle'
   b.addEventListener('click', (evt) => {
     checkPuzzle();
   });
-  p.buttonRow1.appendChild(b);	
+  p.buttonRow1.appendChild(b);
+  p.buttonRow1.appendChild(document.createTextNode("\n"));
+
+  b = document.createElement('button');
+  b.className = 'xlv-button';
+  b.innerHTML = 'Get hints';
+  b.title = 'Get hints'
+  b.addEventListener('click', (evt) => {
+    window.open('../../hints/Cryptic202209_hints.html', '_blank');
+  });
+  p.buttonRow1.appendChild(b);
+  p.buttonRow1.appendChild(document.createTextNode("\n"));  
 }
 
 createExolve(`
