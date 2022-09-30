@@ -356,7 +356,7 @@ async function processAnswers() {
 			if(ans == '') {
 				incomplete_count++;
 			} else {
-				if(ans != answers[keys[k]]) {
+				if(ans != exolveanswers[keys[k]]) {
 					if(incorrect_count) { incorrect_msg +=', '; }
 					incorrect_msg += keys[k];
 					incorrect_count++;
