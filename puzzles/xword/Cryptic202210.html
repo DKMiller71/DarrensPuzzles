@@ -10,81 +10,393 @@ See the full Exolve license notice in exolve-m.js.
 -->
 <link rel="stylesheet" type="text/css" href="exolve/exolve-m.css"/>
 <script src="exolve/exolve-m.js"></script>
-
 <title>Cryptic 2022-10 by Darren Miller</title>
 
 <style>
 	body {
 		font-family: "Gill Sans", sans-serif;
 	}
+	@media print {
+		.extractButton {
+		     visibility: hidden;
+	   }
+	}
+
+	/* The Modal (background) */
+	.modal {
+	  display: none; /* Hidden by default */
+	  position: fixed; /* Stay in place */
+	  z-index: 5; /* Sit on top */
+	  padding-top: 100px; /* Location of the box */
+	  left: 0;
+	  top: 0;
+	  width: 100%; /* Full width */
+	  height: 100%; /* Full height */
+	  overflow: auto; /* Enable scroll if needed */
+	  background-color: rgb(0,0,0); /* Fallback color */
+	  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+	}
+	/* Modal Content */
+	.modal-content {
+	  position: relative;
+	  background-color: #fefefe;
+	  margin: auto;
+	  padding: 0;
+	  border: 1px solid #888;
+	  width: 80%;
+	  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+	  -webkit-animation-name: animatetop;
+	  -webkit-animation-duration: 0.4s;
+	  animation-name: animatetop;
+	  animation-duration: 0.4s
+	}
+
+	/* Add Animation */
+	@-webkit-keyframes animatetop {
+	  from {top:-300px; opacity:0} 
+	  to {top:0; opacity:1}
+	}
+
+	@keyframes animatetop {
+	  from {top:-300px; opacity:0}
+	  to {top:0; opacity:1}
+	}
+
+	/* The Close Button */
+	.modal-close {
+	  color: white;
+	  float: right;
+	  font-size: 28px;
+	  font-weight: bold;
+	}
+
+	.modal-close:hover,
+	.modal-close:focus {
+	  color: #000;
+	  text-decoration: none;
+	  cursor: pointer;
+	}
+
+	.modal-header {
+	  padding: 2px 16px;
+	  background-color: navy;
+	  color: white;
+	}
+
+	.modal-body {
+		padding: 16px;
+		text-align: center;
+		font-family: Consolas, monospace;
+		font-size: larger;
+	}
+
+	.modal-footer {
+	  padding: 2px 16px;
+	  background-color: #5cb85c;
+	  color: white;
+	}
 </style>
 </head>
 <body>
-<script src="exolve/dkm-exolve-utils.js"></script>
-<div id='scroll-wrapper'>
+<div id="popupModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="modal-close">&times;</span>
+      <h3>Check Puzzle</h3>
+    </div>
+    <div class="modal-body" onclick="selectall(this);">
+    </div>
+  </div>
+
+</div>
+<div id='scroll-wrapper'><div id="exolve"></div>
 <script>
 
-const exolvedata = `
-	TExMTExMIzQhPTAyNFEmOCU5USg+JCNRISQrKz00UTM0PT4mTExMTExMe3sUCR4dBxRcEx
-	QWGB97UVEUCR4dBxRcGBVLURUaHFwEHwUYBR0UFVxDQUNDQUB7UVEUCR4dBxRcBRgFHRRL
-	UTIDCAEFGBJRQ0FDQ1xAQXtRURQJHh0HFFwCFAUFFANLUTUQAwMUH1E8GB0dFAN7UVEUCR
-	4dBxRcEh4BCAMYFhkFS1FDQUNDUTUQAwMUH1E8GB0dFAN7UVEUCR4dBxRcBhgVBRlLUUBE
-	e1FRFAkeHQcUXBkUGBYZBUtRQER7UVEUCR4dBxRcAQMUEBwTHRRLe3gUCR4dBxRcHgEFGB
-	4fS1ESHh0eA1wQEgUYBxRLHRgWGQUIFB0dHgZ7UVEUCR4dBxRcHgEFGB4fS1ESHh0eA1wY
-	HwEEBUsDHggQHRMdBBRREh4dHgNcEAMDHgZLHRgWGQUIFB0dHgZ7UVEUCR4dBxRcHgEFGB
-	4fS1ESHh0eA1wdGBYZBVwdEBMUHVwYHwEEBUsGGRgFFHtRURQJHh0HFFweAQUYHh9LURIe
-	HR4DXB0YFhkFXAUUCQVcGB8BBAVLBhkYBRR7UVEUCR4dBxRcHgEFGB4fS1ESHh0eA1wTBA
-	UFHh9LHxAHCFESHh0eA1wTBAUFHh9cGR4HFANLAQQDAR0Ue1FRFAkeHQcUXB4BBRgeH0tR
-	Eh0EFAJcARAfFB1cHRgfFAJLQ0F7UVEUCR4dBxRcHgEFGB4fS1EZGBUUXBIeAQhcAR0QEh
-	QZHh0VFANcEwQFBR4fAntRURQJHh0HFFwDFB0QExQdS3tRUVFREh0UEANLUTIdFBADUQUZ
-	GAJRBh4DFXtRUVFRAxQHFBAdS1EiGR4GURkYHwVRFx4DURwUBRkeFVkCWHtRURQJHh0HFF
-	wWAxgVS3t4eEFRQVFBUUFRQVFBUV9RX1FBUUFRQVFBUUFRQVFBUXt4eEFRX1FBUV9RQVFf
-	UUFRX1FBUV9RQVFfUUFRX1FBUXt4eEFRQVFBUUFRQVFBUUFRQVFBUV9RQVFBUUFRQVFBUX
-	t4eEFRX1FBUV9RQVFfUUFRX1FBUV9RQVFfUUFRX1FBUXt4eEFRQVFBUUFRQVFBUUFRX1FB
-	UUFRQVFBUUFRQVFBUXt4eF9RX1FBUV9RQVFfUUFRX1FfUV9RQVFfUUFRX1FBUXt4eEFRQV
-	FBUUFRX1FBUUFRQVFBUUFRQVFBUUFRQVFBUXt4eEFRX1FfUV9RQVFfUUFRX1FBUV9RQVFf
-	UV9RX1FBUXt4eEFRQVFBUUFRQVFBUUFRQVFBUUFRX1FBUUFRQVFBUXt4eEFRX1FBUV9RQV
-	FfUV9RX1FBUV9RQVFfUUFRX1FfUXt4eEFRQVFBUUFRQVFBUUFRX1FBUUFRQVFBUUFRQVFB
-	UXt4eEFRX1FBUV9RQVFfUUFRX1FBUV9RQVFfUUFRX1FBUXt4eEFRQVFBUUFRQVFfUUFRQV
-	FBUUFRQVFBUUFRQVFBUXt4eEFRX1FBUV9RQVFfUUFRX1FBUV9RQVFfUUFRX1FBUXt4eEFR
-	QVFBUUFRQVFBUUFRX1FfUUFRQVFBUUFRQVFBUXt4FAkeHQcUXBASAx4CAkt7eHhAUVEhGR
-	4FHhYDEAEZFANRFwMeHFEyEB0YFx4DHxgQUQUQGhQCURBRAxgWGQVREAMeBB8VUTwQGB8U
-	UVlHWF57eHhFUVE/HgVRFAcUH1EBHRAfBVEdGBcUUR4fURBRBRATHRRRBR4BURgCUQIeUR
-	QQAggWHhgfFlFZRlh7eHhIUVEiEAhdUQQZXVECHlECGRRRFRQHHgQDFBVREFESHh0dFBAW
-	BBROUVlIWHt4eEBBUVEwUQcUAwhRAh4XBVEDGB8VURcDHhxRHRgFBR0UURcDBBgFUVlEWH
-	t4eEBAUVE0CQEUAwVRGAJRGRAdF1waGB0FFBVREBMeEAMVUQUeEx4WFhAfUVlGWHt4eEBD
-	UVEiGBVRBAECFAVRBhgFGVETAx4GH1ECGRgDBU5RNxADUR4EBVBRWUZYe3h4QEJRUSMUHR
-	AFGAcUURATBB8VEB8SFFEEHxUUA1EfFAZRBQMYExAdUR0UEBUUAwJRWUVYe3h4QEVRUThR
-	AAQYBVEYEh4fGBJRAhIUHxRREBMeBAVRHB4DEB0YBQhRWUBBWHt4eEBGUVEhHgMFHQhRFR
-	QUA1EUCQEdHhUUFV1REBISHgMVGB8WUQUeUQMEHB4DUVlAQVh7eHhASFFRJRkUUQYUEB0F
-	GQhRHhISBAEIURkYAgUeAxgSURkeHBQCUVlFWHt4eENDUVE2AxASFBcEHVEUHRQBGRAfBV
-	ESEAMDGBQCUTYDFBQaUR0UEBUUA1EYHwIFFBAVUR4XURkUEAMFHRQCAlEBGRADEB4ZUVlG
-	WHt4eENFUVEmGB0VUR0YHh9REAUUUQEQAwVRHhdRFx4eBVFZRlh7eHhDR1FRPBADEx0UUQ
-	UYHRQCURkeHRVRExASGlEFGRRRExQCBVFZRFh7eHhDRlFRPBAWGBIQHVESHhgfAlESHhwU
-	URcDHhxRAQMeFQQSGB8WURAfFVESHh8CBBwYHxZRFh4eFQJREB8VUQIUAwcYEhQCUVlIWH
-	t4eENJUVEwAwUCUQcUHwQUUQUeUQMUAgUDEBgWGQUUH1EcGAICGB8WUQMYHxYCUQIeHBQZ
-	HgZRWUZYe3h4Q0hRUThRGRQQAxVRAh4cFAUZGB8WURweAxRRBRkeBBYZBVwBAx4HHhoYHx
-	ZRBRkQH1EQUQIBEBIUUQMeEhpRWUdYe3gUCR4dBxRcFR4GH0t7eHhAUVE1GAIFBAMTEB8S
-	FFEXAx4cURkeAwMYFxgSUQISAxQUEhlLUR4BFAMQUQUeURgFAlEXHh0dHgYUAwJRWURYe3
-	h4Q1FRIhgcHh9RGAJRFx0IGB8WUR4fURBRAAQUAgVRWUZYe3h4QlFRIxQcFBwTFANRBR5R
-	GRAHFFEVFBcUEgUCUQMUBQQDHxQVUVlHWHt4eEVRUTACGlEXHgNRAh4cFFECGBwBHRRREB
-	UHGBIUUVlEWHt4eERRUSIUHxVRExASGlElGBxXUklDQEZKAlEQAwVRFxQQBQQDGB8WURof
-	GBYZBVFZSVh7eHhHUVEyHRADGBcIUQEdEB9ROFEVFAcUHR4BFBVRBR5RFx4dHR4GURceAx
-	wUA1ECAR4EAhRRWUZYe3h4RlFRJQYUFAVRGRgfBVEQBhoGEAMVHQhOUSUZEAVXUklDQEZK
-	AlECHlEdEAIFURIUHwUEAwhQUVlIWHt4eElRUTUQAhkYHxZRGQQCExAfFVEQHxVREFEXFA
-	ZRHgUZFAMCUVlJWHt4eEBCUVEyHh8CFB8CBAJRHh9RAgEeGB0UFVEWAxQUH1EcFBAFUVlI
-	WHt4eEBEUVEwHwIGFANRBR5RBB8XGB8YAhkUFVEdBAUUUThRGRgVURgfUQUZFFEfFBADUR
-	cEBQQDFFFZSVh7eHhAR1FRJRkUURMUAgVRAxAWFFEFFAIFTlEmHgMaGB8WUR4EBVBRWUlY
-	e3h4QElRUTIQAxQXBB1QUSIBHh4fFANREhAfUQIUFFEBAxgSFFFZRlh7eHhDQVFRMxQdGB
-	QHFFEFGRAFUThREBxREFECARgDGAVRHh9RFBICBRACCFFZRlh7eHhDQFFRNAceHQcUURgf
-	BR5REB9RGB8CFBIFUQIGEB0dHgYYHxZREh4cHBAfFRQDUVlHWHt4eENCUVE0BxQfUSQFEB
-	lRAhQfGB4DAlEZEAcUUQYZEAVRExQdHh8WAlEFHlEFGRQcUVlEWHt4eENEUVE/HgVRBRkU
-	URcYAwIFUR0eBxQDUQUeURkQBxRREFESGRAfFhRRHhdRGRQQAwVRWURYe3gUCR4dBxRcFB
-	8Ve3tMTExMTEwjNCE9MDI0USY4JTlRKD4kI1EhJCsrPTRRMDM+JzRMTExMTEw=
-`;
+function customizeExolve(p) {
+  let b = document.createElement('button');
+  b.className = 'xlv-button';
+  b.innerHTML = 'Check puzzle';
+  b.title = 'Check puzzle'
+  b.addEventListener('click', (evt) => {
+    checkPuzzle();
+  });
+  p.buttonRow1.appendChild(b);
+  p.buttonRow1.appendChild(document.createTextNode("\n"));
+
+  b = document.createElement('button');
+  b.className = 'xlv-button';
+  b.innerHTML = 'Get hints';
+  b.title = 'Get hints'
+  b.addEventListener('click', (evt) => {
+    window.open('../../hints/Cryptic202210_hints.html', '_blank');
+  });
+  p.buttonRow1.appendChild(b);
+  p.buttonRow1.appendChild(document.createTextNode("\n"));  
+}
+
+createExolve(`
+======REPLACE WITH YOUR PUZZLE BELOW======
+
+exolve-begin
+  exolve-id: dkm-cryptic-202210
+  exolve-title: Cryptic 2022-10
+  exolve-setter: Darren Miller
+  exolve-copyright: 2022 Darren Miller
+  exolve-width: 15
+  exolve-height: 15
+  exolve-preamble:
+	exolve-option: color-active:lightyellow
+  exolve-option: color-input:royalblue color-arrow:lightyellow
+  exolve-option: color-light-label-input:white
+  exolve-option: color-light-text-input:white
+  exolve-option: color-button:navy color-button-hover:purple
+  exolve-option: clues-panel-lines:20
+  exolve-option: hide-copy-placeholder-buttons
+  exolve-relabel:
+    clear: Clear this word
+    reveal: Show hint for method(s)
+  exolve-grid:
+		0 0 0 0 0 0 . . 0 0 0 0 0 0 0 
+		0 . 0 . 0 . 0 . 0 . 0 . 0 . 0 
+		0 0 0 0 0 0 0 0 0 . 0 0 0 0 0 
+		0 . 0 . 0 . 0 . 0 . 0 . 0 . 0 
+		0 0 0 0 0 0 0 . 0 0 0 0 0 0 0 
+		. . 0 . 0 . 0 . . . 0 . 0 . 0 
+		0 0 0 0 . 0 0 0 0 0 0 0 0 0 0 
+		0 . . . 0 . 0 . 0 . 0 . . . 0 
+		0 0 0 0 0 0 0 0 0 0 . 0 0 0 0 
+		0 . 0 . 0 . . . 0 . 0 . 0 . . 
+		0 0 0 0 0 0 0 . 0 0 0 0 0 0 0 
+		0 . 0 . 0 . 0 . 0 . 0 . 0 . 0 
+		0 0 0 0 0 . 0 0 0 0 0 0 0 0 0 
+		0 . 0 . 0 . 0 . 0 . 0 . 0 . 0 
+		0 0 0 0 0 0 0 . . 0 0 0 0 0 0 
+	exolve-across:
+		1  Photographer from California takes a right around Maine (6)/
+		4  Not even plant life on a table top is so easygoing (7)
+		9  Say, uh, so she devoured a colleague? (9)
+		10  A very soft rind from little fruit (5)
+		11  Expert is half-kilted aboard toboggan (7)
+		12  Sid upset with brown shirt? Far out! (7)
+		13  Relative abundance under new tribal leaders (4)
+		14  I quit iconic scene about morality (10)
+		17  Portly deer exploded, according to rumor (10)
+		19  The wealthy occupy historic homes (4)
+		22  Graceful elephant carries Greek leader instead of heartless pharaoh (7)
+		24  Wild lion ate part of foot (7)
+		26  Marble tiles hold back the best (5)
+		27  Magical coins come from producing and consuming goods and services (9)
+		28  Arts venue to restraighten missing rings somehow (7)
+		29  I heard something more thought-provoking than a space rock (6)
+	exolve-down:
+		1  Disturbance from horrific screech: opera to its followers (5)
+		2  Simon is flying on a quest (7)
+		3  Remember to have defects returned (6)
+		4  Ask for some simple advice (5)
+		5  Send back Tim&#8217;s art featuring knight (8)
+		6  Clarify plan I developed to follow former spouse (7)
+		7  Tweet hint awkwardly? That&#8217;s so last century! (9)
+		8  Dashing husband and a few others (8)
+		13  Consensus on spoiled green meat (9)
+		15  Answer to unfinished lute I hid in the near future (8)
+		16  The best rage test? Working out! (8)
+		18  Careful! Spooner can see price (7)
+		20  Believe that I am a spirit on ecstasy (7)
+		21  Evolve into an insect swallowing commander (6)
+		23  Even Utah seniors have what belongs to them (5)
+		25  Not the first lover to have a change of heart (5)
+	exolve-end
+
+======REPLACE WITH YOUR PUZZLE ABOVE======
+`);
+
+let popupModal;
+
+function doCloseModal() {
+	if(popupModal) { 
+		if(popupModal.style.display == "none") { return;	}
+		popupModal.style.display = "none";
+		window.getSelection().removeAllRanges();
+	}
+}
+
+function showModal(msg) {
+	// Get the modal
+	if (!popupModal) {
+		popupModal = document.getElementById("popupModal");
+	
+		if(popupModal) {
+			var span = document.getElementsByClassName("modal-close");
+			span[0].onclick = doCloseModal;
+			window.onclick = function(e) {
+				if(e.target == popupModal) { doCloseModal(); }
+			}
+			document.addEventListener('keydown', (event) => {
+  			if (event.key === 'Escape') { doCloseModal(); }
+  		});
+		}
+	}
+
+	if(popupModal) {
+		var modalBody = document.getElementsByClassName("modal-body");
+		if(modalBody) {
+			modalBody[0].innerHTML = msg;
+			popupModal.style.display = "block";
+		}
+	}
+}
+
+var puzid = 'dkm-cryptic-202210';
+
+var exolveanswers = {
+	A1:		'582ff0d08aaf78def2407630610a21a4ce92511e27fbe24521b353ea5851bde1',
+	A4:   '0a935ec18ca52f08785c9c17d0160d1d62115348cc808392033fcef3e93c6d5c',
+	A9:   '44914051778cd6d18f974a402ff60dd83cea2147ddff9a4901e25161a4d07ec2',
+	A10:  '55562347f437d65829303cf6307e71acf8b84a020989dd218f31586eeafd01a9',
+	A11:  '563bc4564e136d86cd1b86a7c0233d92dc0204cc6d6b1874d75d8f36eeaae873',
+	A12:  '57d8084e8fa402e31e5f58ee15f4b3aa071aa08abdb19322b8ed044122f2eeb6',
+	A13:  '5dddc539e5913f2726179ddce9385a50eebb5ac063c84d74e0ef43d3f090178e',
+	A14:  'f51c36319d5d4eee5ac4f7aad26d7cc173889b0a797d3e6b5b9ed4b41c96b123',
+	A17:  '2c7252c6a58ccc7c0551673774e63075bf5d3d5b17cf3b776887aa030087f7ce',
+	A19:  '9f7bfa37468a30117e552b93277da709afd94c0df899fbf8e48ecfcb709b8107',
+	A22:  '003b4b5e509eef5aff1d9ddee24ec50b89a1fe4ff670330e5c2f30d4382c51a9',
+	A24:  '052b62436b88f47408496d8eb73d37fb1c5bb2f5bec16cdaec47807a07555835',
+	A26:  '867ea78c4a3a9e0e07cc9c41d0744fb741f7a3fb7ff14164fa20224233d701f8',
+	A27:  'd4ca872cf2f260bd57608d9c8c10be7c47ad4d82a816c43c0dec91e500ee1564',
+	A28:  'b287a7dcacebada6b5d33ffb9291b18a26713bf7b1b38c162b82595a00024796',
+	A29:  '1950032fc7b5880544dfe6ac29bd2980aaaa82bad81e4699cc2bbad175fa59f6',
+	D1:   'dc1a2f9d7bd77176adf5cfec6d2efaddd343e7562000ee31f8f986f037d33ddf',
+	D2:   '78532b626e71177e016f57a4a03c952c96b40952031c20893965256101593b87',
+	D3:   '48528ae80ef20693fa0989bf47123f474fa19f5e7ee5bb58df8db3915f11d237',
+	D4:   '9b61f8ec0d8d611514fcf5eab002efec9e6515ddd048e5b818e190fd90ca4642',
+	D5:   'c7dbcc0d0437d66066c26c2560be8dd8ad6be673485b5c6ac6e9ac506952f3f5',
+	D6:   'a42f134d4d2368c38044ed4cc1c8c1f2bf2affd7d4c5bf490f6be947b06024e7',
+	D7:   '6c130f758f4fdf677d6cb2b8bf0cbdca5d2b9fc41da71765eedace1dff439b14',
+	D8:   'a9c7bf40c681a1b2e0d6997c20bdee5bbcdca8c504fed51e992d52041ad211d9',
+	D13:  '03c89c21a05030ba4a5e4835731d3cfffa869a709b6583769e9a8bb826c7d245',
+	D15:  'e0ac02c12873b7b1e3195ca902b716e38ffe6135001dac26ab7908f3de8c096b',
+	D16:  '7a4369366c4beafa235c3d66549b3b12a893b832dc94ca2853bd0e10f7ad51b8',
+	D18:  'e890ff5930d6ebc35d70964f4e05ebe05d97a6f7fec6280ff8ec7f9fd7e8bbd6',
+	D20:  '32ea504d170bcb8643ce58024f799fae39d1aa881c6ba93fa6f8021460e7246d',
+	D21:  '91bfc22a904bd2378537ca7f59cf7e4bc26f0fd125f47bfb656d313be4f210a5',
+	D23:  '7a8fdc846a82ac6c211a577b9143f6c17edab88787c1ead4aff0df21f4b735ad',
+	D25:	  'dd6dffcd56b77597157ac6c1beb514aa4c59d033098f806d88df89245824d3f5'
+}
+
+function sha256hash(string) {
+  const utf8 = new TextEncoder().encode(string);
+  return crypto.subtle.digest('SHA-256', utf8).then((hashBuffer) => {
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray
+      .map((bytes) => bytes.toString(16).padStart(2, '0'))
+      .join('');
+    return hashHex;
+  });
+}
+
+function getLight(puz, clueIndex) {
+  let light = ''
+  for (let rowcol of puz.clues[clueIndex].cells) {
+    light = light + puz.grid[rowcol[0]][rowcol[1]].currLetter
+  }
+  return light
+}
+
+var checklock = 0;
+var answer_hashes = {};
+var hashpromises = [];
+
+function checkPuzzle() {
+
+	if(checklock) { return false; }
+	answer_hashes = {};
+	hashpromises = [];
+	
+	var puz = exolvePuzzles[puzid];
+	
+	if(!puz) { return; }
+
+	checklock = 1;	
+	const keys = Object.keys(exolveanswers);
+	var p;
+
+	for (var k=0; k < keys.length; k++) {
+		var light = getLight(puz, keys[k]);
+		if(light.match(/0/)) {
+			p = Promise.resolve('');
+			answer_hashes[keys[k]] = p;
+			hashpromises.push(p);
+		} else {
+			p = sha256hash(light);			
+			answer_hashes[keys[k]] = p;
+			hashpromises.push(p);
+		}
+	}
+	
+	if(hashpromises.length>0) {
+		Promise.all(hashpromises).then(processAnswers());
+		return false;
+	}
+
+	processAnswers();
+	return false;
+}
+
+async function processAnswers() {
+	
+	var incomplete_count = 0;
+	var incorrect_count = 0;
+	var incorrect_msg = '';
+	
+	var puz = exolvePuzzles[puzid];
+	
+	if(!puz) { return; }
+	
+	const keys = Object.keys(exolveanswers);
+	
+	for (var k=0; k < keys.length; k++) {
+		if (!answer_hashes.hasOwnProperty(keys[k])) {
+			// console.log(keys[k]+': missing hash');
+		} else {
+			var ans = await answer_hashes[keys[k]];
+			if(ans == '') {
+				incomplete_count++;
+			} else {
+				if(ans != exolveanswers[keys[k]]) {
+					if(incorrect_count) { incorrect_msg +=', '; }
+					incorrect_msg += keys[k];
+					incorrect_count++;
+				}
+			}
+		}
+	}
+
+	var msg = '';
+	if(!(incorrect_count||incomplete_count)) {
+		msg = 'Correct!';
+	} else {
+		if(incorrect_count) {
+			msg = 'Incorrect answer'
+					+ (incorrect_count > 1 ? 's' : '')
+					+ ': ' + incorrect_msg;
+		
+			if(incomplete_count>0) { msg += ' and ' }			
+		}
+
+		if(incomplete_count>0) {
+			msg += incomplete_count + ' incomplete answer'
+					+ (incomplete_count > 1 ? 's' : '')
+		}
+		msg += '.';
+	}
+	showModal(msg);
+	checklock = 0;
+}
 
 </script>
-<script src="exolve/dkm-decode.js"></script>
+<script src="exolve/dkm-exolve-utils.js"></script>
 </div>
 </body>
 </html>
