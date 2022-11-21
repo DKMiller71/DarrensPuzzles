@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!--
+MIT License
+Copyright (c) 2019 Viresh Ratnakar
+See the full Exolve license notice in exolve-m.js.
+-->
+<link rel="stylesheet" type="text/css" href="exolve/exolve-m.css"/>
+<script src="exolve/exolve-m.js"></script>
+<title>Cryptic 2022-11 by Darren Miller</title>
+
+<style>
+	body {
+		font-family: "Gill Sans", sans-serif;
+	}
+	@media print {
+		.extractButton {
+		     visibility: hidden;
+	   }
+	}
+
+	/* The Modal (background) */
+	.modal {
+	  display: none; /* Hidden by default */
+	  position: fixed; /* Stay in place */
+	  z-index: 5; /* Sit on top */
+	  padding-top: 100px; /* Location of the box */
+	  left: 0;
+	  top: 0;
+	  width: 100%; /* Full width */
+	  height: 100%; /* Full height */
+	  overflow: auto; /* Enable scroll if needed */
+	  background-color: rgb(0,0,0); /* Fallback color */
+	  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+	}
+	/* Modal Content */
+	.modal-content {
+	  position: relative;
+	  background-color: #fefefe;
+	  margin: auto;
+	  padding: 0;
+	  border: 1px solid #888;
+	  width: 80%;
+	  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+	  -webkit-animation-name: animatetop;
+	  -webkit-animation-duration: 0.4s;
+	  animation-name: animatetop;
+	  animation-duration: 0.4s
+	}
+
+	/* Add Animation */
+	@-webkit-keyframes animatetop {
+	  from {top:-300px; opacity:0} 
+	  to {top:0; opacity:1}
+	}
+
+	@keyframes animatetop {
+	  from {top:-300px; opacity:0}
+	  to {top:0; opacity:1}
+	}
+
+	/* The Close Button */
+	.modal-close {
+	  color: white;
+	  float: right;
+	  font-size: 28px;
+	  font-weight: bold;
+	}
+
+	.modal-close:hover,
+	.modal-close:focus {
+	  color: #000;
+	  text-decoration: none;
+	  cursor: pointer;
+	}
+
+	.modal-header {
+	  padding: 2px 16px;
+	  background-color: navy;
+	  color: white;
+	}
+
+	.modal-body {
+		padding: 16px;
+		text-align: center;
+		font-family: Consolas, monospace;
+		font-size: larger;
+	}
+
+	.modal-footer {
+	  padding: 2px 16px;
+	  background-color: #5cb85c;
+	  color: white;
+	}
+</style>
+</head>
+<body>
+<div id="popupModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="modal-close">&times;</span>
+      <h3>Check Puzzle</h3>
+    </div>
+    <div class="modal-body" onclick="selectall(this);">
+    </div>
+  </div>
+
+</div>
+<div id='scroll-wrapper'><div id="exolve"></div>
+<script>
+
+var puzid = 'dkm-cryptic-202211';
+
+var exolveanswers = {
+	A8:		'd8cb072bcb51091e252f68b1278e8424853b59212ef3ee1ca7d77f814330946a',
+	A9:	  '37b3f894beb23c420027723931f489ef8678c9ec74d6977dc9f08a757de2c983',
+	A10:	'014d788d8950dcf12e684562bdb564b01df8a191d572f4d3999a81cbcbb54d2f',
+	A11:	'25888f053e3c272608e1364093a3899f7d6b23b985cc62bb203f88e3420d7704',
+	A12:	'4c621e782247daf476a49cf82791b9e8668ac8157aa0009e985fbc44f3845866',
+	A13:	'12fd49900751bfe8614ca3e567bfc20a78d27a5fc7ee724ac380d4a9fe2e218b',
+	A15:	'1ed68c5ec8d981e2377ada048c224ad4df69466d519275ede57f0f1688358fd7',
+	A17:	'0bd0f32ee641104765a99f786de204f16eda99c67b6114e79ea7837092954d50',
+	A19:	'85576270d3b5c023d7a74709ea60b5f9dd3f3c1393733fc3ac266cb6b1f9ce9b',
+	A22:	'65f23e22a9bfedda96929b3cfcb8b6d2fdd34a2e877ddb81f45d79ab05710e12',
+	A23:	'cc75755a6920208703c6dd182c6172ae00384a8bbf8e2f0a5864254c9c7a6618',
+	A25:	'8550f340539484c0a7d9425bd20e5bfe51e0c49b123d04ca527614b250880953',
+	A26:	'b05b68460a2dc85fcdf90bbc806de3935cc79947b11c1ff46e9066753c324485',
+	A28:	'c4e66160b49d2d900ceee2d8744e0e8cf6d6fec4815e4512fa075df77a5cf392',
+	A29:	'bc3bc5b6b634dd4e38693b32b9a48738861dda95ceb335d472021ea7825d995f',
+	A30:	'0d2671c34aff82a6ca08324c7161c890ff62e3e47fbb7773f37419be119a5e37',
+	D1:	  '1f4ee4529751096667da2f42c58121ef1a12710ca4210ec57898693993f3dcb9',
+	D2:	  'be483cd3c9680ae27ac40751c316ed96c6b17e10a9a94ea602d956286cf47a1e',
+	D3:	  '0ac58a8d6e78b3ed5d9a3ddd7adc7a4957031f0af3b68f443b85ab27b83d4a62',
+	D4:	  '228c551a9e90e34979a09f516883efb62b62c2e4b6435b7fa18df40097c5f111',
+	D5:	  '734126247ec8564046eabc26c0d3b0ab344f5ec502cf385f1bf72896fe67c4bc',
+	D6:	  '1babf6cb92c289e3f9ae639a479bb2bfcf80421e0c68c2f98db2a6052c93d742',
+	D7:	  'd89d872f6d07be437e19d319144e471c2caabd101d4c60c5012ff0771d204bd4',
+	D14:	'b6af395c5020f3f19337172a94b2607d19ef6f8fed2424cf788b0d00b0572264',
+	D16:	'e07d7a41a25d20f149606b60df2b5381b740d40ede22fa4079c79b4bcfbb2d02',
+	D18:	'8044b2ae06f86e7763eb34673758269c7abf4604cfbc46b977c3d562d460a73a',
+	D20:	'736aea88813c6038bcc4d0683642cd3494f76c2a866be1bb9671e207c2f9cd59',
+	D21:	'9b2391b4690f9cf3239014eced60d6ab7c17d81447e70f8a08e41005a7a65aeb',
+	D22:	'e5503c88f3bcb7e531a9782656051f85f9682688037dafe9eeb3c820413eb3ba',
+	D24:	'f9aaaf059b7869a7f340d06f407f41b69f4972b6289ab1993260a8f28ce5ee13',
+	D26:	'd86ad66b9fbe438cd7154117e6c617b08757a093a3eb7a72b50719be7b1ed353',
+	D27:  '49ee8852597743dd1c8425cf7b06ffb49c27f5bd641346fa5fae2c061d5b72a4' 
+};
+
+var answer_hashes = {};
+
+function customizeExolve(p) {
+  let b 
+  if (Object.keys(exolveanswers).length) {
+  	b = document.createElement('button');
+	  b.className = 'xlv-button';
+	  b.innerHTML = 'Check puzzle';
+	  b.title = 'Check puzzle'
+	  b.addEventListener('click', (evt) => {
+	    checkPuzzle();
+	  });
+	  p.buttonRow1.appendChild(b);
+	  p.buttonRow1.appendChild(document.createTextNode("\n"));
+	}
+	
+  b = document.createElement('button');
+  b.className = 'xlv-button';
+  b.innerHTML = 'Get hints';
+  b.title = 'Get hints'
+  b.addEventListener('click', (evt) => {
+    window.open('../../hints/Cryptic202211_hints.html', '_blank');
+  });
+  p.buttonRow1.appendChild(b);
+  p.buttonRow1.appendChild(document.createTextNode("\n"));  
+}
+
+createExolve(`
+======REPLACE WITH YOUR PUZZLE BELOW======
+
+exolve-begin
+  exolve-id: dkm-cryptic-202211
+  exolve-title: Cryptic 2022-11
+  exolve-setter: Darren Miller
+  exolve-copyright: 2022 Darren Miller
+  exolve-width: 15
+  exolve-height: 15
+  exolve-preamble:
+	exolve-option: color-active:lightyellow
+  exolve-option: color-input:royalblue color-arrow:lightyellow
+  exolve-option: color-light-label-input:white
+  exolve-option: color-light-text-input:white
+  exolve-option: color-button:navy color-button-hover:purple
+  exolve-option: clues-panel-lines:20
+  exolve-option: hide-copy-placeholder-buttons
+  exolve-relabel:
+    clear: Clear this word
+    reveal: Show hint for method(s)
+  exolve-grid:
+	.	0	.	0	.	0	.	0	.	0	.	0	.	0	.	
+	0	0	0	0	.	0	0	0	0	0	.	0	0	0	0	
+	.	0	.	0	.	0	.	0	.	0	.	0	.	0	.	
+	0	0	0	0	0	0	0	0	0	0	.	0	0	0	0	
+	.	0	.	0	.	.	.	0	.	.	.	0	.	0	.	
+	0	0	0	0	0	0	.	0	0	0	0	0	0	0	.	
+	.	0	.	.	.	0	.	0	.	0	.	0	.	.	.	
+	0	0	0	0	0	0	0	.	0	0	0	0	0	0	0	
+	.	.	.	0	.	0	.	0	.	0	.	.	.	0	.	
+	.	0	0	0	0	0	0	0	.	0	0	0	0	0	0	
+	.	0	.	0	.	.	.	0	.	.	.	0	.	0	.	
+	0	0	0	0	.	0	0	0	0	0	0	0	0	0	0	
+	.	0	.	0	.	0	.	0	.	0	.	0	.	0	.	
+	0	0	0	0	.	0	0	0	0	0	.	0	0	0	0	
+	.	0	.	0	.	0	.	0	.	0	.	0	.	0	.	
+	exolve-across:
+		8  Void contains small breath of air (4)
+		9  Scoundrel chases trendy contract (5)
+		10  Even Dr. Kaufman returns from a distance (4)
+		11  After ten leave, the next nine stagger to the watering hole (10)
+		12  Secretly dallying with a colleague (4)
+		13  I war on bats like your ducks, perhaps? (2,1,3)
+		15  Spies come back covered in plant growth and artwork (7)
+		17  Victor heard, &ldquo;punch Ted!&rdquo; and leapt (7)
+		19  Mr. Rogers or Branagh knew nuns eat pho oddly, so what&#8217;s the frequency? (7)
+		22  Pleased with the presentation (7)
+		23  Ed came in for a hat (6)
+		25  Piece of information that excites military leaders (4)
+		26  Charlie leads awful sitcom; tear up the newspaper feature (5,5)
+		28  Tackle some equipment (4)
+		29  Bands hosted by Springsteen (5)
+		30  Complain about auto park (4)
+	exolve-down:
+		1  Spanish estate had an ice mixer (8)
+		2  Show up with a confusing paper (6)
+		3  Evil heart and empty life - how horrid (4)
+		4  Peel honeycomb, stir with efficiency (7)
+		5  Winds up orchestra chamber music with a bow (4)
+		6  Leave shabby coat I put in vehicle (8)
+		7  Fliers about foreign delegates dismissing Ted (6)
+		14  At what point does Tuesday become Wednesday there? (5) 
+		16  Ledge she left for at first (5)
+		18  Spooner&#8217;s manned lark was a sight to see (8)
+		20  Third attempt to swallow a tire somehow (8)
+		21  Guts from a Main St. butcher (7)
+		22  Lincoln and Jackson&#8217;s quotes about origins of independence (6)
+		24  Identify regular upturn in sticker trends (6)
+		26  Who abandons cow horn for chicken feed? (4)
+		27  Notes on extreme <i>Candy Crush</i> (4)
+	exolve-end
+
+======REPLACE WITH YOUR PUZZLE ABOVE======
+`);
+
+let popupModal;
+
+function doCloseModal() {
+	if(popupModal) { 
+		if(popupModal.style.display == "none") { return;	}
+		popupModal.style.display = "none";
+		window.getSelection().removeAllRanges();
+	}
+}
+
+function showModal(msg) {
+	// Get the modal
+	if (!popupModal) {
+		popupModal = document.getElementById("popupModal");
+	
+		if(popupModal) {
+			var span = document.getElementsByClassName("modal-close");
+			span[0].onclick = doCloseModal;
+			window.onclick = function(e) {
+				if(e.target == popupModal) { doCloseModal(); }
+			}
+			document.addEventListener('keydown', (event) => {
+  			if (event.key === 'Escape') { doCloseModal(); }
+  		});
+		}
+	}
+
+	if(popupModal) {
+		var modalBody = document.getElementsByClassName("modal-body");
+		if(modalBody) {
+			modalBody[0].innerHTML = msg;
+			popupModal.style.display = "block";
+		}
+	}
+}
+
+function sha256hash(string) {
+  const utf8 = new TextEncoder().encode(string);
+  return crypto.subtle.digest('SHA-256', utf8).then((hashBuffer) => {
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray
+      .map((bytes) => bytes.toString(16).padStart(2, '0'))
+      .join('');
+    return hashHex;
+  });
+}
+
+function getLight(puz, clueIndex) {
+  let light = ''
+  for (let rowcol of puz.clues[clueIndex].cells) {
+    light = light + puz.grid[rowcol[0]][rowcol[1]].currLetter
+  }
+  return light
+}
+
+var checklock = 0;
+var hashpromises = [];
+
+function checkPuzzle() {
+
+	if(checklock) { return false; }
+	answer_hashes = {};
+	hashpromises = [];
+	
+	var puz = exolvePuzzles[puzid];
+	
+	if(!puz) { return; }
+
+	checklock = 1;	
+	const keys = Object.keys(exolveanswers);
+	var p;
+
+	for (var k=0; k < keys.length; k++) {
+		var light = getLight(puz, keys[k]);
+		if(light.match(/0/)) {
+			p = Promise.resolve('');
+			answer_hashes[keys[k]] = p;
+			hashpromises.push(p);
+		} else {
+			p = sha256hash(light);			
+			answer_hashes[keys[k]] = p;
+			hashpromises.push(p);
+		}
+	}
+	
+	if(hashpromises.length>0) {
+		Promise.all(hashpromises).then(processAnswers());
+		return false;
+	}
+
+	processAnswers();
+	return false;
+}
+
+async function processAnswers() {
+	
+	var incomplete_count = 0;
+	var incorrect_count = 0;
+	var incorrect_msg = '';
+	
+	var puz = exolvePuzzles[puzid];
+	
+	if(!puz) { return; }
+	
+	const keys = Object.keys(exolveanswers);
+	
+	for (var k=0; k < keys.length; k++) {
+		if (!answer_hashes.hasOwnProperty(keys[k])) {
+			// console.log(keys[k]+': missing hash');
+		} else {
+			var ans = await answer_hashes[keys[k]];
+			if(ans == '') {
+				incomplete_count++;
+			} else {
+				if(ans != exolveanswers[keys[k]]) {
+					if(incorrect_count) { incorrect_msg +=', '; }
+					incorrect_msg += keys[k];
+					incorrect_count++;
+				}
+			}
+		}
+	}
+
+	var msg = '';
+	if(!(incorrect_count||incomplete_count)) {
+		msg = 'Correct!';
+	} else {
+		if(incorrect_count) {
+			msg = 'Incorrect answer'
+					+ (incorrect_count > 1 ? 's' : '')
+					+ ': ' + incorrect_msg;
+		
+			if(incomplete_count>0) { msg += ' and ' }			
+		}
+
+		if(incomplete_count>0) {
+			msg += incomplete_count + ' incomplete answer'
+					+ (incomplete_count > 1 ? 's' : '')
+		}
+		msg += '.';
+	}
+	showModal(msg);
+	checklock = 0;
+}
+
+</script>
+<script src="exolve/dkm-exolve-utils.js"></script>
+</div>
+</body>
+</html>
