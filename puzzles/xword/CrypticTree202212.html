@@ -18,8 +18,6 @@ See the full Exolve license notice in exolve-m.js.
 		background: rgb(169,164,249);
 		background: linear-gradient(10deg, rgba(0,164,0,1) 0%, rgba(189,225,150,1) 6%, rgba(200,255,200,1) 20%, rgba(255,255,255,1) 35%, rgba(200,255,200,1) 83%, rgba(52,212,55,1) 90%, rgba(36,196,31) 95%, rgba(0,150,0,1) 100%);
 	}
-
-	}
 	@media print {
 		.extractButton {
 		     visibility: hidden;
@@ -121,7 +119,50 @@ See the full Exolve license notice in exolve-m.js.
 
 var puzid = 'dkm-cryptictree-202212';
 
-var exolveanswers = {};
+var exolveanswers = {
+	'A2':	'06f4446e29d982e6cdb03855e75f780a97c2f338ba18b1110c67f6976e36d3b9',
+	'A5':	'5a31a4871c25d374485f857da76f45b56a2d9bc3fb7b63acfab8bbde4c831955',
+	'A7':	'5806d08834371746238aadf8e11e0017468e501b8dc1eb37c93f039ce2996c03',
+	'A8':	'54f8bc97a2f82d1ab845f1393e0ead5b85a3d4404cc0cb02d3be763f61d2ba43',
+	'A9':	'0c5753d9570f6b086514a3aa7a8b8d8554b6c102e0435fc44a4685f4a021f01e',
+	'A13':	'67faa0bced947225b6540c2e000243bd4137062e16c8139813cdd84bbd9f6811',
+	'A18':	'24aed800b0827b746dcd8bf29525b1e8c1a5ecaba3661c9bf7a43c0573007488',
+	'A19':	'f681e7dc63001cc8e1b9db1ffd29bb9ce656b2ca6d34138f43d2f16519753ec0',
+	'A20':	'3332bb495af0812327b64bce651a0f86cfc0baabac081f6cb26a39b864610931',
+	'A21':	'5e53e7433a802948b84e71242cf210b43a27036845b656593fbe24538a7ba2bd',
+	'A23':	'9a7d0627500e0ce9be45a3e077c22253b7122a524ffd4d62f650cf8cde596885',
+	'A25':	'd4008456cd59ffd7cd7dbe30651823fec911d6c21821d1a53b9d0663a7a4c6e7',
+	'A26':	'5a15b6c4e2f863171b809f269c66c5fa8abf9ffcac6f6ff79a83a26f1c59ee55',
+	'A27':	'10d320792a59f27ff4b6ea5deeab32d66760fb47c9d817f517e1fc3a840bb58c',
+	'A29':	'0cfec05f6b47a0b6623d947e149d6ae588ecf4565433284459426e49e5521a81',
+	'A32':	'c4c9b97787f71a9113608a70cb7b842b3979bf6586fab722b23bb42080d81951',
+	'A34':	'6d9ac66bc83bc502ed9d9ff53403b5f5028e498a75a3858c68cccd218d8801c4',
+	'A35':	'd3ffe1c5c746d329c2a05052bcd61078a5137b200e4e7d6761da3b235ce7d3b3',
+	'A36':	'e368df9ac3c602fcfe707f97f49b0ea90d0e991520b71d66c2d2ce88113c83d5',
+	'A37':	'0f58a9a4203e0948184d599083d9a30a0181c2176e78547e677a8bff042b46b4',
+	'A38':	'83aaae26be52087d57a7fdf0b6b7fdc5eadc9d4b92a556cc85188ff45cb5963c',
+	'A39':	'bb7ba378dbdabd6f76efa6bb48eea4698c0907e79169b9275b87019dc43500cd',
+	'A40':	'de148e82f9a98a7f4325b0d6d4788c2d664a2f611dbfe9397f3efeb2cbc0be74',
+	'D1':	'717df8504486485ff295eeb50734767b0c0cc1b98a7d3ab8d9f669fc84291c25',
+	'D2':	'ca033782f51a4fe6177f2dac763fde070302588002d4bc7f9b057fb7577aac2c',
+	'D3':	'b369e20458de467a3d366a3c12739a0617ad943a6fbf1146d8107d1ab0d87739',
+	'D4':	'8b09e6de5b5371a4c8669d03c2c7d63cc9471572708c00f55e43bf6f5f68321a',
+	'D6':	'26920d72b54c46a4f9ccd50190a64c6c83708e133ac77d12d4f41610df8d6d43',
+	'D10':	'b33e0682881f45fd7fcea48153173ade7b5d01f33632ac736289d0febf5026db',
+	'D11':	'be97a933d330fb88eef89bc58926ede83ec2daab86dc51c173ba13039a83258f',
+	'D12':	'02af1180fe7197c1f48654f1eef29208e079d14732f21bb0a1d3249136cd0264',
+	'D14':	'7f0c5dba96ef2f48fb5cb4e3fab90064b5057ed3cddcb5c7106aceedd2137a6b',
+	'D15':	'243e24095dc3315c1b2cd215780417d89d51e2b7a019c6d066423b7307a06ec6',
+	'D16':	'34a489fb589a0a73111285e0760d14d79669e3aa152c925d77ad193c2782580a',
+	'D17':	'd78ee41fa181261c27a856fdf44596c0dd95eb260c537993a9376ef3fa846238',
+	'D22':	'565774e607b2a44359a1fb357ecc2a2a1372552ad476007990062cf4bc4ac141',
+	'D24':	'5e75953b172e64383bbaf8a252987bd56116e2dc4b469ede6ead8f398618f0c6',
+	'D25':	'1627381bf7cdc03ac98289d20ecef5709cf371e116e9ac430c6eaa732b9866f0',
+	'D28':	'b8936358679394f0998f0286992ca470c169c16741982ee97a20b9e0abebb2c1',
+	'D30':	'0fd99f8460784c2a3ef5faca8500c08c180c5bcf70b04477ef26ca447fc9ed0f',
+	'D31':	'641a2b40aed68ebb7c050c46bc57c1a6dce99724b6025197f8141d245ab68a13',
+	'D33':	'bc317cddfa000e024aac3343f5bc991097f881d6daf2cdc0fe22af6705e6a01b'
+};
 
 var answer_hashes = {};
 
@@ -155,77 +196,99 @@ function customizeExolve(p) {
 	drawTinsel(p);
 }
 
-exolvedata = `
-	TExMTExMIzQhPTAyNFEmOCU5USg+JCNRISQrKz00UTM0PT4mTExMTExMe3sUCR4dBxRcEx
-	QWGB97UVEUCR4dBxRcGBVLURUaHFwSAwgBBRgSBQMUFFxDQUNDQEN7UVEUCR4dBxRcBRgF
-	HRRLUTIDCAEFGBJRJQMUFFFDQUNDXEBDe1FRFAkeHQcUXAIUBQUUA0tRNRADAxQfUTwYHR
-	0UA3tRURQJHh0HFFwSHgEIAxgWGQVLUUNBQ0NRNRADAxQfUTwYHR0UA3tRURQJHh0HFFwG
-	GBUFGUtRQER7UVEUCR4dBxRcGRQYFhkFS1FARntRURQJHh0HFFwBAxQQHBMdFEt7eBQJHh
-	0HFFweAQUYHh9LURIeHR4DXBASBRgHFEsdGBYZBQgUHR0eBntRURQJHh0HFFweAQUYHh9L
-	URIeHR4DXBgfAQQFS1I3N0dHR0dREh4dHgNcEAMDHgZLHRgWGQUIFB0dHgZ7UVEUCR4dBx
-	RcHgEFGB4fS1ESHh0eA1wdGBYZBVwdEBMUHVwYHwEEBUsGGRgFFHtRURQJHh0HFFweAQUY
-	Hh9LURIeHR4DXB0YFhkFXAUUCQVcGB8BBAVLBhkYBRR7UVEUCR4dBxRcHgEFGB4fS1ESHh
-	0eA1wSGAMSHRRLAxQVe1FRFAkeHQcUXB4BBRgeH0tREh4dHgNcEwQFBR4fSx8QBwhREh4d
-	HgNcEwQFBR4fXBkeBxQDSwEEAwEdFHtRURQJHh0HFFweAQUYHh9LURIdBBQCXAEQHxQdXB
-	0YHxQCS0NBe1FRFAkeHQcUXB4BBRgeH0tRGRgVFFwSHgEIXAEdEBIUGR4dFRQDXBMEBQUe
-	HwJ7UVEUCR4dBxRcHgEFGB4fS1ESHh0eA1wTEBIaFgMeBB8VSwUDEB8CARADFB8Fe1FRFA
-	keHQcUXB4BBRgeH0tRHhcXAhQFXAUeAUtCe1FRFAkeHQcUXB4BBRgeH0tRHhcXAhQFXB0U
-	FwVLQnt7UVEUCR4dBxRcAxQdEBMUHUt7UVFRURIdFBADS1EyHRQQA1EFGRgCUQYeAxV7UV
-	FRUQMUBxQQHUtRIhkeBlEZGB8FURceA1EcFAUZHhVZAlh7UVEUCR4dBxRcFgMYFUt7eHhf
-	UV9RX1FfUV9RX1FfUUFRX1FfUV9RX1FfUV9RX1F7eHhfUV9RX1FfUV9RX3hBMUFRQVFfUV
-	9RX1FfUV9RX1F7eHhfUV9RX1FfUV9RX1FBDUENQTFfUV9RX1FfUV9RX1F7eHhfUV9RX1Ff
-	UV9RQTENQVFBLkENQVFfUV9RX1FfUV9Re3h4X1FfUV9RX1FfUUFRQVFBMS5BUUFRX1FfUV
-	9RX1FfUXt4eF9RX1FfUV9RQTEuQVFBLkEuQS5BUUExLl9RX1FfUV9Re3h4X1FfUV9RX1FB
-	LkEuQTFBLkExQS5BLl9RX1FfUV9Re3h4X1FfUV9RQTENQS5BUUFRQVFBUUFRQVpBMV9RX1
-	FfUXt4eF9RX1FfUUFRQS4xQVFBDUENQVFBUUEuQVFfUV9RX1F7eHhfUV9RQS5BUUEuQVFB
-	UUFRQVFBMUEuQTFBLl9RX1F7eHhfUV9RQTEuQVFBUUFRQTENQTENQVFBUUFRQVFBLl9RX1
-	F7eHhfUUFRQS5BUUENQVpBUUEuQQ1BWkFRQVFBMS5BUV9Re3h4X1FBUUExLkFRQVFBUUFa
-	QQ1BLkFRQVFBUUEuQVFfUXt4eEEuQVFBLkFRQQ1BUUExLkFRQTEuQQ1BUUFRQS5BUUEue3
-	h4QVFBUUFRQVFBUUFRQVpBDUEuQVFBUUFRQTFBUUFRe3h4X1FfUV9RX1FfUUFRQS5BUUEu
-	QVFfUV9RX1FfUV9Re3h4X1FfUV9RX1FfUUFRQVFBUUFRQVFfUV9RX1FfUV9Re3gUCR4dBx
-	RcEBIDHgICS3t4eENRUTMdBBMTFANRHRgaFFECHhwUURYDEB8VFxAFGRQDAlFZQlh7eHhE
-	UVEwBVEXGAMCBVETHQQCGV1RGAUCUQMUEhgBGBQfBVEDFAUEAx8CURwQH1dSSUNARkoCUR
-	cYAwIFURYYFwVRBR5RBhgXFFFZQlh7eHhGUVElBAMTBB0QHwVdUQQfFB8VGB8WUQEQAgIY
-	Hh9REAVRBRkUUQMUFwQWFFFZRFh7eHhJUVEyHhwYElEBAxgfEhRXUklDQEZKAlESEAIaUR
-	kYFRQCUQMeBB8VUQIBGBoUUVlGWHt4eEhRUSIYA11RAgUUAVEQAx4EHxVRBRkUURYeHhVR
-	FxAFGRQDAlFZRlh7eHhAQlFRIhkEBVEEAV1RAhgdHQhQUTIeHxcUEgUYHh8CURkQBxRRHx
-	5REh4CBU5RWUZYe3h4QElRUTUeFAIfV1JJQ0BGSgVRGhQUAVEXGAMCBVETHh0FURcDHhxR
-	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
-`;
+createExolve(`
+======REPLACE WITH YOUR PUZZLE BELOW======
+
+exolve-begin
+  exolve-id: dkm-cryptictree-202212
+  exolve-title: Cryptic Tree 2022-12
+  exolve-setter: Darren Miller
+  exolve-copyright: 2022 Darren Miller
+  exolve-width: 15
+  exolve-height: 17
+  exolve-preamble:
+	exolve-option: color-active:lightyellow
+  exolve-option: color-input:#FF6666 color-arrow:lightyellow
+  exolve-option: color-light-label-input:white
+  exolve-option: color-light-text-input:white
+  exolve-option: color-separator:green
+  exolve-option: color-circle:red
+  exolve-option: color-button:navy color-button-hover:purple
+  exolve-option: clues-panel-lines:20
+  exolve-option: hide-copy-placeholder-buttons
+  exolve-option: color-background:transparent
+  exolve-option: offset-top:3
+  exolve-option: offset-left:3
+
+  exolve-relabel:
+    clear: Clear this word
+    reveal: Show hint for method(s)
+  exolve-grid:
+		. . . . . . . 0 . . . . . . . 
+		. . . . . .	0@0 0 . . . . . . 
+		. . . . . . 0|0|0@. . . . . . 
+		. . . . . 0@|0 0_0|0 . . . . . 
+		. . . . . 0 0 0@_0 0 . . . . . 
+		. . . . 0@_0 0_0_0_0 0@_. . . . 
+		. . . . 0_0_0@0_0@0_0_. . . . 
+		. . . 0@|0_0 0 0 0 0 0+0@. . . 
+		. . . 0 0_@0 0|0|0 0 0_0 . . . 
+		. . 0@_0 0_0 0 0 0 0@0_0@0_. . 
+		. . 0_0 0 0 0@|0@|0 0 0 0 0_. . 
+		. 0 0_0 0|0+0 0_0|0+0 0 0@_0 . 
+		. 0 0@_0 0 0 0+0|0_0 0 0 0_0 . 
+		0_0 0_0 0|0 0@_0 0@_0|0 0 0_0 0_
+		0 0 0 0 0 0 0+0|0_0 0 0 0@0 0 
+		. . . . . 0 0_0 0_0 . . . . . 
+		. . . . . 0 0 0 0 0 . . . . . 
+	exolve-across:
+		2  Blubber like some grandfathers (3)
+		5  At first blush, its recipient returns man&#8217;s first gift to wife (3)
+		7  Turbulent, unending passion at the refuge (5)
+		8  Comic prince&#8217;s cask hides round spike (7)
+		9  Sir, step around the good fathers (7)
+		13  Shut up, silly! Confections have no cost? (7)
+		18  Doesn&#8217;t keep heartless androids (4)
+		19  Drops off daughter and son near New Orleans (4)
+		20  Athletic husband holds metal in a trying place (7,4)
+		21  Turns toward quirky cafes (5)
+		23  Lay it out in the country (5)
+		25  Westbound trains to Monaco travel to Paris unaccompanied (4)
+		26  Somewhat content with finger count (3)
+		27  Bad ref drops bottoms, gets naked (4)
+		29  Large mobs of extremely hormonal brides (6)
+		32  Finely shredded like a kid&#8217;s movie (6)
+		34  Scoundrel to go back in regret (5)
+		35  Losing scent at first, Ed&#8217;s dog runs after duck (5)
+		36  Visionary takes wife: a seamstress, perhaps (5)
+		37  Unconventional, unmanliest man leaves something useful (7)
+		38  US leader loses ID here (7)
+		39  Even stoic Adrian has sparkling headwear (5)
+		40  Finally going North to South, Nolan comes back to a fashionable establishment (5)
+	exolve-down:
+		1  People giving gifts after rummaging within (4)
+		2  Spooner&#8217;s unusual autumn was wild (5)
+		3  Unfortunately, I bit a bone (5)
+		4  Romeo, O Romeo, have a cry (4)
+		6  Woman left twins distraught? On the contrary (3&#8217;1)
+		10  Demands parts of 6D (7)
+		11  Intoning of evil spirit at midnight (7)
+		12  First attempt to turn lair around (5,3)
+		14  Playful creature gets onto the ark oddly (5)
+		15  Railing at swamp on borders of Chile (5)
+		16  Governor Thomas has a point (5)
+		17  Hermits skin bison and steal bananas (8)
+		22  Primarily ciphers or data encrypted somehow! (5)
+		24  Hear a low voice become lower (5)
+		25  Picture a slug of booze (4)
+		28  Beautiful garden located entirely inside (4)
+		30  Tidies messes after I leave some changes (5)
+		31  A deli exploded? That&#8217;s perfect! (5)
+		33  Tried again, but reparations didn&#8217;t include patios (5)
+	exolve-end
+
+======REPLACE WITH YOUR PUZZLE ABOVE======
+`);
 
 let popupModal;
 
@@ -392,9 +455,9 @@ function drawTinsel(puz) {
 	for(i=0; i<coords.length; i++) {
 		var co = coords[i].split(',').map(Number);
 		
-		const x1 = puz.cellLeftPos(co[1], 0);
-    const y1 = puz.cellTopPos(co[0], 0);
-    const x2 = puz.cellLeftPos(co[3], 0);
+		const x1 = puz.cellLeftPos(co[1], 0)-(2.5*barW);
+    const y1 = puz.cellTopPos(co[0], 0)-(2*barW);
+    const x2 = puz.cellLeftPos(co[3], 0)+(	2.5*barW);
     const y2 = puz.cellTopPos(co[2], 0);
 
     const line = 
@@ -404,47 +467,13 @@ function drawTinsel(puz) {
   		line.setAttributeNS(null, 'x2', x2);
      	line.setAttributeNS(null, 'y2', y2);
      	line.setAttributeNS(null, 'stroke', linecolor);
-     	line.setAttributeNS(null, 'stroke-opacity', 0.3);
+     	line.setAttributeNS(null, 'stroke-opacity', 0.4);
      	line.setAttributeNS(null, 'stroke-width', 2*barW);
 		
 		lineGroup.appendChild(line);
+	
 	}	
 }
-
-function decryptStringWithXOR(input,key) {
-  
-  const utf8Encode = new TextEncoder();
-	var c = utf8Encode.encode(window.atob(input));
-	var kb = utf8Encode.encode(key);
-	
- 	for(var i=0; i<c.length; i++) {
-		for(var r=0; r<kb.length; r++) {
-			var k = r % kb.length;
-		  c[i] = c[i] ^ kb[k];
-	 	}
-	}
-  
-	return (new TextDecoder()).decode(c);
-}
-
-function initDecode() {
-	let params = new URLSearchParams(document.location.search);
-	let query = params.get('key');
-
-	if(query && typeof(exolvedata) !== 'undefined') {
-		
-		let key = query instanceof Array ? query[0] : query;
-		exdata = decryptStringWithXOR(exolvedata, key);
-		
-		if(exdata.match(/[^\s\x20-\x7E]/)) {
-			// bad characters or key didn't match
-		} else if(exdata.match(/exolve/)) {
-			createExolve(exdata);		
-		} 
-	}
-}
-
-window.onload = initDecode();
 </script>
 </div>
 </body>
