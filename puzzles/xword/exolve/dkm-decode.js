@@ -31,4 +31,4 @@ function initDecode() {
 	}
 }
 
-window.onload = initDecode();
+window.addEventListener('load', initDecode);
