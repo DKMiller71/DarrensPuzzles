@@ -31,13 +31,75 @@ See the full Exolve license notice in exolve-m.js.
 </style>
 </head>
 <body>
-
+<div id="popupModal" class="modal"></div>
+<link rel="stylesheet" type="text/css" href="exolve/dkm-popup.css"/>
+<script src="exolve/dkm-popup.js"></script>
+<script src="exolve/dkm-checker.js"></script>
+<script src="exolve/dkm-extractor.js"></script>
 <script src="exolve/dkm-exolve-utils.js"></script>
 
 <script>
+var puzid = 'en-egg-matic-cryptic-2022';
+var hinturl = '../../hints/En-egg-matic_hints.html';	
+
 function customizeExolve(puz) {
-    redrawLinesForLightCells(puz, 'darkgreen', 'black');
-} 
+	redrawLinesForLightCells(puz, 'darkgreen', 'black');
+
+  if (Object.keys(exolveanswers).length) {
+  	addButton(puz, 'Check puzzle', checkPuzzle);
+	}
+	
+	if(typeof hinturl !== 'undefined') {
+ 		addButton(puz, 'Get hints', openHint);
+	}
+}
+
+var exolveanswers = {
+	'A1':	'1afafbc30fac9dda906f7f027335f8e59552617c49c0dbfd1a34fd8aed47f734',
+	'A5':	'b92056ad161798c95cd05a97bbce7297165124027b31c242b14aa43ea80305b6',
+	'A7':	'17e51383206c63f97fa11ec00c5132445425a518d0edfcf13fe45fd85708127a',
+	'A9':	'1130e79181f3283fbd935f15db8fad30bbf61505109dccb83c700990b427c858',
+	'A12':	'42f3bbad65b78a5b4ff8ffe303e1a5e244d1f1865991fe297f02e2b33121ea80',
+	'A13':	'acf4ab2abc5cab3943216a66e9a4f5f7f22c6b9d2ddf3f1f6127cc25832c4f58',
+	'A14':	'7d89ff5f23690340f08a8158409b9683def6d098f15e052f7d1fc9fd02a0fae0',
+	'A16':	'8274c6ffc445bb40260cce1577d31edb5a324770620f886d5e3129c68469796f',
+	'A19':	'327def9d8886b0b51a71fe7c883a0fdd92a1dc34dd51758627448ce178878217',
+	'A21':	'5b7143badd87d1e275360fb630dfa20a2d1a4d2e014ed3647128534a65a8cd86',
+	'A24':	'7ae974d734df74a1be47a24d511fe85425817c0d47d0a2a292fb8511cb12b037',
+	'A25':	'0f139100c3ed6144d083545b4ff1354502f080db33042506ca283b8555536633',
+	'A27':	'09687989c242d7778678f4f2646c51ff2101e757b643971cf62394099fc448f1',
+	'A28':	'48cef94315c380a6cc9d7dd8b3834afb0e69d7b443664d30609b8654d5f4a89f',
+	'A31':	'ee610f39842879b0f80a25cccd321a452800e1a59b39b685c62543b53908d636',
+	'A33':	'1ce382dc148a7555d0be908bc34baf90747d5d1cded629847dcd8d8e16dcf16f',
+	'A34':	'bec35402bab96089be52fffe0a13222a6b5a19fbc0bfccb291915d690e29072b',
+	'A35':	'bc47bc594c932fe029c85cc25c9aa68a16cc3c90a64b81e66a002f9f0242e0a2',
+	'A36':	'ccc0bb28a8e1a9691cbaf12013b87ea5cccccfd69d9395cb76f033920fdab125',
+	'A37':	'1d62d75616fd38521a3648a985c28692cfdea5bb7bbbbc5ecb06e09c143d2594',
+	'A38':	'd48dc89d651ca53d8f8534ff017ba26901c157722dcde9f39dff9e46b89450a6',
+	'A39':	'ff9313bd4c2973febfa0371d50ca3ebf5b047ad1816880d4ac8b9590616bb12e',
+	'D2':	'1be52ebfab9714465f7f399a169efa771e7f2b81a1fde2ad4bc022195512044d',
+	'D3':	'cafa51a40e34a9536eecbeceb8cb6ee5e961a54daa5b2ba60b00f6c9d8eaeefc',
+	'D4':	'0ce8fc0606dbd7d45edf1dee3e5beb74757c1629638f867cac2f7ad86c1b8596',
+	'D5':	'faa9decb5dce3d4283a997013e6815abdc80811e9acd23631d126db027653f7e',
+	'D6':	'5e62b11d8fa80e152027abfedd00e506396e8e9387beb6100c18559eaef55651',
+	'D7':	'600e952ef2bc25e6b20227ed78f97da84147d93a11e1b63f1af2af1c1834c6e8',
+	'D8':	'338ce7142ff88c06f675ab2b64f4acb86e979f929065b227ccd06f45c91581e8',
+	'D10':	'e344ae1e658047675b8be770a7d33a13f4cded712142e9f7d11646a40237fa2e',
+	'D11':	'7a1e32d7360937fbee0b04072a9bde250aa171ae92f4d586cba002aa82a3bf0d',
+	'D13':	'848315e2b7d4c1d7d70b0fad4bec8c948c55418e28b892ba02cd37c1e056d3e9',
+	'D15':	'aca4fee155368758392aca3a58e5704c8650173981160328f27181fcf67b68e4',
+	'D17':	'3a61d5508d7ddcc44eb15a5b6a2abc1de45ab5b65dde89722ca87d8f7e4f23d9',
+	'D18':	'3ecffa2c89a0ec11ce8542c49a00ddd81fa257c853c8d8a81b42d6ff36c22025',
+	'D19':	'd92d4d0fe9fe4d443ff7257759fc4e048670eb73f6644dd34adcc854eba62d22',
+	'D20':	'3c80eef32f5752abb4b121c13d86d5bd8504d144093e988d9cbf77064321799a',
+	'D22':	'7dd60c1c6627e99d9a05b673b13c71f1d13977fca8265ec7d9cf84e662d1198c',
+	'D23':	'c71993ff510e9f58a06c2c065bbb52a03c03c124875ed44a92cdcca9dddf1d44',
+	'D25':	'6514b04cc5de418b2cf2cdd259333f8f64f04ca9b7f7ac1a586acbceab54d2a3',
+	'D26':	'ccdaa6c06bfc0f6afaadb4fa39cec5eec0f0a176ec34ace602ee0c42c6c7e4a5',
+	'D29':	'e1eba3226891f58a5f8b350f0ff29a36d3f97cf87735ae7b0d696551834e878b',
+	'D30':	'6a2d88ba25c978656698e809b50ee3b9cb49e8cb38db0c96a7fe893528c367a9',
+	'D32':	'74d43d5f84c33a3e125b56e4663bcfff6fc6a2d93189ded92a680f409d7fcecd'
+}
 
 createExolve(`
 ======REPLACE WITH YOUR PUZZLE BELOW======

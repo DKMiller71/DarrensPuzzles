@@ -213,3 +213,17 @@ if (window.self !== window.top) {
 	  waitAndReportSize();
 	})
 }
+
+function openHint() {
+	if(hinturl) { window.open(hinturl, '_blank'); }
+}
+
+function addButton(p, title, cb) {
+	let b = document.createElement('button');
+	b.className = 'xlv-button';
+	b.innerHTML = title;
+	b.title = title;
+	b.addEventListener('click', cb, false);
+  p.buttonRow1.appendChild(b);
+  p.buttonRow1.appendChild(document.createTextNode("\n"));
+}
