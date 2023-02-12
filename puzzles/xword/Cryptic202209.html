@@ -10,7 +10,7 @@ See the full Exolve license notice in exolve-m.js.
 -->
 <link rel="stylesheet" type="text/css" href="exolve/exolve-m.css"/>
 <script src="exolve/exolve-m.js"></script>
-<title>Cryptic 2022-09 by Darren Miller</title>
+<title>Cryptic 2023-02 by Darren Miller</title>
 
 <style>
 	body {
@@ -21,371 +21,271 @@ See the full Exolve license notice in exolve-m.js.
 		     visibility: hidden;
 	   }
 	}
-
-	/* The Modal (background) */
-	.modal {
-	  display: none; /* Hidden by default */
-	  position: fixed; /* Stay in place */
-	  z-index: 5; /* Sit on top */
-	  padding-top: 100px; /* Location of the box */
-	  left: 0;
-	  top: 0;
-	  width: 100%; /* Full width */
-	  height: 100%; /* Full height */
-	  overflow: auto; /* Enable scroll if needed */
-	  background-color: rgb(0,0,0); /* Fallback color */
-	  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-	}
-	/* Modal Content */
-	.modal-content {
-	  position: relative;
-	  background-color: #fefefe;
-	  margin: auto;
-	  padding: 0;
-	  border: 1px solid #888;
-	  width: 80%;
-	  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
-	  -webkit-animation-name: animatetop;
-	  -webkit-animation-duration: 0.4s;
-	  animation-name: animatetop;
-	  animation-duration: 0.4s
-	}
-
-	/* Add Animation */
-	@-webkit-keyframes animatetop {
-	  from {top:-300px; opacity:0} 
-	  to {top:0; opacity:1}
-	}
-
-	@keyframes animatetop {
-	  from {top:-300px; opacity:0}
-	  to {top:0; opacity:1}
-	}
-
-	/* The Close Button */
-	.modal-close {
-	  color: white;
-	  float: right;
-	  font-size: 28px;
-	  font-weight: bold;
-	}
-
-	.modal-close:hover,
-	.modal-close:focus {
-	  color: #000;
-	  text-decoration: none;
-	  cursor: pointer;
-	}
-
-	.modal-header {
-	  padding: 2px 16px;
-	  background-color: navy;
-	  color: white;
-	}
-
-	.modal-body {
-		padding: 16px;
-		text-align: center;
-		font-family: Consolas, monospace;
-		font-size: larger;
-	}
-
-	.modal-footer {
-	  padding: 2px 16px;
-	  background-color: #5cb85c;
-	  color: white;
-	}
 </style>
+<link rel="stylesheet" type="text/css" href="exolve/dkm-popup.css"/>
+<script src="exolve/dkm-popup.js"></script>
+<script src="exolve/dkm-checker.js"></script>
+<script src="exolve/dkm-extractor.js"></script>
 </head>
 <body>
-<div id="popupModal" class="modal">
-
-  <!-- Modal content -->
-  <div class="modal-content">
-    <div class="modal-header">
-      <span class="modal-close">&times;</span>
-      <h3>Check Puzzle</h3>
-    </div>
-    <div class="modal-body" onclick="selectall(this);">
-    </div>
-  </div>
-
-</div>
+<div id="popupModal" class="modal"></div>
 <div id='scroll-wrapper'><div id="exolve"></div>
 <script>
 
-function customizeExolve(p) {
-  let b = document.createElement('button');
-  b.className = 'xlv-button';
-  b.innerHTML = 'Check puzzle';
-  b.title = 'Check puzzle'
-  b.addEventListener('click', (evt) => {
-    checkPuzzle();
-  });
-  p.buttonRow1.appendChild(b);
-  p.buttonRow1.appendChild(document.createTextNode("\n"));
+var puzid = 'dkm-cryptic-202302';
+var exolveanswers = {
+	'A1':	'5b457e7903be79c3c70603c096689d7882e516849dd404960551afbb329f9f3a',
+	'A7':	'cf1f6c61103ebae481141e41299150209adc3842f0c182acabb87c31c941fa8f',
+	'A11':	'b603d835004caf52d9504b7e33ca06976c91d29238c4621e5294e0f87f67213c',
+	'A12':	'20da60a3f4c2ec93dd89010826a1a0483f8e65b257489dc36c9934d86fe08fd0',
+	'A13':	'65d7607bdd41a7f663a09cf1b8f5daa7130b2375f98e41943b81d3ee0001b377',
+	'A14':	'1da289ddaabd7232a59c8fbbdc99e258a6cd04921f71e595a2db1090df36a15a',
+	'A16':	'a252207d9c1e58890b7232f8479429ed200094fdf5fe787405ada4a8196b89ce',
+	'A17':	'4f1429d85b7b4cb9dff030e14ac60ac397a113b515df07a2190fc353d7b006dd',
+	'A19':	'261376eebaff78994e2e148f9958265c1adae032d05212b951cc78326d238214',
+	'A21':	'b180ebe2968c3813f86d0877a481ede12d0e5d4995c0b19b204ba4e6910dcd42',
+	'A23':	'29d390f555ad0b17ea153d24bb848750d87eaa1a67a20365f8562dea6c116e3c',
+	'A26':	'27ba101d94eeec88958fcc0763a15b5839eb5237e722897dad8b4c2dc1b38610',
+	'A28':	'68343db98fc0cd287988e557b607de741b434ed5c0e95573122a88fb614afba3',
+	'A30':	'0e19f02ca15d6060d63dc1946cc784d739c69a4cc5e6ef266a50e3b58c673f35',
+	'A31':	'9bb48ece0e6b1a13bfe0d4759084c0e8f7281da344f7a0d3b3bd362b92f75c1f',
+	'A32':	'abdac08bec83e6324009a8e49663f2fc25e232d744d3fc256629a5980a9df706',
+	'A34':	'83c79d85bb0bd4a8c8b1cb482fe50127e88e592e900ed75d46aaba505334f8ca',
+	'A37':	'c86498d8aed76dfd5691daf4b06f340c3f705374a3678a721ab118a25c3ba7e0',
+	'A38':	'2f2df2eb63cfc1872993fc80ca3f6382f864fafe465f98db623b66cbfdce2436',
+	'A40':	'91e4135f2a4cd56e7017beef39c157d53af8922e5ec3b4a008af41859e5b1bc7',
+	'A41':	'b30a3bb45b60a85211d5c48a70b4b79e827d1d13cd76f7d7c7e3534c84c2b4bc',
+	'A44':	'05d3799e8d57826848dafee94fadf9f5c9ff5a3939aa76cf77307fca530ffed7',
+	'A46':	'ee27a8ba4247534baffde12769c32cba9ba7713fe2b366af2df1ea2b5d69ed4e',
+	'A47':	'8c5c1a10b756cc77972ab27c3998b9a6ff95b81184c7c2d705cdb127a7ef9b7a',
+	'A49':	'b65fa079ac36df1bfe864941b4540381d69e9e190d70f8ee6523ba5b9cd4efe7',
+	'A50':	'f89b0ffebeed621161e962c09b13b61f9e26cddd2b8a6605995fa87a402c0a4b',
+	'A51':	'c3e0d8b903a73a005535126ee642826ada1e33afbc15b3c13de9647ac72a1d2e',
+	'A52':	'5c08d68929da1ed8788867eaefd7e9638779ef2dd3496ef9e1dc08cc8822d31f',
+	'A53':	'f43840647908aa2bc3d5d7efb0f34f1ad10549b3102df55b15ed557e4709b31a',
+	'D2':	'0ca3a4d8213f999815c5f29693e389a152f0730cc162be09b40cf3de15d85f56',
+	'D3':	'03a92e15ddfb7d86be555b459abafdcf131719d01f094123fe20cd042f85125c',
+	'D4':	'3295f87ad124baa92c56c46a15adea7701d0325a271bfe19621b40560c5916d1',
+	'D5':	'a8bb2043b13119786f07c8164cab0f600fdc9c38a1acb5dd5835f53f3df2b650',
+	'D6':	'a71626e2a9a8970fb938834dd350cccf2538dc0f4d7a040d19abf84e02876eb9',
+	'D7':	'fbc78f6409bef3e27ab18aa311b8100b9c89d22a9a0844b454aea06acd35a843',
+	'D8':	'8f7dd3a7f2e721bcb4bc41c91f969e7d85e8c912863d6788d77b0e5ec207aff4',
+	'D9':	'982b8101ae202ecbb9b002a6743e0fc1b003fd0b436931507e38dac088c3d737',
+	'D10':	'5806d08834371746238aadf8e11e0017468e501b8dc1eb37c93f039ce2996c03',
+	'D15':	'5d71c4df3018c673380a5ad80f3c8f320e61e8c0e4e9afeac65e8cfc776e9e62',
+	'D18':	'863427391b17aea00f796f9b5803f41341a59fdb638c3f1bd0103cbcca28c04b',
+	'D20':	'56d80f21c7b713057267de2d0d86895d69abae9dc5f2e1dc16c372d03148777c',
+	'D22':	'cd58f255d6cca4e21c8d1d5abe3a3d3a322a57ff18f69d1bdc2531b900b83d45',
+	'D24':	'acd09c8e72e456c20fd334a8b31056ef7375fbca55b9497d5bf7a0b16b1aac60',
+	'D25':	'2d858da2f25c36bf6b7ec9a9877943cef8c6d875a48432c73bced2e9de407704',
+	'D26':	'1cedd4524eaff30da8251fcd9b90db4f5749c26d747c3c23aefac6be25cd9680',
+	'D27':	'5818428b08945d56dfce0f7d4472f2ec8367d629e7f77b4ea6371ea63466d3cb',
+	'D28':	'1bb25b71dd2a3c1258bd207b6cced0ed7a2fa7b608bfa19b35bad84e641c7d1b',
+	'D29':	'caf7b1cb8e7eab34b6bc9d6b8c41cd3d71f4f15d7779fa3eb681836ae48d6520',
+	'D30':	'811e30515d02d402740cb9cb807af0b3a7414629d51768ce61a52676df6aaf62',
+	'D33':	'77ae0fa29fbba4e41908b3ed773a6b51048d49b65dcd77508999f2579f79d8e8',
+	'D35':	'c66c7c24e9b18680ae811e50d58d9c8c1b179a29c00e92d0ef309e5063c1fc77',
+	'D36':	'6c3244b804c70fe66e62071ccd360d16503b5393d0f64d0dc7b21013b0ace164',
+	'D37':	'0ce2480fc4bfb36c85b947ed83ae4fa60ec0bed16612d552093d9f2c49018ab3',
+	'D39':	'16a6862e095aa78fc80bb598b644371963b802a9f83ff254628379237e072466',
+	'D40':	'97c6ca984ffb02b8faee5a0f7dc7d224689c5e5996d7b8efeb6c0d414033c15e',
+	'D42':	'e69601364bdac76eeebf277bea25b850aa4c7d9f7d28f670084f7ee801560ea5',
+	'D43':	'3476433f69c4e423947c368c9f09bc289a341cd3de98ef858c46f10e79bada51',
+	'D44':	'87431aecde9a3ad7297f31757cef806694006f1324c03f1ac2f758df160727b3',
+	'D45':	'b095b1afd62e42fa0307bb75f9350db388af33489c709076c33b0c0f85eda808',
+	'D48':	'1d7a8da0b371fc17440e3a9ff1244a56f11d384cfbdddd0b947139863fcd00fa'
+};
+var hinturl = '../../hints/Cryptic202302_hints.html';
 
-  b = document.createElement('button');
-  b.className = 'xlv-button';
-  b.innerHTML = 'Get hints';
-  b.title = 'Get hints'
-  b.addEventListener('click', (evt) => {
-    window.open('../../hints/Cryptic202209_hints.html', '_blank');
-  });
-  p.buttonRow1.appendChild(b);
-  p.buttonRow1.appendChild(document.createTextNode("\n"));  
+function customizeExolve(puz) {
+
+	labelHeaders(puz);	
+	if(markedCells) {
+		markupCells(puz, markedCells, 10, 6, 'darkblue');
+  	addButton(puz, 'Extract cells', getMarkedCells);
+  }
+  if (Object.keys(exolveanswers).length) {
+  	addButton(puz, 'Check puzzle', checkPuzzle);
+	}
+	
+	if(typeof hinturl !== 'undefined') {
+ 		addButton(puz, 'Get hints', openHint);
+	}
+}
+
+function labelHeaders(puz) {
+	
+	const thisW = puz.cellW + 2*puz.GRIDLINE;
+	const thisH = puz.cellH + 2*puz.GRIDLINE;
+
+	const headGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+	puz.svg.appendChild(headGroup);	
+	
+  const cellY = puz.cellTopPos(0, -4*puz.GRIDLINE);
+	for (var col=0; col<puz.gridWidth; col++) {
+		const cellX = puz.cellLeftPos(col+.5, 0);
+		const cellText = makeHeaderText(puz, String.fromCharCode(col+65), 
+											cellX, cellY, 'middle');
+	  headGroup.appendChild(cellText);
+	}
+
+  const cellX = puz.cellLeftPos(0, -4*puz.GRIDLINE);
+  const dspV = (puz.cellH + puz.letterSize) /2;
+	for (var row=0; row<puz.gridHeight; row++) {
+		const cellY = puz.cellTopPos(row, dspV);
+		const cellText = makeHeaderText(puz, row+1, 
+											cellX, cellY, 'end');
+	  headGroup.appendChild(cellText);
+	}
+
+}
+
+function makeHeaderText(puz, txt, cellX, cellY, align) {
+	  const cellText =
+	      document.createElementNS('http://www.w3.org/2000/svg', 'text');
+	  cellText.setAttributeNS(null, 'x', cellX);
+	  cellText.setAttributeNS(null, 'y', cellY);
+		cellText.setAttributeNS(null, 'text-anchor', align);
+	  cellText.textLength = puz.cellW + 'px'
+	  cellText.style.fill = puz.colorScheme['light-label']
+	  cellText.style.fontSize = puz.letterSize + 'px';
+	  cellText.innerHTML = txt
+	  return cellText;
+}
+
+let markedCells = [
+	'n3', 'd18', 'q16', 'h9', 'm9', 'f7', 'k15',
+	'd3', 'b9', 'q5', 'p13', 'f12', 'a11', 's10'
+];
+
+function markupCells(p, cells, ht, basewid, labelcolor='') {
+	for(let i=0; i<cells.length; i++) {
+		let coords = p.parseCellLocation(cells[i]);   // [row,col]
+		let wid = (i+1).toString().length*basewid-1;
+		let c = p.addCellText(coords[0], coords[1], (i+1), ht, wid, false, true);
+		c.style['stroke-width'] = 0.7;
+		if(labelcolor) {
+			c.style.stroke = labelcolor;	
+		}
+	}
+	
+	p.cellActivator(0,0); 
 }
 
 createExolve(`
 ======REPLACE WITH YOUR PUZZLE BELOW======
 
 exolve-begin
-  exolve-id: dkm-cryptic-202209
-  exolve-title: Cryptic 2022-09
+  exolve-id: dkm-cryptic-202302
+  exolve-title: Cryptic 2023-02
   exolve-setter: Darren Miller
-  exolve-copyright: 2022 Darren Miller
-  exolve-width: 15
-  exolve-height: 15	exolve-option: color-active:lightyellow
+  exolve-copyright: 2023 Darren Miller
+  exolve-credits: Testers: Amy F, Errol E, Greg D
+  exolve-width: 19
+  exolve-height: 19
+  exolve-preamble:
+		Once you solve the puzzle,you can submit your final answer at 
+		<a href='https://darrenspuzzles.blogspot.com/2023/02/cryptic-2023-02.html' 
+		title='Go to Darren&apos;s Puzzles blog' target='_blank'>Darren&apos;s Puzzles blog</a>.</li>
+		</ul>  
+		
+	exolve-option: offset-top:30
+  exolve-option: offset-left:30
+	exolve-option: color-active:lightyellow
   exolve-option: color-input:royalblue color-arrow:lightyellow
   exolve-option: color-light-label-input:white
   exolve-option: color-light-text-input:white
   exolve-option: color-button:navy color-button-hover:purple
-  exolve-option: clues-panel-lines:20
-  exolve-option: color-overwritten-start:green
-  exolve-option: highlight-overwritten-seconds:0.5
   exolve-option: hide-copy-placeholder-buttons
   exolve-relabel:
     clear: Clear this word
     reveal: Show hint for method(s)
   exolve-grid:
-		 . 0 0 0 0 0 0 0 0 . 0 0 0 0 0 
-		 . . 0 . 0 . 0 . 0 . 0 . 0 . 0 
-		 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
-		 0 . 0 . 0 . 0 . 0 . 0 . 0 . 0 
-		 0 0 0 0 0 . 0 0 0 0 0 0 0 0 0 
-		 0 . 0 . 0 . 0 . . . 0 . 0 . . 
-		 0 0 0 0 0 0 0 . 0 0 0 0 0 0 . 
-		 0 . 0 . . . 0 . 0 . . . 0 . 0 
-		 . 0 0 0 0 0 0 . 0 0 0 0 0 0 0 
-		 . . 0 . 0 . . . 0 . 0 . 0 . 0 
-		 0 0 0 0 0 0 0 0 0 . 0 0 0 0 0 
-		 0 . 0 . 0 . 0 . 0 . 0 . 0 . 0 
-		 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
-		 0 . 0 . 0 . 0 . 0 . 0 . 0 . . 
-		 0 0 0 0 0 . 0 0 0 0 0 0 0 0 . 
+		0 0 0 0 0 0 . . 0 . 0 . 0 0 0 0 0 0 0 
+		. 0 . 0 . 0 . 0 0 0 0 0 0 . 0 . 0 . 0 
+		0 0 0 0 0 0 . . 0 . 0 . 0 0 0 0 0 0 0 
+		. 0 . 0 . 0 0 0 0 0 0 0 0 . 0 . 0 . 0 
+		. 0 0 0 0 . 0 . 0 . 0 . 0 . 0 0 0 0 0 
+		. 0 . 0 . . 0 0 0 0 0 0 0 . 0 . . 0 . 
+		. 0 0 0 0 0 0 . . 0 . . 0 0 0 0 0 0 0 
+		. 0 . 0 . 0 . 0 0 0 0 0 0 . 0 . 0 . 0 
+		0 0 0 0 0 0 0 0 . 0 . 0 . 0 0 0 0 0 0 
+		0 . 0 . . 0 . 0 0 0 0 0 . 0 . . 0 . 0 
+		0 0 0 0 0 0 . 0 . 0 . 0 0 0 0 0 0 0 0 
+		0 . 0 . 0 . 0 0 0 0 0 0 . 0 . 0 . 0 . 
+		0 0 0 0 0 0 0 . . 0 . . 0 0 0 0 0 0 . 
+		. 0 . . 0 . 0 0 0 0 0 0 0 . . 0 . 0 . 
+		0 0 0 0 0 . 0 . 0 . 0 . 0 . 0 0 0 0 . 
+		0 . 0 . 0 . 0 0 0 0 0 0 0 0 . 0 . 0 . 
+		0 0 0 0 0 0 0 . 0 . 0 . . 0 0 0 0 0 0 
+		0 . 0 . 0 . 0 0 0 0 0 0 . 0 . 0 . 0 . 
+		0 0 0 0 0 0 0 . 0 . 0 . . 0 0 0 0 0 0 
 	exolve-across:
-		1  Troubled heir follows Tom and Charlie to be more easily remembered (8)
-		6  Louisiana boy with the Spanish name (5)
-		9  They said, &ldquo;Sir, come steer Ed all the way around&rdquo; (15)
-		10  Nothing rots badly like perch (5)
-		11  Sea crab I mixed with a lot of beans (9)
-		12  Experience of girl ending up coming back regularly (7)
-		13  She initially asked for some bundles (6)
-		15  Steamships jettison hemp to reach equilibrium (6)
-		17  Read secret message in Delaware tomb (7)
-		19  Photograph one calligrapher holding a ring (5,4)
-		21  Suspect villain fertilized too much (5)
-		22  Pepper warns ship about young punks (15)
-		23  It&#8217;s sweet playing guitars without it (5)
-		24  Separated Frisbee mangled tree (8)
+		1  Makes sense when Dad IDs cup without lids (4,2)
+		7  Bear found beneath green light (7)
+		11  Not at all old-fashioned, Dawn took back Ed (6)
+		12  What&#8217;s left behind by Earl with bad taste (6)
+		13  Spooner says, &ldquo;no dates for gifts&rdquo; (7)
+		14  Divide trophy with half of Angola (8)
+		16  In conclusion, the answer being so! (4)
+		17  Quarter engaged in profits on treehouses (5)
+		19  That bub ran a place where you might get into hot water (7)
+		21  Naked panelist dancing with foreign types (6)
+		23  Mike leaves rambling emails to shut-in (7)
+		26  Messenger of Ra arrested by bore (6)
+		28  Utter, &ldquo;I love Zac desperately!&rdquo; (8)
+		30  Buzz from extremely staunch critic (6)
+		31  Getting up, there are goals I&#8217;m never going to start (5)
+		32  Speculation about hero lost amid the borders of Turkey (6)
+		34  Cheat death somehow without any tea? What a pain (8)
+		37  Country singer George is very strict (6)
+		38  Fancy tinsel having a bit of color pattern (7)
+		40  Spoiled, hot mother&#8217;s a famous skeptic (6)
+		41  No fire blazing? No, quite the opposite (7)
+		44  Pastor Derek has a reservation (5)
+		46  Theodore gave up perfume for you long ago (4)
+		47  Until now, chart-topping idol took a little time (8)
+		49  Braggart elitist traded lithium for gold, half off (7)
+		50  Odd notion is why I&#8217;m inside with the last bit of hummus (6)
+		51  Angry reprimand: &ldquo;Careful about dropping clubs!&rdquo; (6)
+		52  Evens out purse he intends to be spruced up (7)
+		53  Knock-off sites posing behind initial disguise (6)
 	exolve-down:
-		2  Chilling tune with criminal doing it in distress (3-12)
-		3  Grouping of ulcers upset about tea (7)
-		4  Hotel with unlimited couscous, stirred but bland (9)
-		5  After a left, arrive by mistake at Amazon, perhaps (5)
-		6  Left big eel squirming, as you can plainly read (7)
-		7  Fry beef cutlet mixed with odd tofu because small changes can have large results (9,6)
-		8  I left Daniel broken and weighed down (5)
-		9  Spooner heard curses at the funfair (6)
-		13  Yes, Italian sandwich shop almost sent back to the borders (9)
-		14  Comes back around but burns tops off (1-5)
-		16  Removing clog, college&#8217;s rep disturbed a mole (7)
-		18  Accidentally cripple a speedy ship (7)
-		19  Leaders of private armies will need some soldiers (5)
-		20  Bitter acid engulfs ringleader (5)
+		2  Reckless criminal ropes dead bats (9)
+		3  Mostly shy with a silly grin at the French paradise (7-2)
+		4  A sweet chick in every way (4)
+		5  Blue dog of a sort climbs up in bed (6)
+		6  Take a stand against topless priest entangled with original sin (6)
+		7  Lowball a quantity of rounder bidets (8)
+		8  Loud noise covers you entering bar at a restaurant, perhaps (6,3)
+		9  Gathered notes about important ceremonies (5)
+		10  Jonah&#8217;s kids staggered to a watering hole (5)
+		15  Spheres at the fringes of ornamental shrubs (4)
+		18  Aristotle had a little one (3)
+		20  A big storm, Archie! Run in a panic (9)
+		22  Rowdy son, standing on yard, embraces first idea (5)
+		24  Funny thing when Anne and Mark made out (5)
+		25  Moderator tries leaving cemeteries in a mess (5)
+		26  Tenderness from each ear tingling internally (5)
+		27  Airplane trip doesn&#8217;t start without a lot of weight (5)
+		28  Decides 5-0 on fix-up (5)
+		29  Bored by mediocre performance of batter&#8217;s achievement (5)
+		30  Hit hard, short man taken by ship to hospital (5)
+		33  Confused senior carries dog to see 33D for example (9)
+		35  Matriarchs excitedly spilling tea in comfy places (9)
+		36  Entertainers like Tess wrapped in tubes (9)
+		37  Put down top from traffic signal, Ed (8)
+		39  Heart of Thor becomes a black, sticky substance (3)
+		40  Only half of tortures are wrongdoing (4)
+		42  Prospective Reverend said, chew coat? (6)
+		43  Shame-faced and leaderless? True, and not quite complete (6)
+		44  Every other townie jumps to gain an advantage (3-2)
+		45  Buzz about flying robot (5)
+		48  Short revolutionary captured by blonde woman (4)
 	exolve-end
 
 ======REPLACE WITH YOUR PUZZLE ABOVE======
 `);
-
-let popupModal;
-
-function doCloseModal() {
-	if(popupModal) { 
-		if(popupModal.style.display == "none") { return;	}
-		popupModal.style.display = "none";
-		window.getSelection().removeAllRanges();
-	}
-}
-
-function showModal(msg) {
-	// Get the modal
-	if (!popupModal) {
-		popupModal = document.getElementById("popupModal");
-	
-		if(popupModal) {
-			var span = document.getElementsByClassName("modal-close");
-			span[0].onclick = doCloseModal;
-			window.onclick = function(e) {
-				if(e.target == popupModal) { doCloseModal(); }
-			}
-			document.addEventListener('keydown', (event) => {
-  			if (event.key === 'Escape') { doCloseModal(); }
-  		});
-		}
-	}
-
-	if(popupModal) {
-		var modalBody = document.getElementsByClassName("modal-body");
-		if(modalBody) {
-			modalBody[0].innerHTML = msg;
-			popupModal.style.display = "block";
-		}
-	}
-}
-
-var puzid = 'dkm-cryptic-202209';
-
-var exolveanswers = {
-	A1:  'f01f6ae7c3f1b58f61ca1ccabf8215fc88c7060e9b4512a005693bb2a7cb6fd6',
-	A6:  '0d6fda019c2504de9240206f3a7936e49a1190354fb65f8e1c171683b476d2cf',
-	A9:  '653189f14d830e7b75d046a840fe1fbd8e125a7ee1d0340982ce45168150ae34',
-	A10: '08f307d66900dbd66793d6da914d5296f6dbfcd60d628483fbf01a4580d8da36',
-	A11: '53489f3dd99ac1aa275c98090982672dc36f16de496041236a6855c4c2c66d9b',
-	A12: 'cf1f6c61103ebae481141e41299150209adc3842f0c182acabb87c31c941fa8f',
-	A13: '7ed992fdfddeccdfe37730e171ddb703c3ac9dd8d2611ac23091c7c65e2e4eda',
-	A15: '0b6a45ce5d885c9ee0b5c1086371f3480d7c29c78de0fd37cda3e20fb0a16b67',
-	A17: 'd51c3f133e8c00336f39e1f61011b7944f9c49a1a32404032e5b55f360024d28',
-	A19: '09607f7dcc5f63d37895cc4fcf6ba15f400d6fa14d18b153cf4126e033e7ca64',
-	A21: 'c0d939d3eff82a12270124876f7c82edb41543c0a27c068a1b369a4282dc9197',
-	A22: '988bbc9e9f3f65d2ed72a07d9e91e812429ab9b710e1c685f00f07c83efdf9b2',
-	A23: '0d7be9477d19d6e73b4e3c13c6ae48b418725e29ab8e0bab31c1ca3da543e9bd',
-	A24: '72522d3217fb90381ebad9463334876549eb87a543803472fa6d4e4429bbd0d4',
-	D2:  '79346b5ce86db655e32953aea6e90bd72a8ba838cccab15fb8a0789ca53a2aed',
-	D3:  '033278922ccddea3f3795b4e31b3f21e7407e2f449791fcf8d880886a344e33d',
-	D4:  '0a17fb55d90f7388987e37be4ee8c988746eaa1f63e505e6ed5f4906e1ae3e88',
-	D5:  '83f1c699f315d25c44e643b7b73598ca68848e3ecf671b062f36c2d015f35931',
-	D6:  'a214d49fc3415bc99e4369960c623f470018629588b6591ba5eff4402c6f82ec',
-	D7:  'c62e14c09fd46bbf012f5148dfa5415182c35cf8beaaefb1ae833ff1d8b8ed08',
-	D8:  'e035cda6006b1695958f514378a4885058546a1e4a7678efa593b4b84cd8cb51',
-	D9:  'acaf503c65018c708c2fdf1e8e1e25cde93f54200566a672d9d4c1d27a80b189',
-	D13: '3516dad9c5fb4189f39c4d1be9923f07436c7bcc5558191919da40b3e46b8c81',
-	D14: 'fbaaa884961997deaf02cf807819c142de9a8e6d200820973c2f6a0915c30e4d',
-	D16: 'd5231ffaa314439bce48c74d331239c43a989e00bc75882dcfd9dd0115e4f227',
-	D18: 'e693327c4bcec84c4a610d11879cf658d5759fa57d7656d6d9514eb9d6992ffe',
-	D19: '18ec6003e2573c3e2eda7a02764275ab44f9b8a2e20fb73e4729b943c129b543',
-	D20: '74fb207236db64995afcbe66a59121f3b852c17d3d79b09c4235a6b1976dbc2e'
-}
-
-function sha256hash(string) {
-  const utf8 = new TextEncoder().encode(string);
-  return crypto.subtle.digest('SHA-256', utf8).then((hashBuffer) => {
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray
-      .map((bytes) => bytes.toString(16).padStart(2, '0'))
-      .join('');
-    return hashHex;
-  });
-}
-
-function getLight(puz, clueIndex) {
-  let light = ''
-  for (let rowcol of puz.clues[clueIndex].cells) {
-    light = light + puz.grid[rowcol[0]][rowcol[1]].currLetter
-  }
-  return light
-}
-
-var checklock = 0;
-var answer_hashes = {};
-var hashpromises = [];
-
-function checkPuzzle() {
-
-	if(checklock) { return false; }
-	answer_hashes = {};
-	hashpromises = [];
-	
-	var puz = exolvePuzzles[puzid];
-	
-	if(!puz) { return; }
-
-	checklock = 1;	
-	const keys = Object.keys(exolveanswers);
-	var p;
-
-	for (var k=0; k < keys.length; k++) {
-		var light = getLight(puz, keys[k]);
-		if(light.match(/0/)) {
-			p = Promise.resolve('');
-			answer_hashes[keys[k]] = p;
-			hashpromises.push(p);
-		} else {
-			p = sha256hash(light);			
-			answer_hashes[keys[k]] = p;
-			hashpromises.push(p);
-		}
-	}
-	
-	if(hashpromises.length>0) {
-		Promise.all(hashpromises).then(processAnswers());
-		return false;
-	}
-
-	processAnswers();
-	return false;
-}
-
-async function processAnswers() {
-	
-	var incomplete_count = 0;
-	var incorrect_count = 0;
-	var incorrect_msg = '';
-	
-	var puz = exolvePuzzles[puzid];
-	
-	if(!puz) { return; }
-	
-	const keys = Object.keys(exolveanswers);
-	
-	for (var k=0; k < keys.length; k++) {
-		if (!answer_hashes.hasOwnProperty(keys[k])) {
-			// console.log(keys[k]+': missing hash');
-		} else {
-			var ans = await answer_hashes[keys[k]];
-			if(ans == '') {
-				incomplete_count++;
-			} else {
-				if(ans != exolveanswers[keys[k]]) {
-					if(incorrect_count) { incorrect_msg +=', '; }
-					incorrect_msg += keys[k];
-					incorrect_count++;
-				}
-			}
-		}
-	}
-
-	var msg = '';
-	if(!(incorrect_count||incomplete_count)) {
-		msg = 'Correct!';
-	} else {
-		if(incorrect_count) {
-			msg = 'Incorrect answer'
-					+ (incorrect_count > 1 ? 's' : '')
-					+ ': ' + incorrect_msg;
-		
-			if(incomplete_count>0) { msg += ' and ' }			
-		}
-
-		if(incomplete_count>0) {
-			msg += incomplete_count + ' incomplete answer'
-					+ (incomplete_count > 1 ? 's' : '')
-		}
-		msg += '.';
-	}
-	showModal(msg);
-	checklock = 0;
-}
 
 </script>
 <script src="exolve/dkm-exolve-utils.js"></script>
