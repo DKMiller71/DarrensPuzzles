@@ -113,6 +113,20 @@ function customizeExolve(puz) {
 	}
 }
 
+function openHint() {
+	if(hinturl) { window.open(hinturl, '_blank'); }
+}
+
+function addButton(p, title, cb) {
+	let b = document.createElement('button');
+	b.className = 'xlv-button';
+	b.innerHTML = title;
+	b.title = title;
+	b.addEventListener('click', cb, false);
+  p.buttonRow1.appendChild(b);
+  p.buttonRow1.appendChild(document.createTextNode("\n"));
+}
+
 function labelHeaders(puz) {
 	
 	const thisW = puz.cellW + 2*puz.GRIDLINE;
@@ -280,7 +294,7 @@ exolve-begin
 		42  Prospective Reverend said, chew coat? (6)
 		43  Shame-faced and leaderless? True, and not quite complete (6)
 		44  Every other townie jumps to gain an advantage (3-2)
-		45  Buzz about flying robots (5)
+		45  Buzz about flying robot (5)
 		48  Short revolutionary captured by blonde woman (4)
 	exolve-end
 
