@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!--
+MIT License
+Copyright (c) 2019 Viresh Ratnakar
+See the full Exolve license notice in exolve-m.js.
+-->
+<link rel="stylesheet" type="text/css" href="exolve/exolve-m.css"/>
+<script src="exolve/exolve-m.js"></script>
+<title>Cryptic 2023-03 by Darren Miller</title>
+
+<style>
+	body {
+		font-family: "Gill Sans", sans-serif;
+	}
+	@media print {
+		.extractButton {
+		     visibility: hidden;
+	   }
+	}
+</style>
+<link rel="stylesheet" type="text/css" href="exolve/dkm-popup.css"/>
+<script src="exolve/dkm-popup.js"></script>
+<script src="exolve/dkm-checker.js"></script>
+<script src="exolve/dkm-decode.js"></script>
+</head>
+<body>
+<div id="popupModal" class="modal"></div>
+<div id='scroll-wrapper'><div id="exolve"></div>
+<script>
+
+var puzid = 'dkm-cryptic-202303';
+var exolveanswers = {};
+// var hinturl = '../../hints/Cryptic202302_hints.html';
+
+const exolvedata = `
+	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
+	nPw0zxdyuoxfW0glHhpA==
+`
+
+function customizeExolve(puz) {
+
+	if(typeof markedCells !== 'undefined') {
+		markupCells(puz, markedCells, 10, 6, 'darkblue');
+  	addButton(puz, 'Extract cells', getMarkedCells);
+  }
+  if (Object.keys(exolveanswers).length) {
+  	addButton(puz, 'Check puzzle', checkPuzzle);
+	}
+	if(typeof hinturl !== 'undefined') {
+ 		addButton(puz, 'Get hints', openHint);
+	}
+}
+
+function openHint() {
+	if(hinturl) { window.open(hinturl, '_blank'); }
+}
+
+function addButton(p, title, cb) {
+	let b = document.createElement('button');
+	b.className = 'xlv-button';
+	b.innerHTML = title;
+	b.title = title;
+	b.addEventListener('click', cb, false);
+  p.buttonRow1.appendChild(b);
+  p.buttonRow1.appendChild(document.createTextNode("\n"));
+}
+
+</script>
+<script src="exolve/dkm-exolve-utils.js"></script>
+</div>
+</body>
+</html>
