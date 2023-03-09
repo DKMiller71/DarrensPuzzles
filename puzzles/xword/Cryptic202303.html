@@ -25,7 +25,6 @@ See the full Exolve license notice in exolve-m.js.
 <link rel="stylesheet" type="text/css" href="exolve/dkm-popup.css"/>
 <script src="exolve/dkm-popup.js"></script>
 <script src="exolve/dkm-checker.js"></script>
-<script src="exolve/dkm-decode.js"></script>
 </head>
 <body>
 <div id="popupModal" class="modal"></div>
@@ -33,67 +32,40 @@ See the full Exolve license notice in exolve-m.js.
 <script>
 
 var puzid = 'dkm-cryptic-202303';
-var exolveanswers = {};
-// var hinturl = '../../hints/Cryptic202302_hints.html';
+var exolveanswers = {
+	'A1':	'c7b006680f8bba07774aa182589ceb0778f0454f0b8386392f2e58b553ef0ff4',
+	'A4':	'19659ff5b267819dadfe18ab6e2116b99ef1fa460237ae12760b8e355abe77f4',
+	'A10':	'9f8d95dd01c0dd43307f594084b061c8dd79a9487706d2621b43216417fec7ea',
+	'A11':	'88ddfe8c5a145006e7bb6bca8fb047f6c0b75e8b9555e9311ea8b8acb8ee59be',
+	'A12':	'0ad6bb76a2f220c9e747af7aab353d137c70ebae255098c1775a604bf783a87a',
+	'A13':	'57a26f70f921f65fae2ff7f6cc30e349089afb267cff7758f0ddbbd653a2ff07',
+	'A15':	'c39ebc9b192f126abde620aa5de6bfb6ad65035a5799730eef73b725057aabc8',
+	'A16':	'761a831223a180e88d465e4845ced9b89341e8488d1029f979e2b5361136588f',
+	'A18':	'62302617f488f75aff8c812b9a52bc0e3e543939a67c1e870e505a75365fb602',
+	'A19':	'0fa74790c73c843923282309cacab21c507af6e152dc2184772e0acfa9b6cb28',
+	'A21':	'81e64362c97be3c4ed9b18ac99f7daad03a82113ca352b6fd78675db5b3eea98',
+	'A23':	'0cd19888a166d40d0e9ea5aa7508b8c8bb2a633740560c7790eecc99bf170d7c',
+	'A25':	'b89c4cde9a76a809210d672060ca21edeb08f72bf0fc5bbcd59556d5d4ed2722',
+	'A26':	'969686aeaf4a8d1cab794511460ed3bdf4b3ec7fb8644e4530f2f26fe0eb422a',
+	'A27':	'f36f4fb4128fb797f51951a1b2d1a6ecd5fe96d2d8c665f8e8ace488daa9ea2d',
+	'A28':	'c438f263f0649934931b6031441c225fb9c80453ef152dfb1a099be5daf49a44',
+	'D1':	'42a86cd97e3a94e3b8ffbd953fd9f2a34021eb1d3250c37efa924d47b6bf1718',
+	'D2':	'4acc8a696c564acbe08ccaec0f0388557fad7f69da2ea8667e984e2a87275c80',
+	'D3':	'6858fd3ab48b5ec095640ed45db30d646a3a8579eba4afe175ffd597bc5baf5c',
+	'D5':	'037e39b5db03581b423b826395d9707e5da520b13ef77cf9f8a16037df1419dd',
+	'D6':	'50c2dff98846c343d4294551eb9e4b75905e4921abe6ff7f93984945d0c6c1c5',
+	'D7':	'e8d90aeed93991c6eb40ce5656a0e18314f78694c13523d83e85c7776cda5608',
+	'D8':	'530b9a260a7cb165930d82033d6433d63f801ce5089df216887903ddf8ad75ae',
+	'D9':	'870dfd66020c5a523ac8566d285640deff410410b7d2d1fbb9da6763452d09bd',
+	'D14':	'48951c2cae18cde453edff208f968dcc7cd9f79239dfe41ada94e86e6bf19bf7',
+	'D17':	'd0badab928e40717cf294dc0243aa94852944d5e177ff26433929f5875cb9fca',
+	'D18':	'b24e2a6586479ce6d1ecd0acce4d11f0c37b194306eec47a0f8dff45ff2864e8',
+	'D20':	'b603d835004caf52d9504b7e33ca06976c91d29238c4621e5294e0f87f67213c',
+	'D22':	'0d1ba443a8e8f5f3c312e0570f6af740bdd9d712a89bfb7da5b640e198664838',
+	'D24':	'd4e407f56c06d3fa2d3927112702360f850773414b3e31740ef00a2b70318360'
+};
 
-const exolvedata = `
-	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
-	nPw0zxdyuoxfW0glHhpA==
-`
+var hinturl = '../../hints/Cryptic202303_hints.html';
 
 function customizeExolve(puz) {
 
@@ -122,6 +94,79 @@ function addButton(p, title, cb) {
   p.buttonRow1.appendChild(b);
   p.buttonRow1.appendChild(document.createTextNode("\n"));
 }
+
+createExolve(`
+======REPLACE WITH YOUR PUZZLE BELOW======
+
+exolve-begin
+  exolve-id: dkm-cryptic-202303
+  exolve-title: Cryptic 2023-03
+  exolve-setter: Darren Miller
+  exolve-copyright: 2023 Darren Miller
+  exolve-width: 15
+  exolve-height: 15
+  exolve-preamble:
+	exolve-option: color-active:lightyellow
+  exolve-option: color-input:royalblue color-arrow:lightyellow
+  exolve-option: color-light-label-input:white
+  exolve-option: color-light-text-input:white
+  exolve-option: color-button:navy color-button-hover:purple
+  exolve-option: hide-copy-placeholder-buttons
+  exolve-relabel:
+    clear: Clear this word
+    reveal: Show hint for method(s)
+  exolve-grid:
+		0 0 0 0 0 . . 0 0 0 0 0 0 0 0 
+		0 . 0 . 0 . 0 . 0 . 0 . 0 . 0 
+		0 0 0 0 0 0 0 . 0 0 0 0 0 0 0 
+		0 . 0 . 0 . 0 . 0 . 0 . 0 . 0 
+		0 0 0 0 . 0 0 0 0 0 0 0 0 0 0 
+		0 . 0 . 0 . 0 . 0 . 0 . . . 0 
+		. 0 0 0 0 0 0 0 0 . 0 0 0 0 0 
+		. . 0 . 0 . 0 . 0 . 0 . 0 . . 
+		0 0 0 0 0 . 0 0 0 0 0 0 0 0 . 
+		0 . . . 0 . 0 . 0 . 0 . 0 . 0 
+		0 0 0 0 0 0 0 0 0 0 . 0 0 0 0 
+		0 . 0 . 0 . 0 . 0 . 0 . 0 . 0 
+		0 0 0 0 0 0 0 . 0 0 0 0 0 0 0 
+		0 . 0 . 0 . 0 . 0 . 0 . 0 . 0 
+		0 0 0 0 0 0 0 0 . . 0 0 0 0 0 
+	exolve-across:
+		1  Sticker had a piece of cloth or netting (5)
+		4  Short girl lodging in Moses&#8217; compound (8)
+		10  Criminal said, &ldquo;Shut up and hide!&rdquo; (7)
+		11  Could be sadness that no one took me back without approval (7)
+		12  Creep was lurid when I&#8217;d become king (4)
+		13  TV program where minister dies without trial or debate initially (10)
+		15  That woman devours wild gator but it&#8217;s not enough (8)
+		16  Curse angrily at smokes (5)
+		18  Come back to bank installing piano (5)
+		19  Assemble near Sal&#8217;s stores (8)
+		21  Brew house&#8217;s cut of fees taken in (6,4)
+		23  An aura that indicates salt (4)
+		25  Ban on powdered amber and lead (7)
+		26  Staggering back, he avoids cut by a savage (7)
+		27  Geek-speak about girl leaving a memento (8)
+		28  Started navy, perhaps, capturing Germany (5)
+	exolve-down:
+		1  Thrill from time I caught Kay with the French (6)
+		2  Title of sniper who failed (9)
+		3  Requirement contributing to online education (4)
+		5  Fancy neon dime is back on loan, deceptively lacking depth (3-11)
+		6  Teenager&#8217;s welfare wrapped in a bouquet (10)
+		7  Primarily space cowboys in futuristic incidents! (3-2)
+		8  Evil purposes of holes in your head (7)
+		9  Do I walk on Al&#8217;s yard? It&#8217;s no big deal (3,2,1,3&#8217;1,4)
+		14  Grizzly bears biting head of ducks, not spring chickens (10)
+		17  Mutinous general is giving up (9)
+		18  Creek meanders around empty church? Look again (7)
+		20  Doormen juggling, dropping nothing of recent vintage (6)
+		22  Spooner claims bay has no more room, but it&#8217;s a myth (5)
+		24  Feeling nothing when you disarm bomb at last (4)
+	exolve-end
+
+======REPLACE WITH YOUR PUZZLE ABOVE======
+`);
 
 </script>
 <script src="exolve/dkm-exolve-utils.js"></script>
