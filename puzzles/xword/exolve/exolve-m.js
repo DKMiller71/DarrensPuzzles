@@ -60,7 +60,7 @@ var exolvePuzzles;
  *     all the pages on the page). If containerId is empty and there is no
  *     element with id "exolve", the puzzle is created at the end of the
  *     web page.
- * customized is an optional function that will get called after the puzzle
+ * customizer is an optional function that will get called after the puzzle
  *     is set up. The Exolve object will be passed to the function.
  * provideStateUrl should be set to true if you also want to provide a URL
  *     that includes the current state and can be bookmarked or shared. Note
@@ -84,7 +84,7 @@ function Exolve(puzzleSpec,
                 visTop=0,
                 maxDim=0,
                 notTemp=true) {
-  this.VERSION = 'Exolve v1.47 December 19, 2022';
+  this.VERSION = 'Exolve v1.48 March 7, 2023';
   this.id = '';
 
   this.puzzleText = puzzleSpec;
@@ -332,8 +332,9 @@ function Exolve(puzzleSpec,
          <li><b>Arrow keys:</b>
              Move to the nearest light square in that direction.</li>
          <li><b>Ctrl-q:</b> Clear this, <b>Ctrl-Q:</b> Clear All!,
-             <b>Ctrl-B:</b> Print crossword, <b>Ctrl-/:</b> Jump to notes,
-             <b>Ctrl-*:</b> Mark clue as fave in notes, adding a * prefix.</li>
+             <b>Ctrl-B:</b> Print crossword, <b>Ctrl-/:</b> Jump to/back-from
+             notes, <b>Ctrl-*:</b> Mark clue as fave in notes, adding a *
+             prefix.</li>
          <li><b>Spacebar:</b>
              Place/clear block in the current square if it's diagramless.</li>
        </ul>
@@ -349,9 +350,9 @@ function Exolve(puzzleSpec,
     'notes': 'Notes',
     'notes.hover': 'Show/hide notes panel.',
     'notes-help': '<li>Ctrl-/ takes you to the current clue\'s notes ' +
-        '(or overall notes).</li><li>Ctrl-* adds a * prefix to the current ' +
-        'clue\'s notes.</li><li>Hovering over a clue\'s notes shows the ' +
-        'clue as a tooltip.</li>',
+        '(or overall notes) and back (if already there).</li><li>Ctrl-* ' +
+        'adds a * prefix to the current clue\'s notes.</li><li>Hovering ' +
+        'over a clue\'s notes shows the clue as a tooltip.</li>',
     'maker-info': 'Exolve-maker info',
     'manage-storage': 'Manage local storage',
     'manage-storage.hover': 'View puzzle Ids for which state has been saved. ' +
@@ -429,6 +430,7 @@ function Exolve(puzzleSpec,
     'print-page.hover': 'Print the whole page (Ctrl-p or Cmd-p).',
     'print-page-wysiwyg': 'Print wysiwyg',
     'print-page-wysiwyg.hover': 'Print the whole page without reformatting the crossword.',
+    'print-questions': 'Print questions:',
     'show-notes-seq': 'Show clue-solving sequence:',
     'show-notes-entries': 'Show entered solutions:',
     'show-notes-times': 'Show clue-solving times:',
@@ -465,7 +467,6 @@ function Exolve(puzzleSpec,
   this.languageScript = '';
   this.langMaxCharCodes = 1;
   this.columnarLayout = false;
-  this.cluesToRight = false;
   this.ignoreUnclued = false;
   this.ignoreEnumMismatch = false;
   this.showCellLevelButtons = false;
@@ -679,6 +680,12 @@ Exolve.prototype.init = function() {
                     <input class="xlv-input" id="${this.prefix}-page-margin"
                       name="${this.prefix}-page-margin" size="5" value="0.5">
                     </input>
+                    <span id="${this.prefix}-print-questions-span">
+                      ${this.textLabels['print-questions']}
+                      <input id="${this.prefix}-print-questions"
+                        checked=true type="checkbox">
+                      </input>
+                    </span>
                   </div>
                   <div>
                     <button id="${this.prefix}-print-crossword"
@@ -925,6 +932,10 @@ Exolve.prototype.init = function() {
   this.printFontInput = document.getElementById(this.prefix + '-print-font-inp');
   this.printFontInput.addEventListener(
       'change', this.setPrintFont.bind(this, false));
+  if (this.questionTexts.length == 0) {
+    const pq = document.getElementById(this.prefix + '-print-questions-span');
+    pq.style.display = 'none';
+  }
 
   this.webifiButton = document.getElementById(this.prefix + '-webifi');
   this.webifiButton.style.display = 'none';
@@ -1357,132 +1368,143 @@ Exolve.prototype.parseSubmit = function(s) {
 }
 
 Exolve.prototype.parseOption = function(s) {
-  let sparts = s.split(' ')
+  let sparts = s.split(' ');
   for (let spart of sparts) {
-    spart = spart.trim().toLowerCase()
+    spart = spart.trim();
     if (spart == "show-cell-level-buttons") {
-      this.showCellLevelButtons = true
-      continue
+      this.showCellLevelButtons = true;
+      continue;
     }
     if (spart == "hide-inferred-numbers") {
-      this.hideInferredNumbers = true
-      continue
+      this.hideInferredNumbers = true;
+      continue;
     }
     if (spart == "hide-copy-placeholder-buttons") {
-      this.hideCopyPlaceholders = true
-      continue
+      this.hideCopyPlaceholders = true;
+      continue;
     }
     if (spart == "no-auto-solution-in-anno") {
-      this.addSolutionToAnno = false
-      continue
+      this.addSolutionToAnno = false;
+      continue;
     }
     if (spart == "columnar-layout") {
-      this.columnarLayout = true
-      continue
+      this.columnarLayout = true;
+      continue;
     }
     if (spart == "clues-at-right-in-two-columns") {
-      this.cluesToRight = true
-      continue
+      /* Deprecated, we always try to position clues to the right now. */
+      continue;
     }
     if (spart == "print-incomplete-2cols") {
       this.printIncomplete2Cols = true;
-      continue
+      continue;
     }
     if (spart == "print-completed-3cols") {
       this.printCompleted3Cols = true;
-      continue
+      continue;
     }
     if (spart == "ignore-unclued") {
-      this.ignoreUnclued = true
-      continue
+      this.ignoreUnclued = true;
+      continue;
     }
     if (spart == "ignore-enum-mismatch") {
-      this.ignoreEnumMismatch = true
-      continue
+      this.ignoreEnumMismatch = true;
+      continue;
     }
     if (spart == "no-nina-button" || spart == "no-ninas-button") {
-      this.noNinaButton = true
-      continue
+      this.noNinaButton = true;
+      continue;
     }
     if (spart == "webifi") {
-      this.useWebifi = true
-      continue
+      this.useWebifi = true;
+      continue;
     }
     if (spart == "allow-digits") {
-      spart = 'allow-chars:0123456789'
+      spart = 'allow-chars:0123456789';
       // Fall through to the allow-chars code.
     }
-    const colon = spart.indexOf(':')
+    const colon = spart.indexOf(':');
     if (colon < 0) {
-      this.throwErr('Expected exolve-option: key:value, got: ' + spart)
+      this.throwErr('Expected exolve-option: key:value, got: ' + spart);
     }
-    const kv = [spart.substr(0, colon).trim(), spart.substr(colon + 1).trim()]
+    const kv = [spart.substr(0, colon).trim(), spart.substr(colon + 1).trim()];
     if (kv[0] == 'clues-panel-lines') {
-      this.cluesPanelLines = parseInt(kv[1])
+      this.cluesPanelLines = parseInt(kv[1]);
       if (isNaN(this.cluesPanelLines)) {
         this.throwErr('Unexpected val in exolve-option: clue-panel-lines: ' +
-                      kv[1])
+                      kv[1]);
       }
-      this.cluesToRight = true
-      continue
+      continue;
     }
     if (kv[0] == 'highlight-overwritten-seconds') {
-      const secs = parseFloat(kv[1])
+      const secs = parseFloat(kv[1]);
       if (isNaN(secs) || secs < 0) {
-        this.throwErr('Unexpected val in exolve-option: highlight-overwritten-seconds: ' + kv[1])
+        this.throwErr('Unexpected val in exolve-option: highlight-overwritten-seconds: ' + kv[1]);
       }
       this.hltOverwrittenMillis = secs * 1000;
       continue;
     }
     if (kv[0] == 'offset-left') {
-      this.offsetLeft = parseInt(kv[1])
+      this.offsetLeft = parseInt(kv[1]);
       if (isNaN(this.offsetLeft)) {
-        this.throwErr('Unexpected val in exolve-option: offset-left: ' + kv[1])
+        this.throwErr('Unexpected val in exolve-option: offset-left: ' + kv[1]);
       }
-      continue
+      continue;
     }
     if (kv[0] == 'offset-top') {
-      this.offsetTop = parseInt(kv[1])
+      this.offsetTop = parseInt(kv[1]);
       if (isNaN(this.offsetTop)) {
-        this.throwErr('Unexpected val in exolve-option: offset-top: ' + kv[1])
+        this.throwErr('Unexpected val in exolve-option: offset-top: ' + kv[1]);
       }
-      continue
+      continue;
     }
     if (kv[0] == 'grid-background') {
-      this.colorScheme['background'] = kv[1]
-      continue
+      this.colorScheme['background'] = kv[1];
+      continue;
     }
     if (kv[0] == 'font-family') {
-      this.fontFamily = kv[1]
-      continue
+      this.fontFamily = kv[1];
+      continue;
     }
     if (kv[0] == 'font-size') {
-      this.fontSize = kv[1]
-      continue
+      this.fontSize = kv[1];
+      continue;
     }
     if (kv[0].substr(0, 6) == 'color-' || kv[0].substr(0, 7) == 'colour-') {
       let key = kv[0].substr(kv[0].indexOf('-') + 1);
       if (!this.colorScheme[key]) {
-        this.throwErr('Unsupported coloring option: ' + kv[0])
+        this.throwErr('Unsupported coloring option: ' + kv[0]);
       }
       if (!this.isColour(kv[1])) {
-        this.throwErr('Invalid colour for ' + key + ': ' + kv[1])
+        this.throwErr('Invalid colour for ' + key + ': ' + kv[1]);
       }
-      this.colorScheme[key] = kv[1]
-      continue
+      this.colorScheme[key] = kv[1];
+      continue;
+    }
+    if (kv[0].substr(0, 16) == 'override-number-') {
+      const key = kv[0].substr(16);
+      if (!this.hasOwnProperty(key)) {
+        this.throwErr('Invalid Exolve property: ' + key);
+      }
+      if (typeof this[key] !== 'number') {
+        this.throwErr('Non-numeric Exolve property: ' + key);
+      }
+      const val = parseFloat(kv[1]);
+      this[key] = val;
+      continue;
     }
     if (kv[0] == 'allow-chars') {
       if (!this.allowChars) this.allowChars = {};
       for (c of kv[1]) {
         if (/\s/.test(c)) continue;
-        this.allowChars[c] = true
+        this.allowChars[c] = true;
         if (this.SPECIAL_STATE_CHARS.hasOwnProperty(c)) {
-          this.allowChars[this.SPECIAL_STATE_CHARS[c]] = true
+          this.allowChars[this.SPECIAL_STATE_CHARS[c]] = true;
         }
       }
-      continue
+      continue;
     }
-    this.throwErr('Unexpected exolve-option: ' + spart)
+    this.throwErr('Unexpected exolve-option: ' + spart);
   }
 }
 
@@ -1495,10 +1517,10 @@ Exolve.prototype.parseLanguage = function(s) {
   this.language = parts[0]
   this.languageScript = parts[1]
   try {
-      this.scriptRE = new RegExp('\\p{Script=' + this.languageScript + '}', 'u')
-      this.scriptLowerCaseRE = new RegExp('\\p{Lowercase}', 'u')
+    this.scriptRE = new RegExp('\\p{Script=' + this.languageScript + '}', 'u')
+    this.scriptLowerCaseRE = new RegExp('\\p{Lowercase}', 'u')
   } catch (err) {
-      this.throwErr(
+    this.throwErr(
         'Your browser ' +
         '<a href="https://caniuse.com/#search=Unicode%20property%20escapes"' +
         '>does not support Unicode property escapes</a> OR you\'ve provided ' +
@@ -1506,13 +1528,13 @@ Exolve.prototype.parseLanguage = function(s) {
   }
   // Hard-code some known scripts requiring langMaxCharCodes
   if (this.languageScript.toLowerCase() == 'devanagari') {
-      this.langMaxCharCodes = 4
+    this.langMaxCharCodes = 4
   }
   if (parts.length > 2) {
-      this.langMaxCharCodes = parseInt(parts[2])
-      if (isNaN(this.langMaxCharCodes) || this.langMaxCharCodes < 1) {
-        this.throwErr('invalid max-char-codes in exolve-language: ' + parts[2])
-      }
+    this.langMaxCharCodes = parseInt(parts[2])
+    if (isNaN(this.langMaxCharCodes) || this.langMaxCharCodes < 1) {
+      this.throwErr('invalid max-char-codes in exolve-language: ' + parts[2])
+    }
   }
 }
 
@@ -4097,15 +4119,6 @@ Exolve.prototype.displayClues = function() {
     document.getElementById(this.prefix + '-nodir-label').
       insertAdjacentHTML('beforeend', this.nodirHeading);
   }
-  const cbs = document.getElementsByClassName('xlv-clues-box')
-  this.cluesBoxWidth = 0;
-  for (let x = 0; x < cbs.length; x++) {
-    const e = cbs[x]
-    if (e.offsetWidth > this.cluesBoxWidth) {
-      this.cluesBoxWidth = e.offsetWidth;
-    }
-  }
-  this.equalizeClueWidths(this.cluesBoxWidth);
 }
 
 Exolve.prototype.equalizeClueWidths = function(w) {
@@ -4171,16 +4184,35 @@ Exolve.prototype.computeGridSize = function(maxDim) {
 }
 
 Exolve.prototype.setColumnLayout = function() {
+  const frameBox = this.frame.getBoundingClientRect();
+  const xStart = Math.max(frameBox.left, 0);
+  const vpWidth = this.getViewportWidth();
+  const xEnd = frameBox.right > 0 ? Math.min(frameBox.right, vpWidth) : vpWidth;
+  const portWidth = xEnd - xStart;
+  const gpWidth = this.gridPanel.offsetWidth || 481;
+  /**
+   * 12 = rt margin of grid panel, 8 = rt margin of clues panel; subtract 20.
+   */
+  const availWidth = portWidth - gpWidth - 20;
+  if (availWidth < 400) {
+    /* Clues in a single column, under grid */
+    this.cluesBoxWidth = gpWidth;
+  } else if (availWidth < 984 && !this.columnarLayout) {
+    /* Clues in two columns to the right of the grid */
+    this.cluesBoxWidth = Math.floor(availWidth / 2) - 12;
+  } else {
+    this.cluesBoxWidth = 480;
+  }
+  console.assert(this.cluesBoxWidth > 0, this.cluesBoxWidth);
+  this.equalizeClueWidths(this.cluesBoxWidth);
+  this.cluesContainer.style.maxWidth = (2 * (this.cluesBoxWidth + 12)) + 'px';
   if (!this.columnarLayout) {
     this.cluesContainer.className = 'xlv-clues xlv-clues-flex'
     this.gridcluesContainer.className = 'xlv-grid-and-clues-flex'
-    if (this.cluesToRight) {
-      this.cluesContainer.classList.add('xlv-clues-to-right');
-    }
     return;
   }
-  const numColumns = Math.floor(this.getViewportWidth() /
-    (15 + Math.max(this.cluesBoxWidth, this.gridPanel.offsetWidth)));
+  const numColumns = Math.floor(
+      vpWidth / (15 + Math.max(this.cluesBoxWidth, gpWidth)));
   if (numColumns == 2) {
     this.cluesContainer.className = 'xlv-clues xlv-clues-columnar'
     this.gridcluesContainer.className = 'xlv-grid-and-clues-2-columnar'
@@ -4226,7 +4258,8 @@ Exolve.prototype.displayGridBackground = function() {
 }
 
 Exolve.prototype.fireCompletionEvent = function() {
-  if (this.numCellsToFill != this.numCellsFilled) {
+  if (this.numCellsToFill != this.numCellsFilled ||
+      !this.frame) {
     return;
   }
   const event = new CustomEvent('exolve', {
@@ -5427,6 +5460,20 @@ Exolve.prototype.handleKeyUp = function(e) {
   this.handleKeyUpInner(key)
 }
 
+Exolve.prototype.muzzleEvent = function(e) {
+  e.stopPropagation();
+  e.preventDefault();
+}
+
+Exolve.prototype.fromNotesToGrid = function() {
+  if (this.savedRow == this.currRow && this.savedCol == this.currCol) {
+    /* Firefox (etc.?) do not scroll back correctly */
+    window.scrollTo(this.savedScrollX || 0, this.savedScrollY || 0);
+  }
+  this.activateCell(this.currRow, this.currCol);
+  this.refocus();
+}
+
 // For tab/shift-tab, ctrl-q, ctrl-Q, ctrl-B, ctrl-e
 Exolve.prototype.handleKeyDown = function(e) {
   let key = e.which || e.keyCode
@@ -5436,26 +5483,26 @@ Exolve.prototype.handleKeyDown = function(e) {
       e.preventDefault()
     }
   } else if (e.ctrlKey && (e.key == 'q' || e.key == 'Q')) {
-    e.stopPropagation();
-    e.preventDefault();
+    this.muzzleEvent(e);
     if (e.key == 'Q') {
       this.clearAll();
     } else {
       this.clearCurr();
     }
   } else if (e.ctrlKey && e.key == 'B') {
-    e.stopPropagation();
-    e.preventDefault();
+    this.muzzleEvent(e);
     this.printNow('crossword');
   } else if (e.ctrlKey && e.key == '/') {
-    if (this.focusOnNotes()) {
-      e.stopPropagation();
-      e.preventDefault();
+    if (this.notesPanel.contains(e.target) &&
+        this.currCellIsValid()) {
+      this.muzzleEvent(e);
+      this.fromNotesToGrid();
+    } else if (this.focusOnNotes()) {
+      this.muzzleEvent(e);
     }
   } else if (e.ctrlKey && e.key == '*') {
     if (this.markAsFave()) {
-      e.stopPropagation();
-      e.preventDefault();
+      this.muzzleEvent(e);
     }
   }
 }
@@ -6890,6 +6937,10 @@ Exolve.prototype.focusOnNotes = function() {
   if (!elt) {
     return false;
   }
+  this.savedScrollX = window.pageXOffset;
+  this.savedScrollY = window.pageYOffset;
+  this.savedRow = this.currRow;
+  this.savedCol = this.currCol;
   elt.focus();
   return true;
 }
@@ -6965,7 +7016,13 @@ Exolve.prototype.copyNotes = function() {
     return;
   }
   const type = "text/html";
+
+  /** Temporarily remove the notebook background */
+  const cls = 'xlv-overall-notes';
+  this.notesInput.classList.remove(cls);
   const blob = new Blob([this.notesContents.innerHTML], {type});
+  this.notesInput.classList.add(cls);
+
   const data = [new ClipboardItem({[type]: blob})];
   navigator.clipboard.write(data).then(
       this.copyNotesSuccess.bind(this),
@@ -7252,7 +7309,6 @@ Exolve.prototype.handleAfterPrint = function() {
       }
     }
     this.setColumnLayout();
-    this.equalizeClueWidths(this.cluesBoxWidth);
     this.recolourCells();
     this.redisplayNinas();
 
@@ -7321,6 +7377,7 @@ Exolve.prototype.getPrintSettings = function() {
                    ((page == 'ledger') ? 17.0 : 11.0))))))));
   const font = (this.printFontInput ? this.printFontInput.value : '18px') || '18px';
 
+  const pq = document.getElementById(this.prefix + '-print-questions');
   const onlyCrossword = this.printOnlyCrossword || false;
   return {
     page: page,
@@ -7329,6 +7386,7 @@ Exolve.prototype.getPrintSettings = function() {
     pageMarginIn: marginIn,
     pageWidthIn: widthIn,
     pageHeightIn: heightIn,
+    printQuestions: (this.questionTexts.length > 0) && pq.checked,
   };
 }
 
@@ -7423,6 +7481,11 @@ Exolve.prototype.handleBeforePrint = function() {
   this.columnarLayout = false;
   this.setColumnLayout();
 
+  // Hide questions if requested.
+  const maybeHideQuestions = settings.printQuestions ? '' : `
+    .xlv-questions,
+  `;
+
   const customStyles = document.createElement('style');
   customStyles.innerHTML = `
   @page {
@@ -7457,6 +7520,7 @@ Exolve.prototype.handleBeforePrint = function() {
     .xlv-saving,
     .xlv-small-button,
     .xlv-small-print,
+    .xlv-submit,${maybeHideQuestions}
     .xlv-status {
       display: none;
     }
