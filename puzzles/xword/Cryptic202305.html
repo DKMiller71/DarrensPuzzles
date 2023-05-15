@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!--
+MIT License
+Copyright (c) 2019 Viresh Ratnakar
+See the full Exolve license notice in exolve-m.js.
+-->
+<link rel="stylesheet" type="text/css" href="exolve/exolve-m.css"/>
+<script src="exolve/exolve-m.js"></script>
+<title>Cryptic 2023-05 by Darren Miller</title>
+
+<style>
+	body {
+		font-family: "Gill Sans", sans-serif;
+	}
+	@media print {
+		.extractButton {
+		     visibility: hidden;
+	   }
+	}
+</style>
+<link rel="stylesheet" type="text/css" href="exolve/dkm-popup.css"/>
+<script src="exolve/dkm-popup.js"></script>
+<script src="exolve/dkm-checker.js"></script>
+<script src="exolve/dkm-decode.js"></script>
+</head>
+<body>
+<div id="popupModal" class="modal"></div>
+<div id='scroll-wrapper'><div id="exolve"></div>
+<script>
+
+var puzid = 'dkm-cryptic-202305';
+var exolveanswers = {};
+// var hinturl = '../../hints/Cryptic202305_hints.html';
+
+const exolvedata = `
+	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
+`
+
+function customizeExolve(puz) {
+
+	if(typeof markedCells !== 'undefined') {
+		markupCells(puz, markedCells, 10, 6, 'darkblue');
+  	addButton(puz, 'Extract cells', getMarkedCells);
+  }
+  if (Object.keys(exolveanswers).length) {
+  	addButton(puz, 'Check puzzle', checkPuzzle);
+	}
+	if(typeof hinturl !== 'undefined') {
+ 		addButton(puz, 'Get hints', openHint);
+	}
+}
+
+function openHint() {
+	if(hinturl) { window.open(hinturl, '_blank'); }
+}
+
+function addButton(p, title, cb) {
+	let b = document.createElement('button');
+	b.className = 'xlv-button';
+	b.innerHTML = title;
+	b.title = title;
+	b.addEventListener('click', cb, false);
+  p.buttonRow1.appendChild(b);
+  p.buttonRow1.appendChild(document.createTextNode("\n"));
+}
+
+</script>
+<script src="exolve/dkm-exolve-utils.js"></script>
+</div>
+</body>
+</html>
