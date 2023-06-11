@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!--
+MIT License
+Copyright (c) 2019 Viresh Ratnakar
+See the full Exolve license notice in exolve-m.js.
+-->
+<link rel="stylesheet" type="text/css" href="exolve/exolve-m.css"/>
+<script src="exolve/exolve-m.js"></script>
+<title>Cryptic 2023-06 by Darren Miller</title>
+
+<style>
+	body {
+		font-family: "Gill Sans", sans-serif;
+	}
+	@media print {
+		.extractButton {
+		     visibility: hidden;
+	   }
+	}
+</style>
+<link rel="stylesheet" type="text/css" href="exolve/dkm-popup.css"/>
+<script src="exolve/dkm-popup.js"></script>
+<script src="exolve/dkm-checker.js"></script>
+<script src="exolve/dkm-decode.js"></script>
+</head>
+<body>
+<div id="popupModal" class="modal"></div>
+<div id='scroll-wrapper'><div id="exolve"></div>
+<script>
+
+var puzid = 'dkm-cryptic-202305';
+var exolveanswers = {};
+// var hinturl = '../../hints/Cryptic202305_hints.html';
+
+const exolvedata = `
+	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
+`
+
+function customizeExolve(puz) {
+
+	if(typeof markedCells !== 'undefined') {
+		markupCells(puz, markedCells, 10, 6, 'darkblue');
+  	addButton(puz, 'Extract cells', getMarkedCells);
+  }
+  if (Object.keys(exolveanswers).length) {
+  	addButton(puz, 'Check puzzle', checkPuzzle);
+	}
+	if(typeof hinturl !== 'undefined') {
+ 		addButton(puz, 'Get hints', openHint);
+	}
+}
+
+function openHint() {
+	if(hinturl) { window.open(hinturl, '_blank'); }
+}
+
+function addButton(p, title, cb) {
+	let b = document.createElement('button');
+	b.className = 'xlv-button';
+	b.innerHTML = title;
+	b.title = title;
+	b.addEventListener('click', cb, false);
+  p.buttonRow1.appendChild(b);
+  p.buttonRow1.appendChild(document.createTextNode("\n"));
+}
+
+</script>
+<script src="exolve/dkm-exolve-utils.js"></script>
+</div>
+</body>
+</html>
