@@ -84,7 +84,7 @@ function Exolve(puzzleSpec,
                 visTop=0,
                 maxDim=0,
                 notTemp=true) {
-  this.VERSION = 'Exolve v1.48 March 7, 2023';
+  this.VERSION = 'Exolve v1.50 May 16, 2023';
   this.id = '';
 
   this.puzzleText = puzzleSpec;
@@ -1517,8 +1517,8 @@ Exolve.prototype.parseLanguage = function(s) {
   this.language = parts[0]
   this.languageScript = parts[1]
   try {
-    this.scriptRE = new RegExp('\\p{Script=' + this.languageScript + '}', 'u')
-    this.scriptLowerCaseRE = new RegExp('\\p{Lowercase}', 'u')
+    this.scriptRE = new RegExp('^\\p{Script=' + this.languageScript + '}+$', 'u')
+    this.scriptLowerCaseRE = new RegExp('^\\p{Lowercase}+$', 'u')
   } catch (err) {
     this.throwErr(
         'Your browser ' +
@@ -1528,7 +1528,7 @@ Exolve.prototype.parseLanguage = function(s) {
   }
   // Hard-code some known scripts requiring langMaxCharCodes
   if (this.languageScript.toLowerCase() == 'devanagari') {
-    this.langMaxCharCodes = 4
+    this.langMaxCharCodes = 5
   }
   if (parts.length > 2) {
     this.langMaxCharCodes = parseInt(parts[2])
@@ -7173,6 +7173,7 @@ Exolve.prototype.deleteStorage = function(id, timestamp) {
   if (id) {
     window.localStorage.removeItem('xlvstate:' + id);
   } else {
+    const keysToDelete = [];
     for (let idx = 0; idx < window.localStorage.length; idx++) {
       let key = window.localStorage.key(idx)
       if (!key.startsWith('xlvstate:')) {
@@ -7185,8 +7186,11 @@ Exolve.prototype.deleteStorage = function(id, timestamp) {
         continue;
       }
       if (lsVal.timestamp < timestamp) {
-        window.localStorage.removeItem(key);
+        keysToDelete.push(key);
       }
+    }
+    for (let key of keysToDelete) {
+      window.localStorage.removeItem(key);
     }
   }
   this.manageStorage(null);
@@ -7359,6 +7363,9 @@ Exolve.prototype.getPrintSettings = function() {
   if (marginStr) {
     const val = parseFloat(marginStr);
     if (!isNaN(val) && val >= 0.0) marginIn = val;
+  }
+  if (pageMarginElt) {
+    pageMarginElt.value = marginIn;
   }
   const widthIn = ((page == 'letter' || page == 'legal') ? 8.5 :
                   ((page == 'A4') ? 210.0/25.4 :
@@ -7918,10 +7925,6 @@ Exolve.prototype.printThreeColumns = function(settings) {
 }
 
 Exolve.prototype.paginate = function(settings) {
-  if (navigator.userAgent.indexOf('Firefox/') >= 0) {
-    // Firefox printing is complicated, give up.
-    return;
-  }
   const outerBox = this.frame.getBoundingClientRect();
   const bodyBox = document.body.getBoundingClientRect();
   if (outerBox.top - bodyBox.top > 5 || outerBox.left - bodyBox.left > 5) {
