@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!--
+MIT License
+Copyright (c) 2019 Viresh Ratnakar
+See the full Exolve license notice in exolve-m.js.
+-->
+<link rel="stylesheet" type="text/css" href="exolve/exolve-m.css"/>
+<script src="exolve/exolve-m.js"></script>
+
+<title>July 4th Acrostic by Amy Fisher</title>
+
+<style>
+	body {
+		font-family: "Gill Sans", sans-serif;
+	}
+	@media print {
+		.extractButton {
+		     visibility: hidden;
+	   }
+	}
+</style>
+<link rel="stylesheet" type="text/css" href="exolve/dkm-popup.css"/>
+<script src="exolve/dkm-popup.js"></script>
+<script src="exolve/dkm-extractor.js"></script>
+<script src="exolve/dkm-checker.js"></script>
+</head>
+<body>
+<div id="popupModal" class="modal"></div>
+<div id='scroll-wrapper'><div id="exolve"></div>
+<script>
+
+var puzid = 'amyf-20230704';
+var exolveanswers = {};
+
+let markedCells = [
+	'm13', 'j3', 'q8', 'b1', 'h6', 'f5', 
+	't2', 'i13', 'p2', 'r4', 'b5', 'e9', 
+	'n3', 's10', 'a12', 'k9', 't5', 'k1',
+	'o11'
+];
+
+function customizeExolve(puz) {
+
+	if(typeof markedCells !== 'undefined') {
+		markupCells(puz, markedCells, 10, 6, 'darkblue');
+  	addButton(puz, 'Extract cells', getMarkedCells);
+  }
+  if (Object.keys(exolveanswers).length) {
+  	addButton(puz, 'Check puzzle', checkPuzzle);
+	}
+	if(typeof hinturl !== 'undefined') {
+ 		addButton(puz, 'Get hints', openHint);
+	}
+}
+
+function openHint() {
+	if(hinturl) { window.open(hinturl, '_blank'); }
+}
+
+function addButton(p, title, cb) {
+	let b = document.createElement('button');
+	b.className = 'xlv-button';
+	b.innerHTML = title;
+	b.title = title;
+	b.addEventListener('click', cb, false);
+  p.buttonRow1.appendChild(b);
+  p.buttonRow1.appendChild(document.createTextNode("\n"));
+}
+
+createExolve(`
+======REPLACE WITH YOUR PUZZLE BELOW======
+
+exolve-begin
+  exolve-id: amyf-20230704
+  exolve-title: July 4th Acrostic 2023
+  exolve-setter: Amy Fisher
+  exolve-copyright: 2023 Amy Fisher
+  exolve-width: 20
+  exolve-height: 13
+  exolve-preamble:
+	exolve-option: color-active:lightyellow
+  exolve-option: color-input:royalblue color-arrow:lightyellow
+  exolve-option: color-light-label-input:white
+  exolve-option: color-light-text-input:white
+  exolve-option: color-button:navy color-button-hover:purple
+  exolve-option: hide-copy-placeholder-buttons
+  exolve-option: hide-inferred-numbers
+  exolve-relabel:
+    clear: Clear this word
+    reveal: Show hint for method(s)
+  exolve-grid:
+		0	.	0	.	0	.	0	.	0	.	0	.	0	.	0	.	0	.	0	.
+		0	0	0	0	0	.	0	.	0	.	0	.	0	.	0	0	0	0	0	.
+		0	.	0	.	0	0	0	0	0	.	0	.	0	.	0	.	0	.	0	.
+		0	.	0	.	0	.	0	.	0	.	0	0	0	0	0	.	0	.	0	.
+		0	.	0	.	0	.	0	.	0	.	0	.	0	.	0	.	0	.	0	.
+		0	.	0	.	0	.	0	.	0	.	0	.	0	.	0	.	0	.	0	.
+		H!A!P!P!Y!I!N!D!E!P!E!N!D!E!N!C!E!D!A!Y!
+		.	0	.	0	.	0	.	0	.	0	.	0	.	0	.	0	.	0	.	0
+		.	0	.	0	.	0	.	0	.	0	.	0	.	0	.	0	.	0	.	0
+		.	0	.	0	.	0	.	0	.	0	.	0	0	0	0	0	.	0	.	0
+		.	0	.	0	.	0	.	0	.	0	.	0	.	0	.	0	0	0	0	0
+		.	0	0	0	0	0	.	0	.	0	.	0	.	0	.	0	.	0	.	0
+		.	0	.	0	.	0	.	0	0	0	0	0	.	0	.	0	.	0	.	0
+  exolve-nodir:
+		1. ALLEN
+		2. AMERICA
+		3. BLESSED
+		4. CHOIR
+		5. COUNTRY
+		6. DIVERSE
+		7. DUTIFUL
+		8. ERUPT
+		9. EXPLODE
+		10. FESTIVE
+		11. GIDDYUP
+		12. HOLIDAY
+		13. INSPIRE
+		14. JUSTICE
+		15. LARGE
+		16. LOTUS
+		17. NOTABLE
+		18. PATRIOT
+		19. PIONEER
+		20. RHINO
+		21. SERVICE
+		22. STAMINA
+		23. THREE
+		24. TRIUMPH
+		25. VETERAN
+		26. VISIT
+		27. WESTERN
+		28. YANKEES
+	exolve-end
+
+======REPLACE WITH YOUR PUZZLE ABOVE======
+`);
+
+function markupCells(p, cells, ht, basewid, labelcolor='') {
+	for(let i=0; i<cells.length; i++) {
+		let coords = p.parseCellLocation(cells[i]);   // [row,col]
+		let wid = (i+1).toString().length*basewid-1;
+		let c = p.addCellText(coords[0], coords[1], (i+1), ht, wid, false, true);
+		c.style['stroke-width'] = 0.7;
+		if(labelcolor) {
+			c.style.stroke = labelcolor;	
+		}
+	}
+	
+	p.cellActivator(0,0); 
+}
+
+</script>
+<script src="exolve/dkm-exolve-utils.js"></script>
+</div>
+</body>
+</html>
