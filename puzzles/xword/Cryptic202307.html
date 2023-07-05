@@ -25,7 +25,6 @@ See the full Exolve license notice in exolve-m.js.
 <link rel="stylesheet" type="text/css" href="exolve/dkm-popup.css"/>
 <script src="exolve/dkm-popup.js"></script>
 <script src="exolve/dkm-checker.js"></script>
-<script src="exolve/dkm-decode.js"></script>
 </head>
 <body>
 <div id="popupModal" class="modal"></div>
@@ -33,72 +32,40 @@ See the full Exolve license notice in exolve-m.js.
 <script>
 
 var puzid = 'dkm-cryptic-202307';
-var exolveanswers = {};
-// var hinturl = '../../hints/Cryptic202305_hints.html';
+var exolveanswers = {
+	'A1':	'893fb56e2a657e678845cf6f1f63b395a790219d199d36823eba85237cc22192',
+	'A6':	'4b45eb24368d90fa50ca06a7cd291ff7dcfc66970ebba2ad294d43d2b8a1f795',
+	'A9':	'b454e99a8ab8a4edf1ef8eb24e0e817bd2f3d45eb6409c066cce14888ea2c4e5',
+	'A10':	'8cd2433ab2064c14ca04b78bd9ed2469886052e4c482fdee87ccc27c0419f4a3',
+	'A11':	'4a619461573d93171d9be7c67953e1e5d6ed2a4abad49c6cd3b549929bddf26a',
+	'A12':	'5905b7a0cd6bdafbce3c4e45785499e04db1b2a561c887d74afb9ba6365f973e',
+	'A13':	'9f8c7b26cde59ca3dacc74ec7afda737ac1d15aa5239206416f79019dbd7ec37',
+	'A14':	'0dfd7a9317f3504bceeca34360f8d3ad65ffa9605d7775b194c74438a313a452',
+	'A16':	'9af51e05a57a59af172b98f170d77ba1f7e4cdcd18084255a51729f86857b648',
+	'A19':	'a196b4935f56c12c1aba2120c19fe3684601927a41dd1565ca33edd2b1922781',
+	'A21':	'905fc984207b863a16d954c713a90d5b84e42924fba6942b2958244f6ccea00f',
+	'A23':	'03fc5c7dbed0fce546b4d2d06c60f40afc31d4593d413e68eb810dcd4c9260ca',
+	'A25':	'a50b55d4a3d8a1056a3744992d2bcab8915d6c2c55636f1d2725e4ef4d5cd059',
+	'A26':	'eb0eb09cd2356d394a171eaa90abdb19134964aa1882daf893152fda17cf595f',
+	'A27':	'067d07c80a327255a64b180c2ff00760120c8676e147590de2b8d533944a42b8',
+	'A28':	'7ff3faa020ee3e6bb3cc94a538bfefc8d13c8a329d818260bed2428a2127f1f5',
+	'D2':	'616f73fbace961415d3c6dc317722ef52dcb67de02b77c12608c59ed1b2d44bf',
+	'D3':	'3aa10fcf067558f89a37a1b4f1e3113df2a73c32721c93b88c090ebf1b0d30a7',
+	'D4':	'b3e196142052ffb2630bf32f0d57f8b65683c554d4e1a29a0d1b6bdd88c312e9',
+	'D5':	'f05b1ad115a6e442cba67924c483de64a0c4036b2bb0d525ab05c6a961879e2a',
+	'D6':	'011ce2a3cfcf680577222dea8c7a464a76dd91fe3c3a563c6885201510f2a502',
+	'D7':	'4b34681329498a03cf836ddfa4bf0857df8aaa179086077f0d0b1abf4eab917a',
+	'D8':	'65af94b6b196c7acbd32222d50a588540e6b92c4779dab64aceef76ab137825c',
+	'D14':	'b7ddfc9e87ec48dd163965c9a808c694fa1a078e4818b930ce8bf0365344a2c4',
+	'D15':	'197eb0b25b2c7a345c244867af1a5f174d51578f004a75c0a6dd5513837b4aac',
+	'D17':	'051afbc19f1968157e37a3b93c559872cad62ee13fc72fb42ff5f89671583ca6',
+	'D18':	'ee017e0e2a065cbe9621fcd5e87faa61fafa4f88fa910c1d98bf2ad509ecae0e',
+	'D20':	'affe6e47e7fa0811392b021930ca369bd25677e4c99f4e14ee4e2eda6279f614',
+	'D22':	'd4de7d71335b040b3096306396a1931d1dcb641da4900b290a5f9eb238ff05a1',
+	'D24':	'fc2e986543c2b417ad883ce9882c2fc8e3038d986796b038838b8e3705d28602'
+};
 
-const exolvedata = `
-	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
-`
+var hinturl = '../../hints/Cryptic202307_hints.html';
 
 function customizeExolve(puz) {
 
@@ -127,6 +94,80 @@ function addButton(p, title, cb) {
   p.buttonRow1.appendChild(b);
   p.buttonRow1.appendChild(document.createTextNode("\n"));
 }
+
+createExolve(`
+======REPLACE WITH YOUR PUZZLE BELOW======
+
+exolve-begin
+  exolve-id: dkm-cryptic-202307
+  exolve-title: Cryptic 2023-07
+  exolve-setter: Darren Miller
+  exolve-copyright: 2023 Darren Miller
+	exolve-credits: Testers: Amy F
+  exolve-width: 15
+  exolve-height: 15
+  exolve-preamble:
+	exolve-option: color-active:lightyellow
+  exolve-option: color-input:royalblue color-arrow:lightyellow
+  exolve-option: color-light-label-input:white
+  exolve-option: color-light-text-input:white
+  exolve-option: color-button:navy color-button-hover:purple
+  exolve-option: hide-copy-placeholder-buttons
+  exolve-relabel:
+    clear: Clear this word
+    reveal: Show hint for method(s)
+  exolve-grid:
+		0 0 0 0 0 0 0 0 . 0 0 0 0 0 0 
+		. 0 . 0 . 0 . 0 . 0 . 0 . 0 . 
+		0 0 0 0 0 0 . 0 0 0 0 0 0 0 0 
+		. 0 . 0 . 0 . 0 . 0 . 0 . 0 . 
+		0 0 0 0 0 0 0 0 0 0 . 0 0 0 0 
+		. 0 . 0 . . . 0 . 0 . . . 0 . 
+		0 0 0 0 . 0 0 0 0 0 0 0 0 0 0 
+		. . . 0 . 0 . . . 0 . 0 . . . 
+		0 0 0 0 0 0 0 0 0 0 . 0 0 0 0 
+		. 0 . . . 0 . 0 . . . 0 . 0 . 
+		0 0 0 0 . 0 0 0 0 0 0 0 0 0 0 
+		. 0 . 0 . 0 . 0 . 0 . 0 . 0 . 
+		0 0 0 0 0 0 0 0 . 0 0 0 0 0 0 
+		. 0 . 0 . 0 . 0 . 0 . 0 . 0 . 
+		0 0 0 0 0 0 . 0 0 0 0 0 0 0 0 
+	exolve-across:
+		1  Rookie cop and first mentor parking out in renovated emergency room&nbsp;(8)
+		6  Cover of &ldquo;National Treasure&rdquo; has a distinctive character&nbsp;(6)
+		9  Spooner said to ruin hair of Old MacDonald, for one&nbsp;(6)
+		10  Soulmate has hoard with fuel, but no gas&nbsp;(4,4)
+		11  Doctor calls a teen for a fresh start&nbsp;(5,5)
+		12  Broadway lighting essential to scene one&nbsp;(4)
+		13  View of Independence Day extravaganza amazed leaders&nbsp;(4)
+		14  Flying castles in the air need rails: ether, perhaps&nbsp;(10)
+		16  Stag comes back eating cooked corn if thickened&nbsp;(10)
+		19  Actor &amp; poet ignore the odds to get by&nbsp;(4)
+		21  Circuit has bend right after cross loop&nbsp;(4)
+		23  Was converted and ranted angrily about pornography&nbsp;(10)
+		25  Annoyance when red train carelessly crashes into the Thing&nbsp;(8)
+		26  Excite Ken to follow a path, by the sound of it&nbsp;(6)
+		27  Mooch finds wasp on geranium&#8217;s insides&nbsp;(6)
+		28  Wild fiancee having a bit of fun might keep you up at night&nbsp;(8)
+	exolve-down:
+		2  Triggered, beginner abandoned Lena and ran&nbsp;(7)
+		3  Sorry for unfortunate egomaniac&nbsp;(4,5)
+		4  Takes notice of starting positions&nbsp;(5)
+		5  Musical talent takes buggy up to competition&nbsp;(3,4)
+		6  Sick of bologna? Use a teddy&#8217;s stuffing&nbsp;(9)
+		7  Part of a bird&#8217;s nest Sara will tattoo on rear ends&nbsp;(5)
+		8  Abrupt attack captured instrument for Italian cuisine&nbsp;(7)
+		14  Expert supported oaf but oddly had a change of opinion&nbsp;(5-4)
+		15  Once excited, you rave and cheer up&nbsp;(9)
+		17  We finally understood flaw with selfish activity&nbsp;(3,4)
+		18  Crazy, rich actor has no rights? How deranged&nbsp;(7)
+		20  Up to twelve percent were staggering north&nbsp;(7)
+		22  Dictatorship contributes to severe ignorance&nbsp;(5)
+		24  Muffler of a vehicle covered by soundproof shell&nbsp;(5)
+	exolve-end
+
+======REPLACE WITH YOUR PUZZLE ABOVE======
+`);
 
 </script>
 <script src="exolve/dkm-exolve-utils.js"></script>
