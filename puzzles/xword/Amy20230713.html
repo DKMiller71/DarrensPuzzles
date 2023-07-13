@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!--
+MIT License
+Copyright (c) 2019 Viresh Ratnakar
+See the full Exolve license notice in exolve-m.js.
+-->
+<link rel="stylesheet" type="text/css" href="exolve/exolve-m.css"/>
+<script src="exolve/exolve-m.js"></script>
+<title>Amy's 28th Birthday Puzzle - My Favorite Things by Amy Fisher</title>
+
+<style>
+	body {
+		font-family: "Gill Sans", sans-serif;
+	}
+	@media print {
+		.extractButton {
+		     visibility: hidden;
+	   }
+	}
+</style>
+<link rel="stylesheet" type="text/css" href="exolve/dkm-popup.css"/>
+<script src="exolve/dkm-popup.js"></script>
+<script src="exolve/dkm-checker.js"></script>
+</head>
+<body>
+<div id="popupModal" class="modal"></div>
+<div id='scroll-wrapper'><div id="exolve"></div>
+<script>
+
+var puzid = 'amy-cryptic-20230713';
+var exolveanswers = {
+};
+
+function customizeExolve(puz) {
+
+	if(typeof markedCells !== 'undefined') {
+		markupCells(puz, markedCells, 10, 6, 'darkblue');
+  	addButton(puz, 'Extract cells', getMarkedCells);
+  }
+  if (Object.keys(exolveanswers).length) {
+  	addButton(puz, 'Check puzzle', checkPuzzle);
+	}
+	if(typeof hinturl !== 'undefined') {
+ 		addButton(puz, 'Get hints', openHint);
+	}
+}
+
+function openHint() {
+	if(hinturl) { window.open(hinturl, '_blank'); }
+}
+
+function addButton(p, title, cb) {
+	let b = document.createElement('button');
+	b.className = 'xlv-button';
+	b.innerHTML = title;
+	b.title = title;
+	b.addEventListener('click', cb, false);
+  p.buttonRow1.appendChild(b);
+  p.buttonRow1.appendChild(document.createTextNode("\n"));
+}
+
+createExolve(`
+======REPLACE WITH YOUR PUZZLE BELOW======
+
+exolve-begin
+  exolve-id: amy-cryptic-202307
+  exolve-title: Amy&#8217;s 28th Birthday Puzzle - My Favorite Things
+  exolve-setter: Amy Fisher
+  exolve-copyright: 2023 Amy Fisher
+  exolve-width: 12
+  exolve-height: 12
+  exolve-preamble:
+	exolve-option: color-active:lightyellow
+  exolve-option: color-input:royalblue color-arrow:lightyellow
+  exolve-option: color-light-label-input:white
+  exolve-option: color-light-text-input:white
+  exolve-option: color-button:navy color-button-hover:purple
+  exolve-option: hide-copy-placeholder-buttons
+  exolve-color: purple a1 a2 a3 a4 a5 a6 a7 a8 a9 a10 a11
+  exolve-color: purple c8 c9 c10 c11 c12
+  exolve-color: purple e7 e8 e9 e10 e11 e12
+	exolve-color: purple e1 e2 e3 e4
+	exolve-color: purple h9 h10 h11 h12
+	exolve-color: purple j1 j2 j3 j4 j5
+  exolve-color: purple j1 j2 j3 j4 j5
+  exolve-color: purple l2 l3 l4 l5 l6 l7 l8 l9 l10 l11 l12
+  exolve-color: purple a1 b1 c1 d1 e1
+  exolve-color: purple e4 f4 g4 h4
+  exolve-color: purple e11 f11 g11 h11
+  exolve-color: purple h3 i3 j3 k3 l3
+  exolve-color: purple i8 j8 k8 l8
+  exolve-relabel:
+    clear: Clear this word
+    reveal: Reveal this word
+  exolve-grid:
+		. Z I N C . . T O T E M 
+		B . C . H O M E . E . A 
+		U N I T E . . C O A S T 
+		T . N . E T C H . P . H 
+		T O G A S . O . L O V E 
+		E . . . E L M . . T . M 
+		R . F . . A B C . . . A 
+		F O R D . L . O W L E T 
+		L . U . C A T S . I . I 
+		I R I S H . . M U S I C 
+		E . T . A L T O . T . S 
+		S U S H I . . S A S S . 
+	exolve-across:
+		1  Metal company behind final letter&nbsp;(4)
+		4  To them, hearts split sacred object&nbsp;(5)
+		8  Quarters found in psycho meeting&nbsp;(4)
+		9  Endless dueting exploded combine&nbsp;(5)
+		10  Beach has unusual tacos&nbsp;(5)
+		11  Carve film alongside Switzerland&nbsp;(4)
+		13  Clothing pieces from leftover smorgasbord centers&nbsp;(5)
+		14  Evolution, losing most of back side, brought about affection&nbsp;(4)
+		15  Regularly reclimb tree&nbsp;(3)
+		18  Initially, all brilliant children are alphabet beginners&nbsp;(3)
+		20  American president&#8217;s car brand&nbsp;(4)
+		21  Towel randomly reveals small bird&nbsp;(5)
+		23  Most accordion pieces turn into felines&nbsp;(4)
+		24  Man from Dublin has flower with ocher center&nbsp;(5)
+		25  Muscle the French out, gain one tune&nbsp;(5)
+		26  Discover Dalton creating musical part&nbsp;(4)
+		27  Japanese dish found in Sweden, America, and Hawaii&nbsp;(5)
+		28  Glimpse of shapely butt cheek&nbsp;(4)
+	exolve-down:
+		2  Hear Amy chant for sweet stuff&nbsp;(5)
+		3  Blue? Smile for the camera!&nbsp;(6)
+		4  Application of scientific knowledge, shortened from working 11&nbsp;(4)
+		5  Whistler ate a potato sample&nbsp;(6)
+		6  A tame chemist loses energy working with the science of numbers&nbsp;(11)
+		7  Fat bugs produce nauseous feeling&nbsp;(11)
+		12  Untangle Austria from battle&nbsp;(4)
+		16  City and state produce dreamlike land?&nbsp;(4)
+		17  Oddly, fur nudist is bananas?&nbsp;(6)
+		19  Forgetting, he smooches spinning universe&nbsp;(6)
+		22  Records belonging to Hungarian composer on the radio&nbsp;(5)
+		23  Greek character embracing a popular Indian drink&nbsp;(4)
+	exolve-end
+
+======REPLACE WITH YOUR PUZZLE ABOVE======
+`);
+
+</script>
+<script src="exolve/dkm-exolve-utils.js"></script>
+</div>
+</body>
+</html>
