@@ -584,11 +584,6 @@ Exolve.prototype.init = function() {
               <span id="${this.prefix}-status-num-filled">0</span>/<span
                     id="${this.prefix}-status-num-total"></span>
             </div> <!-- xlv-status -->
-            <div id="${this.prefix}-saving" class="xlv-wide-box xlv-saving">
-              <span id="${this.prefix}-saving-msg">
-              ${this.notTemp ? this.textLabels['saving-msg'] : ''}
-              </span>
-            </div> <!-- xlv-saving -->
             <div id="${this.prefix}-small-print"
                 class="xlv-wide-box xlv-small-print">
               <a id="${this.prefix}-tools-link" href="" class="xlv-toggler"
@@ -603,7 +598,7 @@ Exolve.prototype.init = function() {
               <a id="${this.prefix}-webifi" href="" class="xlv-toggler"
                   title="${this.textLabels['webifi.hover']}"
                   >${this.textLabels['webifi']}</a>
-              <span id="${this.prefix}-copyright"></span>
+              <span class="xlv-copyright" id="${this.prefix}-copyright"></span>
               <div id="${this.prefix}-tools" class="xlv-toggleable"
                   style="display:none">
                 <p id="${this.prefix}-id" class="xlv-metadata">
@@ -633,6 +628,11 @@ Exolve.prototype.init = function() {
                 </p>
                 <p id="${this.prefix}-tools-msg">
                   ${this.textLabels['tools-msg']}
+                </p>
+                <p id="${this.prefix}-saving" class="xlv-saving">
+                  <span id="${this.prefix}-saving-msg">
+                    ${this.notTemp ? this.textLabels['saving-msg'] : ''}
+                  </span>
                 </p>
                 <p>
                   <span id="${this.prefix}-shuffle" class="xlv-shuffle"
@@ -813,11 +813,12 @@ Exolve.prototype.init = function() {
   } else {
     this.copyright = '';
   }
-  let smallPrintBox = document.getElementById(this.prefix + '-small-print');
+  this.smallPrint = document.getElementById(this.prefix + '-small-print');
   for (credit of this.credits) {
-    smallPrintBox.insertAdjacentHTML('beforeend',
+    this.smallPrint.insertAdjacentHTML('beforeend',
         '<div class="xlv-credit">' + credit + '</div>');
   }
+  this.controlsEtc = document.getElementById(this.prefix + '-controls-etc');
 
   this.gridPanel = document.getElementById(this.prefix + '-grid-panel');
   this.svg = document.getElementById(this.prefix + '-grid');
@@ -7442,6 +7443,13 @@ Exolve.prototype.handleBeforePrint = function() {
     document.body.insertAdjacentElement('afterbegin', this.frame);
     this.printingChanges.moves.push(
         {'elem': this.frame, 'target': puzParent, 'sibling': puzSibling});
+    if (this.copyright) {
+      const crt = document.getElementById(this.prefix + '-copyright');
+      const sibling = crt.nextSibling;
+      this.controlsEtc.insertAdjacentElement('afterbegin', crt);
+      this.printingChanges.moves.push(
+          {'elem': crt, 'target': this.smallPrint, 'sibling': sibling});
+    }
 
     const hider = document.createElement('div');
     hider.className = 'xlv-dont-print';
@@ -7526,6 +7534,7 @@ Exolve.prototype.handleBeforePrint = function() {
     .xlv-postscript,
     .xlv-saving,
     .xlv-small-button,
+    .xlv-frame .xlv-small-button,
     .xlv-small-print,
     .xlv-submit,${maybeHideQuestions}
     .xlv-status {
@@ -7613,8 +7622,7 @@ Exolve.prototype.printTwoColumns = function(settings) {
   `;
   this.frame.appendChild(customStyles);
 
-  const controlsEtcH = document.getElementById(
-      this.prefix + '-controls-etc').clientHeight;
+  const controlsEtcH = this.controlsEtc.clientHeight;
 
   // We need to apply the print media style, with an additional 2-col
   // grid layout. We'll then measure clue row heights and balance
@@ -7768,8 +7776,7 @@ Exolve.prototype.printThreeColumns = function(settings) {
   `;
   this.frame.appendChild(customStyles);
 
-  const controlsEtcH = document.getElementById(
-      this.prefix + '-controls-etc').clientHeight;
+  const controlsEtcH = this.controlsEtc.clientHeight;
 
   // We need to apply the print media style, with an additional 3-col
   // grid layout. We'll then measure clue row heights and balance
