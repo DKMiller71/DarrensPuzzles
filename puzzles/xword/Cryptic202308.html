@@ -25,7 +25,6 @@ See the full Exolve license notice in exolve-m.js.
 <link rel="stylesheet" type="text/css" href="exolve/dkm-popup.css"/>
 <script src="exolve/dkm-popup.js"></script>
 <script src="exolve/dkm-checker.js"></script>
-<script src="exolve/dkm-decode.js"></script>
 </head>
 <body>
 <div id="popupModal" class="modal"></div>
@@ -33,72 +32,40 @@ See the full Exolve license notice in exolve-m.js.
 <script>
 
 var puzid = 'dkm-cryptic-202308';
-var exolveanswers = {};
-// var hinturl = '../../hints/Cryptic202305_hints.html';
+var exolveanswers = {
+	'A1':	'feaa4b1f7dc5a4ce57b70b8fefd939157f4ed02f3ec950a89ac70e39fdbee6be',
+	'A5':	'383b06d59f21961bddea7496de98d13aa299f3c3aa56548157d4ba0698e7da59',
+	'A10':	'e025949dbf3b9f81819385b0570783b345c8ac66e2064ce91a6f6a559cecbca5',
+	'A11':	'1493d1199e56d4037e307def996a225538aefa7875aac4ad743bdc4ba7054b1b',
+	'A12':	'837a60b3b8b7f9bddf4a9a7b3182027a744ab548a01bdf789162c04be68d3805',
+	'A14':	'260e9d13614f36e8a84ff234c2cdea491745b900ca9932ab6af91f1a22b894d4',
+	'A17':	'f0e004ae57f18df7702bc9178b09f731cd0c6a24a02524a81e684c0ac298df6d',
+	'A18':	'79162683cc418a417a1e0499837d0c8a29270d718e7d4f6706eb9a6725c3adf0',
+	'A20':	'c1123facc691e4ca053f2a29aadf66ed152db1c6d73f994cf4aea9b84485be5d',
+	'A22':	'49b37c7fae016dfe76c51a3842585bdf620230402b7571ac3f1578001c5f214e',
+	'A23':	'c1571d0e664cce0f0ed8c3dcbe3e9dd2ec4a62cf1e6962989c499b7232c1ea57',
+	'A27':	'245ad4efad7bb0438023bdf0b65bd3e3319cd6cfd75c0259b2d17769238a8c2a',
+	'A28':	'c44794670eb3daf647024ca9c95e00327f5b51d5e5e4cd71d6a4e6c53b45933c',
+	'A29':	'f9162c53354a8bfe9cf87b85c8144a9f8afa33d46b2b147899199d39b33a6c5b',
+	'D2':	'72cbf9657854d664e187d218fae37c0da6f9a6618db4ca7660438561a52c15ce',
+	'D3':	'4423a9405e5ec46ced606ac45b09bdc6e89e9d5fc4bd0e9a4759a72ef70c04ac',
+	'D4':	'dcad275fd85865493b2853cd88d0afcca6295e35f8e39f5a2c552117df454ae0',
+	'D6':	'4582d48038f16be47bd9d666183cf3c8627434235edbec5a80cab3e9cb5d62f0',
+	'D7':	'dc55c8d339516b0c01450c9eae0260109663b28affb5ef599ed379e0633bab61',
+	'D8':	'ccbe12456124cd8941e8a66d768ab62b43443c7a6b91ed46f1a712d45ae34e1f',
+	'D9':	'b3dde8e77ed2d76ebba1651878fabf9a96bc8b484d5fc57b20174c2ded73807d',
+	'D10':	'cee45bab36b78b4fd1db5c94923f11fa730056dd89f25895de0cdaa032f7d640',
+	'D13':	'5f6ef0a0d7d415fddb8ebabca9c419540ee6ebe74537d915b20c0258fc65d3a6',
+	'D15':	'432f7a84d1d30c4ef22a486437460543981416311594b69a56278bf5dbaf5af5',
+	'D16':	'dd636249cb05ada3860438600b128df594a627135c382000077aba0a26908ce4',
+	'D19':	'2425292aee0cfec0eaacb75fa961cc2a916815b21ae91a93d7b000eefe8227d8',
+	'D21':	'908de70b56bbe346720254a79c952ee17c0d308e0303d1288181a5800882927d',
+	'D24':	'e05e695f21fc6e3fda388e02e0c2912778dfb9c81fa03576c05511eec4b12f5d',
+	'D25':	'eeab67e11cc68f834858d00b54e4214ea8a71150c92d228234885cc1e1fef827',
+	'D26':	'966f5b89b5d5af954d8bc9858c0d7aa4da8546905b9e31b705c995e84d3b6915'
+};
 
-const exolvedata = `
-	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
-`
+var hinturl = '../../hints/Cryptic202308_hints.html';
 
 function customizeExolve(puz) {
 
@@ -127,6 +94,80 @@ function addButton(p, title, cb) {
   p.buttonRow1.appendChild(b);
   p.buttonRow1.appendChild(document.createTextNode("\n"));
 }
+
+createExolve(`
+======REPLACE WITH YOUR PUZZLE BELOW======
+
+exolve-begin
+  exolve-id: dkm-cryptic-202308
+  exolve-title: Cryptic 2023-08
+  exolve-setter: Darren Miller
+  exolve-copyright: 2023 Darren Miller
+	exolve-credits: Testers:
+  exolve-width: 15
+  exolve-height: 15
+  exolve-preamble:
+	exolve-option: color-active:lightyellow
+  exolve-option: color-input:royalblue color-arrow:lightyellow
+  exolve-option: color-light-label-input:white
+  exolve-option: color-light-text-input:white
+  exolve-option: color-button:navy color-button-hover:purple
+  exolve-option: hide-copy-placeholder-buttons
+  exolve-relabel:
+    clear: Clear this word
+    reveal: Show hint for method(s)
+  exolve-grid:
+		. 0 0 0 0 0 0 . . 0 0 0 0 0 0 
+		. . 0 . 0 . 0 . 0 . 0 . 0 . 0 
+		0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+		0 . 0 . 0 . 0 . 0 . 0 . 0 . 0 
+		0 0 0 0 0 0 . 0 0 0 0 0 0 . . 
+		0 . 0 . . . . . 0 . 0 . 0 . 0 
+		0 0 0 0 0 0 0 0 0 . 0 0 0 0 0 
+		0 . . . 0 . 0 . 0 . 0 . . . 0 
+		0 0 0 0 0 . 0 0 0 0 0 0 0 0 0 
+		0 . 0 . 0 . 0 . . . . . 0 . 0 
+		. . 0 0 0 0 0 0 . 0 0 0 0 0 0 
+		0 . 0 . 0 . 0 . 0 . 0 . 0 . 0 
+		0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+		0 . 0 . 0 . 0 . 0 . 0 . 0 . . 
+		0 0 0 0 0 0 . . 0 0 0 0 0 0 . 
+	exolve-across:
+		1  Cigarettes&#8217; reek finally replaced with a hint of really sweet stuff&nbsp;(1&apos;5)
+		5  Prankster unwrapped Fedex hamper&nbsp;(6)
+		10  Drunken fling with hunk is never gonna happen&nbsp;(7,8)
+		11  Gossips flipping year in review filled with celebrities&nbsp;(6)
+		12  Jack and knight trapped in hot glue? It&#8217;s wild&nbsp;(6)
+		14  Made to think new thoughts about black god with fashionable laundry&nbsp;(9)
+		17  Fragrance of that tarragon essence&nbsp;(5)
+		18  Paladin heads off after sunset&nbsp;(5)
+		20  Casey smuggles an earring, for example&nbsp;(4,5)
+		22  Not the first kitchen remodeled with a specific cultural style&nbsp;(6)
+		23  Need you to become a wiry frame&nbsp;(6)
+		27  Eagles hit hog. Tell Cala I&#8217;m cutting off tails for Nia&nbsp;(5,10)
+		28  Woods is not opposed to relaxation, according to rumor&nbsp;(6)
+		29  Trip in the dark from every other green dye type&nbsp;(3-3)
+	exolve-down:
+		2  Matt&#8217;s cart has no teas with a color&nbsp;(7)
+		3  Transfer back and forth&nbsp;(5)
+		4  At first, scientists always limit the stuff that may be shaken&nbsp;(4)
+		6  Personal letters make moms groan sadly&nbsp;(9)
+		7  Noteworthy component of problem in entertainment&nbsp;(7)
+		8  Breaking new ground on pins and needles&nbsp;(4)
+		9  Hollow triumph should lead to a bit of solemn reflections&nbsp;(8)
+		10  Woman and boy admitting his magical dollar bill is a lucky token&nbsp;(8)
+		13  Oddly, Germany&#8217;s air began in uncharted territory&nbsp;(4,4)
+		15  Succinct summaries of close rings, according to Spooner&nbsp;(9)
+		16  Broken chair valued half-off and kept for historical purposes&nbsp;(8)
+		19  Son leaves generators running to become more powerful&nbsp;(7)
+		21  Bureau you are leading without a sense of haste&nbsp;(7)
+		24  Escape from a hole&nbsp;(5)
+		25  Panhandler found in outreach efforts&nbsp;(4)
+		26  Landing atop ski slope or trains&nbsp;(4)
+	exolve-end
+
+======REPLACE WITH YOUR PUZZLE ABOVE======
+`);
 
 </script>
 <script src="exolve/dkm-exolve-utils.js"></script>
