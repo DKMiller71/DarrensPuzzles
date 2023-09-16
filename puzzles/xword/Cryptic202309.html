@@ -10,7 +10,7 @@ See the full Exolve license notice in exolve-m.js.
 -->
 <link rel="stylesheet" type="text/css" href="exolve/exolve-m.css"/>
 <script src="exolve/exolve-m.js"></script>
-<title>Cryptic 2023-09 by Darren Miller</title>
+<title>Cryptic 2023-09: Plundering Pirates	 by Darren Miller</title>
 
 <style>
 	body {
@@ -25,7 +25,6 @@ See the full Exolve license notice in exolve-m.js.
 <link rel="stylesheet" type="text/css" href="exolve/dkm-popup.css"/>
 <script src="exolve/dkm-popup.js"></script>
 <script src="exolve/dkm-checker.js"></script>
-<script src="exolve/dkm-decode.js"></script>
 </head>
 <body>
 <div id="popupModal" class="modal"></div>
@@ -33,82 +32,39 @@ See the full Exolve license notice in exolve-m.js.
 <script>
 
 var puzid = 'dkm-cryptic-202309';
-var exolveanswers = {};
-// var hinturl = '../../hints/Cryptic202305_hints.html';
+var exolveanswers = {
+	'A1':	'aca4fee155368758392aca3a58e5704c8650173981160328f27181fcf67b68e4',
+	'A4':	'34b3505c413a9872098d1bc0295a426aad197a27ba9a297b1beb44d80fa22421',
+	'A8':	'f48cbaf2f02dcf878781b4c023090720e43c2090ef6a42c7977b63b096b83b26',
+	'A11':	'9861c538dd233e4ad63206e8606f2bbd8112033d5f4067033094c82e7be11f14',
+	'A13':	'ba6e2270aebfe7a70e0b51c537f8aa860f6149230934fe53746245f48cb4b404',
+	'A14':	'733bc3f81673609cd580673373d9ec685711d37c517de75c1e5310415a70998d',
+	'A16':	'9948e9e9ddf57e0d6981e30eb43cea46efd3c2926a3dd594e70b0a1dc30ae488',
+	'A17':	'54acba867f4f0d6b84afbfda28fa59cbb0db5b298841dae420048221716b1075',
+	'A19':	'2d3f553854ea569d293901a05f983a027a9f91a07a9f71f58e9cc437a0660988',
+	'A22':	'7543c5d2e1b2fbce5c65937d8e423c6a73301a32f20a366d3927aa8c338efa76',
+	'A23':	'd814714034eb9e32a223ac0000ffcfffed2fb7d85e0b2a623bb0218c59e33d41',
+	'A24':	'96047b8cba19ace6aa8df320ece3a5f5a7fca99bbed60f8137e19ce4c9ef2263',
+	'A25':	'caf40f0914cba4daee64ced3ad1ff5f4fd3220193a85877752cd2295d38e9078',
+	'A26':	'87cdde639a39588dd5761255f5908169803ede975acca0917db35cdc5062ae49',
+	'D1':	'7d3b513dbabd9b6770cd32bf9f5488418ffbcb6f29af1ee6eea594f9503f819b',
+	'D2':	'f4ccabaea9d33f6378aa300920b24f38e62509c6dbe59e213056f16863f9080c',
+	'D3':	'1bcb2aaec733dac26c146172a058296dba07211e9964d60246d9487d18fb3e29',
+	'D5':	'd4af31966f81965c836d0d99819f1b266e1d4a1a718075e49c80670aa0967eac',
+	'D6':	'8c2e4a035f5f3d218f87211a0ba367ef05fc2242510559807ef03969dd091b32',
+	'D7':	'703e3c9da2754a0f6699778a97457d4d4c7374a0bfd42a81e79069ee38242863',
+	'D9':	'9ed8bc0145d100f2380cd3ee8b71b044d4318bd690667578562014e7a610a2ca',
+	'D10':	'b6e5573421a83c35bed3b855b15d2b7f28008fccf14eb02055eeedf37342020e',
+	'D12':	'2a72c9d01799747275c578b31441b9db7371e47590e1c88a61a001e8ff6a9a0e',
+	'D15':	'1955cc567a5390933a59c9fe449a7bf6c0cb1543357ddff8c18736626540c3bc',
+	'D16':	'a05731395a38cea0101e734f1b8ec889e77676106b5295a1d52e5c31a254bc33',
+	'D18':	'2f7cb36d104ace2f2ab8efd82f1e01f8d93765ea686a37443cf7105f6edf8adc',
+	'D19':	'c4690c53677dd680eaf1e705d5ce3ced953638c5e57f8fd1b1d6dbab939bded8',
+	'D20':	'14e49ae388ac023fe93269b489cdba78c07465b1727fbeb9ac05f5bcaab891b2',
+	'D21':	'722fa00099f160e8859b7d63789769fd83a2ab82425e9a929c41337e877cf369'
+};
 
-const exolvedata = `
-	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
-	GKgu+Y6SN9YM0ISW
-`
+var hinturl = '../../hints/Cryptic202309_hints.html';
 
 function customizeExolve(puz) {
 
@@ -137,6 +93,89 @@ function addButton(p, title, cb) {
   p.buttonRow1.appendChild(b);
   p.buttonRow1.appendChild(document.createTextNode("\n"));
 }
+
+createExolve(`
+======REPLACE WITH YOUR PUZZLE BELOW======
+
+exolve-begin
+  exolve-id: dkm-cryptic-202309
+  exolve-title: Cryptic 2023-09: Plundering Pirates
+  exolve-setter: Darren Miller
+  exolve-copyright: 2023 Darren Miller
+	exolve-credits: Testers: Amy F
+  exolve-width: 11
+  exolve-height: 11
+  exolve-preamble:
+	  <p>Arr! Some pirates have stolen letters from the puzzle below 
+	  to hide their misdeeds. Can ye find their secret?&nbsp;(8)
+	  </p>
+    <p>Notes:
+    <ul>
+    <li>All the words need to drop a letter to fit in the grid. The grid entries 
+    		may no longer be words once the letter has been removed.</li>
+    <li>Optionally, you can use the blank after each clue to store its word until 
+    you&#8217;re ready to place it into the grid.</li>
+		</ul></p>
+
+	exolve-cell-size: 35 35
+	exolve-option: font-family:inherit
+  exolve-option: ignore-enum-mismatch
+	exolve-option: color-active:lightyellow
+  exolve-option: color-input:royalblue color-arrow:lightyellow
+  exolve-option: color-light-label-input:white
+  exolve-option: color-light-text-input:white
+  exolve-option: color-button:navy color-button-hover:purple
+  exolve-option: hide-copy-placeholder-buttons
+  exolve-relabel:
+    clear: Clear this word
+    reveal: Show hint for method(s)
+  exolve-grid:
+		0 0_0 0_0_0|0_0 0 0_0 
+		0|0_0 0_0_0 0 0 0 0 0 
+		0 0 0 0_0+0|0|0|0|0|0 
+		0|0|0|0_0_0 0 0 0 0 0 
+		0_0 0_0_0 0 0 0+0+0|0 
+		0 0 0_0_0|0|0 0_0_0 0_
+		0|0|0|0 0 0 0_0_0 0 0 
+		0 0 0 0 0 0 0_0+0|0|0 
+		0|0|0|0|0|0|0_0_0 0_0 
+		0 0_0 0 0_0 0_0_0 0+0 
+		0 0 0 0 0|0 0 0 0 0 0 
+	exolve-across:
+		1  Mixing brown to cover stains essentially produces a splash of color&nbsp;(7) _
+		4  It falls back, getting into position for a reason&nbsp;(6) _
+		8  Rearrange altar panels to reveal a spiritual realm&nbsp;(<span>6,5</span>) (11)* _
+		11  Temporary accommodations for sexy, short elf and sister&nbsp;(6) _
+		13  Make inquiries of faceless mask, avoiding glimpses of war wound&nbsp;(<span>3,6</span>) (9)* _
+		14  A dog watcher has St. Peter upset about it&nbsp;(<span>3,6</span>) (9)* _
+		16  Naked postgrad running from fierce creatures&nbsp;(6) _
+		17  Boy grabs border like a loafer&nbsp;(<span>4-2</span>) (6)* _
+		19  Feta and rice stirred together at a restaurant&nbsp;(9) _
+		22  Caught in her net, even Pa came back quietly embraced by Ruby&nbsp;(9) _
+		23  They say not many avoid get together&nbsp;(6) _
+		24  French one, before getting involved in courtship, is not getting enough&nbsp;(11) _
+		25  Initially, Calvin Klein goes crazy for lizards&nbsp;(6) _
+		26  Backsliding drunk gives up last drop of gin and his awful language&nbsp;(7) _
+	exolve-down:
+		1  Was hospital originally under pressure to get clean?&nbsp;(<span>4,2</span>) (6)* _
+		2  Picture-in-picture features in TV sets lacking true volume&nbsp;(6) _
+		3  Two kings adopt the proposal after repealing decree to abandon ship?&nbsp;(4,3,5) (12)* _
+		5  For example, Barbie or John Wayne&#8217;s famous horse&nbsp;(6) _
+		6  Amount of interest at usurious level&nbsp;(6) _
+		7  Leading video engineers reject design and need an alternative to Comic Sans&nbsp;(7) _
+		9  Tidiest, topless, and skinniest&nbsp;(7) _
+		10  Spoiled onion dip containing egg is a safer type of drug&nbsp;(<span>3-6</span>) (9)* _
+		12  Bored when skillet with the last scrap of bacon stuck inside caught in an oak, maybe&nbsp;(9) _
+		15  Lumber for wild parties&nbsp;(7) _
+		16  Newer and lower carbon footprint requirements&nbsp;(7) _
+		18  Premiere of Star Trek had a good run&nbsp;(6) _
+		19  Spooner claimed unusual cut of vegetable&nbsp;(6) _
+		20  Oddly dancers hear backwards and forward&nbsp;(6) _
+		21  Shaun has lost heart twice in soothing places&nbsp;(6) _
+	exolve-end
+
+======REPLACE WITH YOUR PUZZLE ABOVE======
+`);
 
 </script>
 <script src="exolve/dkm-exolve-utils.js"></script>
