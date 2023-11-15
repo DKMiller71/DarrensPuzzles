@@ -5712,19 +5712,20 @@ Exolve.prototype.handleKeyUpInner = function(key, shift=false) {
     return true
   }
   if (key == 46) { // delete key
-    const gridCell = this.currCell()
+    const gridCell = this.currCell();
     if (gridCell && gridCell.isLight && !gridCell.prefill) {
-      this.clearCell(this.currRow, this.currCol)
-      this.updateAndSaveState()
+      this.clearCell(this.currRow, this.currCol);
+      this.updateActiveCluesState();
+      this.updateAndSaveState();
     }
-    return true
+    return true;
   }  
   if (key == 13) {
     // Enter
-    this.toggleCurrDirAndActivate()
+    this.toggleCurrDirAndActivate();
   } else if (key == 39) {
     // right arrow
-    let col = this.currCol + 1
+    let col = this.currCol + 1;
     while (col < this.gridWidth &&
            !this.grid[this.currRow][col].isLight &&
            !this.grid[this.currRow][col].isDgmless) {
@@ -5735,7 +5736,7 @@ Exolve.prototype.handleKeyUpInner = function(key, shift=false) {
     }
   } else if (key == 37) {
     // left arrow
-    let col = this.currCol - 1
+    let col = this.currCol - 1;
     while (col >= 0 &&
            !this.grid[this.currRow][col].isLight &&
            !this.grid[this.currRow][col].isDgmless) {
@@ -6037,7 +6038,9 @@ Exolve.prototype.expireOverwrite = function(gridCell) {
 }
 
 /**
- * TODO
+ * This is the handler for a double-click in a cell. It enables the entry of
+ * multiple letters into the current cell, but only if the crossword has rebus
+ * cells or is in a language that has multi-char letters.
  */
 Exolve.prototype.enableMultiLetterEntry = function() {
   if (!this.multiLetter) {
@@ -6052,7 +6055,9 @@ Exolve.prototype.enableMultiLetterEntry = function() {
 }
 
 /**
- * Only called from handleGridInput()
+ * Only called from handleGridInput(), this checks if
+ * multiple letters are to be allowed to be entered during the
+ * current entry of letters into a cell.
  */
 Exolve.prototype.checkMultiLetterMode = function(entry) {
   if (!this.multiLetter) {
@@ -6060,6 +6065,11 @@ Exolve.prototype.checkMultiLetterMode = function(entry) {
   }
   const mRow = this.multiLetterCellRow;
   const mCol = this.multiLetterCellCol;
+  /**
+   * If multi-letter-mode gets enabled for reasons other than the last
+   * dobule-click, or if that double-click was in some other cell, then clear
+   * away that double-click's state.
+   */
   this.multiLetterCellRow = -1;
   this.multiLetterCellCol = -1;
   if (this.lastKeyHadShift || entry.length > 1) {
@@ -6692,7 +6702,7 @@ Exolve.prototype.clearCell = function(row, col) {
   }
 }
 
-// Returns a pair of numbers. The first number is  0 if not full, 1 if full,
+// Returns a pair of numbers. The first number is 0 if not full, 1 if full,
 // 2 if full entirely with prefills. The second number is the number of
 // full cells.
 Exolve.prototype.isFull = function(clueIndex) {
