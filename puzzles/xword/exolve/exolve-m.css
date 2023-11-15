@@ -5,7 +5,7 @@ Copyright (c) 2019 Viresh Ratnakar
 
 See the full license notice in exolve-m.js.
 
-Version: Exolve v1.50 May 16, 2023
+Version: Exolve v1.55 November 1, 2023
 */
 
 @media (max-width: 500px) {
@@ -17,7 +17,8 @@ Version: Exolve v1.50 May 16, 2023
   font-size: 16px;
   font-family: serif;
   font-weight: 400;
-  line-height: normal;
+  letter-spacing: normal !important;
+  line-height: normal !important;
   box-sizing: border-box;
 }
 .xlv-anno-text,
@@ -27,6 +28,7 @@ Version: Exolve v1.50 May 16, 2023
 .xlv-answer,
 .xlv-input,
 .xlv-incluefill,
+.xlv-clue-extraction-slot,
 .xlv-scratchpad,
 .xlv-shuffle {
   font-size: 12px !important;
@@ -67,6 +69,7 @@ Version: Exolve v1.50 May 16, 2023
   .xlv-answer,
   .xlv-input,
   .xlv-incluefill,
+  .xlv-clue-extraction-slot,
   .xlv-scratchpad,
   .xlv-shuffle {
     font-size: 8px !important;
@@ -124,22 +127,29 @@ Version: Exolve v1.50 May 16, 2023
 .xlv-cell-circle {
   fill: rgba(0,0,0,0.0);
 }
-.xlv-frame .xlv-clues table {
-  border: none;
-  border-collapse: collapse;
-  border-spacing: 0;
+.xlv-frame .xlv-clues-table {
+  border: none !important;
+  border-collapse: collapse !important;
+  border-spacing: 0 !important;
   margin: inherit;
 }
-.xlv-frame .xlv-clues tr {
-  border: none;
+.xlv-frame table,
+.xlv-frame td,
+.xlv-frame tr {
+  background-image: none !important;
+}
+.xlv-frame .xlv-clues-table tr {
+  border: none !important;
   break-inside: avoid;
 }
-.xlv-frame .xlv-clues td {
-  border: none;
-  padding: 0 6px 4px 0;
+.xlv-frame .xlv-clues-table td {
+  border: none !important;
+  padding: 0 6px 4px 0 !important;
   vertical-align: top;
+  white-space: normal !important;
 }
-.xlv-frame .xlv-clues td:first-child:not(.xlv-filler) {
+.xlv-frame .xlv-clues-table .xlv-clue-label {
+  background-image: none !important;
   box-sizing: content-box;
   font-weight: bold;
   max-width: 2ch;
@@ -147,7 +157,7 @@ Version: Exolve v1.50 May 16, 2023
   text-align: right;
   word-break: normal;
   word-wrap: normal;
-  white-space: nowrap;
+  white-space: nowrap !important;
 }
 .xlv-invisible {
   color: transparent;
@@ -169,17 +179,6 @@ Version: Exolve v1.50 May 16, 2023
   align-items: flex-start;
   justify-content: space-around;
 }
-.xlv-clues-columnar,
-.xlv-grid-and-clues-2-columnar,
-.xlv-grid-and-clues-3-columnar {
-  display: block;
-}
-.xlv-grid-and-clues-2-columnar {
-  column-count: 2;
-}
-.xlv-grid-and-clues-3-columnar {
-  column-count: 3;
-}
 .xlv-grid-panel {
   break-inside: avoid;
 }
@@ -200,10 +199,14 @@ Version: Exolve v1.50 May 16, 2023
 .xlv-preamble {
   padding: 0;
 }
+.xlv-frame .xlv-preamble table {
+  margin: 0;
+  width: auto;
+}
 .xlv-small-print {
   margin: 4px 0 6px 0 !important;
 }
-.xlv-small-print > * {
+.xlv-small-print a {
   padding: 4px 4px 0 0 !important;
 }
 .xlv-credit {
@@ -243,12 +246,15 @@ Version: Exolve v1.50 May 16, 2023
   font-weight: bold;
   margin: 0;
   overflow-y: auto;
-  padding: 2px 0 8px 0 !important;
+  padding: 0 !important;
   position: sticky;
   position: -webkit-sticky;
   text-align: left;
   word-wrap: break-word;
   z-index: 2;
+}
+.xlv-curr-clue-inner {
+  padding: 2px 0 8px 0 !important;
 }
 .xlv-curr-orphan,
 .xlv-curr-clue-label {
@@ -401,8 +407,16 @@ Version: Exolve v1.50 May 16, 2023
   background-image:
     repeating-linear-gradient(to bottom, transparent, transparent 13px, black 14px);
 }
+.xlv-clue-extraction-slot {
+  line-height: normal !important;
+  box-sizing: border-box;
+  text-align: center;
+  vertical-align: middle;
+}
+.xlv-clue-extraction-slot,
 .xlv-incluefill {
   border: none;
+  cursor: text;
   padding: 0 0 2px 0px;
   margin: 0 0 0 4px;
   outline: none;
@@ -427,8 +441,13 @@ Version: Exolve v1.50 May 16, 2023
 }
 .xlv-scratchpad {
   border: 1px solid black;
+  font-size: large !important;
   padding: 8px;
+}
+.xlv-textarea {
+  box-sizing: border-box;
   outline: none;
+  width: 100%;
 }
 .xlv-shuffle {
   cursor: pointer;
@@ -459,18 +478,50 @@ Version: Exolve v1.50 May 16, 2023
 }
 .xlv-print-settings div {
   padding: 4px 0 4px 16px;
+  word-wrap: normal;
+}
+.xlv-small-print input {
+  appearance: auto;
+  border-radius: 0;
+  margin: 0;
+  padding: 0;
+  height: auto;
+  width: auto;
+}
+.xlv-print-settings td {
+  white-space: normal;
+}
+.xlv-qrcode-table {
+  border: 1px solid black !important;
+  float: right;
+  margin: 0 0 4px 4px;
+  padding: 0;
+  width: auto !important;
+}
+.xlv-qrcode-cta {
+  font-family: monospace;
+  font-size: 12px;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+.xlv-qrcode-panel td {
+  padding: 0;
+  vertical-align: middle;
 }
 .xlv-toggleable * {
   background-color: transparent;
   color: inherit;
 }
-a.xlv-toggler:active,
-a.xlv-toggler:link,
-a.xlv-toggler:visited {
+a.xlv-link:active,
+a.xlv-link:link,
+a.xlv-link:visited {
+  color: inherit !important;
   outline: none;
+  text-decoration: none;
 }
-a.xlv-toggler:hover {
-  text-decoration: underline;
+a.xlv-link:hover {
+  font-weight: bold;
 }
 .xlv-toggleable {
   margin-top: 6px !important;
