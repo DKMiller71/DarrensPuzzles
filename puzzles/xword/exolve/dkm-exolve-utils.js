@@ -226,4 +226,5 @@ function addButton(p, title, cb) {
 	b.addEventListener('click', cb, false);
   p.buttonRow1.appendChild(b);
   p.buttonRow1.appendChild(document.createTextNode("\n"));
+	return b;
 }

@@ -47,7 +47,7 @@ function sha256hash(string) {
 }
 
 function getLight(puz, clueIndex) {
-  let light = ''
+  let light = '';
   for (let rowcol of puz.clues[clueIndex].cells) {
     light = light + puz.grid[rowcol[0]][rowcol[1]].currLetter
   }
