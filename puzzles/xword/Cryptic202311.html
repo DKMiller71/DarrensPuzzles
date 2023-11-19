@@ -10,14 +10,14 @@ See the full Exolve license notice in exolve-m.js.
 -->
 <link rel="stylesheet" type="text/css" href="exolve/exolve-m.css"/>
 <script src="exolve/exolve-m.js"></script>
-<title>Cryptic 2023-11 by Darren Miller</title>
+<title>Cryptic 2023-11: Getting Stuffed by Darren Miller</title>
 
 <style>
 	body {
 		font-family: "Gill Sans", sans-serif;
 	}
 	@media print {
-		.extractButton {
+		.extractButton, .checkPuzzleButton, .hintButton {
 		     visibility: hidden;
 	   }
 	}
@@ -25,7 +25,6 @@ See the full Exolve license notice in exolve-m.js.
 <link rel="stylesheet" type="text/css" href="exolve/dkm-popup.css"/>
 <script src="exolve/dkm-popup.js"></script>
 <script src="exolve/dkm-checker.js"></script>
-<script src="exolve/dkm-decode.js"></script>
 </head>
 <body>
 <div id="popupModal" class="modal"></div>
@@ -60,86 +59,10 @@ var exolveanswers = {
 	'D18':	'9edd1b86df91724976ef7ebbef6be5a7979d5865f7d20b18edcbe262f0f9e2ce',
 	'D20':	'5fc1cfbe1d37d2c04a32d899c0e96502b8bd7179a12498ba867fbdc2998c36ff'
 };
-// var hinturl = '../../hints/Cryptic202305_hints.html';
 
-const exolvedata = `
-	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
-`
+var hinturl = '../../hints/Cryptic202311_hints.html';
+
+var specialCells = {}		// cells to be highlighted dynamically
 
 function customizeExolve(puz) {
 	if(typeof markedCells !== 'undefined') {
@@ -152,11 +75,120 @@ function customizeExolve(puz) {
 	if(typeof hinturl !== 'undefined') {
  		puz.hintButton = addButton(puz, 'Get hints', openHint);
 	}
+	
+	highlightSpecialCells(puz, 'palegreen')
+	puz.updateDisplayAndGetState = function(notifyIfComplete=true) {
+		highlightSpecialCells(puz, 'palegreen')
+		return Exolve.prototype.updateDisplayAndGetState.call(puz, notifyIfComplete)
+	}
 }
 
 function openHint() {
 	if(hinturl) { window.open(hinturl, '_blank'); }
 }
+
+function highlightSpecialCells(puz, color) {
+  for (let i = 0; i < puz.gridHeight; i++) {
+  for (let j = 0; j < puz.gridWidth; j++) {
+		let gridCell = puz.grid[i][j]
+    if (!gridCell.isLight) continue
+    
+    if (gridCell.currLetter.length <= 1) {
+    	if (specialCells[[i, j]]) {
+    		puz.colourGroup.removeChild(specialCells[[i, j]])
+    		delete specialCells[[i, j]]
+    	}
+    	continue;
+    }
+    
+    if([i, j] in specialCells) continue
+    
+    specialCells[[i, j]] = puz.makeCellDiv(i, j, color, 1)
+    puz.colourGroup.appendChild(specialCells[[i, j]] )
+
+	}}
+	
+	puz.colourGroup.style.display = (Object.keys(specialCells).length > 0) ||
+	 		(this.colourfuls.length > 0)? '' : 'none';
+
+}
+
+window.addEventListener('load', function () {
+window.puz = createExolve(`
+======REPLACE WITH YOUR PUZZLE BELOW======
+
+exolve-begin
+  exolve-id: dkm-cryptic-202311
+  exolve-title: Cryptic 2023-11: Getting Stuffed
+  exolve-setter: Darren Miller
+  exolve-copyright: 2023 Darren Miller
+	exolve-credits: Testers: Amy F, kitsovereign
+  exolve-width: 9
+  exolve-height: 9
+  exolve-preamble:
+  	<p>A cryptic meal in time for Thanksgiving. What do you need to do?&nbsp;(6)</p>
+  	<p>Some entries need to be modified to fit into the grid properly by holding <b>shift</b> while typing in the cell or double-clicking in the cell before typing.</p>
+  	<p>You can check your final answer at
+		<a href='https://darrenspuzzles.blogspot.com/2023/11/cryptic-2023-11.html' title='Go to Darren&apos;s Puzzles blog' target='_blank'>Darren&apos;s Puzzles blog</a>.</p>
+	exolve-cell-size: 40 40
+	exolve-option: font-family:inherit
+  exolve-option: ignore-enum-mismatch
+	exolve-option: color-active:lightyellow
+	exolve-option: color-active-clue:lightyellow
+  exolve-option: color-input:royalblue color-arrow:lightyellow
+  exolve-option: color-light-label-input:white
+  exolve-option: color-light-text-input:white
+  exolve-option: color-overwritten-start:#FFF5EE
+  exolve-option: color-overwritten-end:	#FAF9F6
+  exolve-option: highlight-overwritten-seconds:0.05
+  exolve-option: color-button:navy color-button-hover:yellow
+  exolve-option: hide-copy-placeholder-buttons
+  exolve-option: rebus-cells
+  exolve-relabel:
+    clear: Clear this word
+    reveal: Show hint for method(s)
+  exolve-grid:
+		0 0 0 0_0 0_0 0+0 
+		0|0|0|0_0 0 0 0_0 
+		0 0 0 0+0 0 0 0_0 
+		0+0 0 0_0|0|0+0|0_
+		0_0 0_0|0|0_0 0 0_
+		0|0+0|0|0 0_0 0|0 
+		0 0_0 0 0|0_0 0 0 
+		0 0_0 0_0 0+0|0|0 
+		0|0 0 0 0 0 0 0 0 
+	exolve-across:
+		1  Trap containing large, mangled boot and a vessel&nbsp;(5,4) (8)* _ [.........]
+		7  Famous artist Evan, scratching head, almost got shanghaied essentially&nbsp;(3,4) (6)* _ [.......]
+		9  Wise man cycling for a long time&nbsp;(4) _
+		10  Leave for an errand for Bruno, but rejecting tips&nbsp;(3,3) (5)* _ [......]
+		11  Detailed hat Donald was wearing&nbsp;(3,2) (4)* _ [.....]
+		13  Distressed by stunt with girl filling in for the finale&nbsp;(5) (4)* _ [.....]
+		15  Demigods unfortunately died off, causing an environmental hazard&nbsp;(4) _
+		19  Hustler starts to show his arcane religious knowledge&nbsp;(5) (4)* _ [.....]
+		21  Some daisies come from guts of foxes, right?&nbsp;(6) (5)* _ [......]
+		22  Promotion for some noteworthy performances&nbsp;(4) _
+		23  Great joys in Bahamas on vacation, taking in magical isles&nbsp;(7) (6)* _ [.......]
+		24  Untested explosive used as an overwhelming conclusion to symphony&nbsp;(9) (8)* _ [.........]
+	exolve-down:
+		1  Pat is confused by Greek pockets&nbsp;(5) (4)* _ [.....]
+		2  Come to life and start smoking&nbsp;(5,2) (6)* _ [.......]
+		3  Old empty castle with a knight in the Arctic, perhaps?&nbsp;(5) _
+		4  Noble ladies strip, assuming one&#8217;s sister covers opening in screen&nbsp;(10) (9)* _ [..........]
+		5  Silver ring over New York causes great pain&nbsp;(5) (4)* _ [.....]
+		6  Channel has report of fire&nbsp;(5) (4)* _ [.....]
+		8  Bring back rock and bananas&nbsp;(4) _
+		12  Half pint absorbed in playing poker for a hat&nbsp;(7) (6)* _ [.......]
+		14  Figure Susie hung unevenly and upside-down&nbsp;(5) (4)* _ [.....]
+		16  Spooner says date is allowed to call for help&nbsp;(6) (5)* _ [......]
+		17  Robber ditches duplicate items and fancy clothing&nbsp;(4) _
+		18  Enter data about kidney without trace of disease&nbsp;(3,2) (4)* _ [.....]
+		20  Maine and North Dakota patch things up&nbsp;(4) _
+	exolve-end
+
+======REPLACE WITH YOUR PUZZLE ABOVE======
+`);
+})
 
 </script>
 <script src="exolve/dkm-exolve-utils.js"></script>
