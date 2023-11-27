@@ -1,0 +1,14 @@
+body {
+	font-family: "Gill Sans", sans-serif;
+}
+
+.CORRECT { color: green; padding: 5;}
+
+.INCORRECT { color: red; padding: 5; }
+
+.spacing {clear:both; }
+
+.CORRECT_INPUT:after { font-size:smaller; content: '\2705'; }
+
+.INCORRECT_INPUT:after { font-size:smaller; content: '\274C'; }
+

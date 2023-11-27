@@ -1,0 +1,76 @@
+<html>
+<head>
+	<title>Test multi hash</title>
+<link rel="stylesheet" type="text/css" href="testpuzzlechecker.css" />
+<script src="js/puzzlechecker.js"></script>
+</head>
+<body>
+
+Format: id:answer<br />
+<textarea id="inputstring" type="text" rows=6 cols=80 ></textarea><br />
+<input type="button" value="Encode" onclick="getMultiHashes()" />
+<input type="button" value="Copy" onclick="copy_output()" />
+<p />
+<xmp id="outputarea" onclick="selectall(this);"></xmp>
+
+<script>
+inputstring.focus();
+
+let checklock = 0;
+const hashpromises = [];
+
+function getMultiHashes() {
+
+	if(checklock) return false;
+
+	hashpromises.length = 0
+	checklock = 1
+
+	const data = document.getElementById("inputstring")
+	if(!data) return
+	
+	let rows = data.value.split(/\r?\n/);
+
+	for(let i=0; i < rows.length; i++) {
+		let fields = rows[i].split(/:/)
+		if(fields[0] == '' || fields.length < 2) continue
+		
+		let pid = fields[0].trim()
+		let answer = fields[1].toUpperCase().replaceAll(/\W/g, '')
+		let p = sha256hash(answer);			
+		test_hashes[pid] = p;
+		hashpromises.push(p);
+	}
+	
+	if(hashpromises.length>0) {
+		Promise.all(hashpromises).then(processHashes)
+		return false
+	}
+
+	processHashes()
+	return false;
+}
+
+async function processHashes() {
+	let result = ''
+	let keys = Object.keys(test_hashes)
+	if (keys.length == 0) return
+	keys.sort()
+	
+	for (let k=0; k<keys.length; k++) {
+//			console.log(keys[k])
+	 	let h = await test_hashes[keys[k]]
+		result += `${keys[k]}:${h}\n` 
+	}
+	
+	const out = document.getElementById("outputarea")
+	if(!out) {
+		console.log('missing output area')
+		return
+	}
+	out.innerHTML = result
+}
+	
+</script>
+</body>
+</html>
