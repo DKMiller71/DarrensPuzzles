@@ -1,0 +1,198 @@
+
+.CORRECT { color: green; padding: 5; }
+
+.INCORRECT { color: red; padding: 5; }
+
+.spacing {clear:both; }
+
+.CORRECT_INPUT:after { font-size:smaller; content: '\2705'; }
+
+.INCORRECT_INPUT:after { font-size:smaller; content: '\274C'; }
+
+h1 { 
+	color: crimson;
+	text-shadow: -1px 1px 2px black, 0 0 3px darkgreen;
+}
+h2 { margin-bottom: 10px; }
+
+.container {
+	font-family: "Verdana", sans-serif;
+	margin-left: auto; margin-right: auto;
+	width:100%;
+	padding:20px 0px 50px 40px;
+	background:#fefefe;
+}
+
+.masthead { width:95%; }
+
+.inputbox { 
+	text-transform: uppercase; 
+	font-size: larger;
+	font-weight: bolder;
+	margin-bottom: 5px;
+}
+
+body {
+
+	font-family: "Verdana", sans-serif;
+
+/* Wrapping paper: https://codepen.io/bennettfeely/pen/jEbraK */
+    background:
+        repeating-linear-gradient(
+            -45deg,
+            transparent 0,
+            transparent 25%,
+            #F40009 0,
+            #F40009 50%
+       ),
+       repeating-linear-gradient(
+            45deg,
+            transparent 0,
+            transparent 25%,
+            #50C878 0,
+            #50C878 50%
+        ),
+				white;
+    background-blend-mode: multiply;
+    background-size: 150px 150px;
+
+ 
+/* https://opdiv.com/2021/02/28/torn-edges-css/ */
+	/* Settings */
+	--torn-shadow-offset-x:-8px;
+	--torn-shadow-offset-y:12px;
+	--torn-shadow-background-color:rgba(0,0,0,0.5);
+	--torn-background-color:#fefefe;
+	--torn-left-width:8px;
+	--torn-right-width:12px;
+	--torn-left-clip-path:polygon(60% 0%, 57% 3%, 52% 5%, 45% 8%, 44% 10%, 55% 13%, 1% 15%, 91% 18%, 48% 20%, 39% 23%, 46% 25%, 16% 28%, 19% 30%, 81% 33%, 77% 35%, 10% 38%, 35% 40%, 60% 43%, 72% 45%, 33% 48%, 82% 50%, 54% 53%, 92% 55%, 80% 57%, 62% 60%, 37% 63%, 35% 65%, 60% 68%, 57% 70%, 75% 73%, 63% 75%, 3% 78%, 67% 80%, 65% 83%, 41% 85%, 44% 88%, 15% 90%, 92% 93%, 21% 95%, 28% 98%, 46% 100%, calc(100% + 1px) 100%, calc(100% + 1px) 0%);
+	--torn-right-clip-path:polygon(20% 0%, 47% 3%, 21% 5%, 94% 8%, 19% 10%, 82% 13%, 14% 15%, 22% 18%, 65% 20%, 10% 23%, 79% 25%, 15% 28%, 52% 30%, 38% 33%, 93% 35%, 43% 38%, 71% 40%, 88% 43%, 95% 45%, 99% 48%, 14% 50%, 61% 53%, 16% 55%, 47% 57%, 90% 60%, 93% 63%, 76% 65%, 19% 68%, 17% 70%, 100% 73%, 74% 75%, 27% 78%, 21% 80%, 14% 83%, 67% 85%, 21% 88%, 97% 90%, 41% 93%, 74% 95%, 88% 98%, 8% 100%, -10% 100%, -10% 0%);
+	--torn-shadow-blur:1px;
+}
+
+.torn_container{
+	margin-left: auto; margin-right: auto;
+	width:60%;
+	min-width: 400px;
+	clear:both;
+	margin-bottom:1.2em;
+	position:relative;
+}
+.torn_container>div:first-child{
+	margin-left:var(--torn-shadow-offset-x);
+	margin-top:var(--torn-shadow-offset-y);
+	left:0px;
+	top:0px;
+	right:calc(0px - var(--torn-shadow-offset-x));
+	bottom:calc(0px - var(--torn-shadow-offset-y));
+	position:absolute;
+	z-index:1;
+	filter:blur(var(--torn-shadow-blur));
+}
+.torn_container>div:nth-child(2), .torn_container>div:nth-child(2)>span{
+	vertical-align:middle;
+}
+.torn_container>div:nth-child(2), .torn_left>div:nth-child(2):before, .torn_right>div:nth-child(2):after{
+	background-color:var(--torn-background-color);
+}
+.torn_container>div:nth-child(2), .torn_container>div:nth-child(2){
+	display:inline-block;
+	position:relative;
+	z-index:2;
+/*	padding:0.4em; */
+}
+.torn_left>div:nth-child(2):before, .torn_left>div:first-child:before{
+	content:'';
+	position:absolute;
+	left:calc(0em - var(--torn-left-width));
+	top:0px;
+	width:var(--torn-left-width);
+	bottom:0px;
+	-webkit-clip-path:var(--torn-left-clip-path);
+	clip-path:var(--torn-left-clip-path);
+}
+.torn_container>div:first-child, .torn_left>div:first-child:before, .torn_right>div:first-child:after{
+	background-color:var(--torn-shadow-background-color);
+}
+.torn_right>div:nth-child(2):after, .torn_right>div:first-child:after{
+	content:'';
+	position:absolute;
+	left:100%;
+	top:0px;
+	right:calc(0px - var(--torn-right-width));
+	bottom:0px;
+	-webkit-clip-path:var(--torn-right-clip-path);
+	clip-path:var(--torn-right-clip-path);
+}
+.torn_right>div:nth-child(2):after{
+	left:calc(100% - 0.5px);
+}
+
+/* https://codepen.io/VIRU/pen/DGXOjE */
+.button {
+	display: inline-block;
+	-webkit-box-sizing:border-box;
+	   -moz-box-sizing:border-box;
+	        box-sizing:border-box;
+	min-width:100px;
+	padding: 6px 8px;
+	font-family: 'Lobster', cursive;
+	font-size:100%;
+	text-decoration: none;
+	color: #FFF;
+	text-shadow: 0 1px 2px rgba(0,0,0,0.75);
+	background: #5e0d0c;
+	outline: none;
+	border-radius: 8px;
+	border: 1px solid #4c0300;
+	box-shadow:
+		inset 1px 1px 0px rgba(255,255,255,0.25), /* highlight */
+		inset 0 0 6px #a23227, /* inner glow */
+		inset 0 80px 80px -40px #ac3223, /* gradient */
+		1px 1px 3px rgba(0,0,0,0.75); /* shadow */
+		
+	position: relative;
+	overflow: visible; /* IE9 & 10 */
+	-webkit-transition: 500ms linear;
+	   -moz-transition: 500ms linear;
+	     -o-transition: 500ms linear;
+					transition: 500ms linear;
+	margin-bottom: 5px; 
+}
+
+.button:hover {
+	background: #a61715;
+	text-shadow: 0 1px 2px rgba(0,0,0,0.75), 0 0 40px #FFF;
+	box-shadow:
+		inset 1px 1px 0px rgba(255,255,255,0.25), /* highlight */
+		inset 0 0 6px #da3b2c, /* inner glow */
+		inset 0 80px 80px -40px #dd4330, /* gradient */
+		1px 1px 3px rgba(0,0,0,0.75); /* shadow */
+		
+}
+.button:focus {
+	outline: none; /*FF*/
+}
+.button:active {
+	box-shadow:
+		inset 1px 1px 0px rgba(255,255,255,0.25), /* highlight */
+		inset 0 0 6px #da3b2c, /* inner glow */
+		inset 0 80px 80px -40px #dd4330, /* gradient */
+		0px 1px 0px rgba(255,255,255,0.25); /* shadow */
+		
+	-webkit-transition: 50ms linear;
+	   -moz-transition: 50ms linear;
+	     -o-transition: 50ms linear;
+	        transition: 50ms linear;
+}
+.button:disabled {
+	filter: brightness(170%) saturate(30%);
+	color:gray;
+}
+
+.resetbutton {
+	width:100px;
+	text-align:center;
+  margin: 0 auto;
+  display: none;
+}
