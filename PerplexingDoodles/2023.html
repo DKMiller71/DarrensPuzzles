@@ -13,7 +13,7 @@
 <img class="masthead" src="Masthead_24_Gifts_of_Christmas.png">
 <h1>Answer Checker</h1>
 <xmp id=answerdata hidden>
-{% capture nowunix %}{{'now' | date: '%s' | minus: 32400 }}{% endcapture %}{% for rec in site.data.pd2023 %}{% capture rectime %}{{rec.date | date: '%s'}}{% endcapture %}{% if rectime < nowunix %}{{rec.id}}:{{rec.hash}}
+{% capture nowunix %}{{'now' | date: '%s' | minus: 14400 }}{% endcapture %}{% for rec in site.data.pd2023 %}{% capture rectime %}{{rec.date | date: '%s'}}{% endcapture %}{% if rectime < nowunix %}{{rec.id}}:{{rec.hash}}:{{rec.author}}
 {% endif %}{% endfor %}</xmp>
 <noscript>This page requires Javascript.</noscript>
 </div></div>
