@@ -3,6 +3,7 @@ window.onload = init;
 //template inserted for each puzzle checker box:
 const puzzleFormTemplate = `
 <div id="Puzzle_PUZZLEID_Section">
+<h2>Day DAYNUM: Puzzle by AUTHOR</h2>
 <form id="Puzzle_PUZZLEID_Form" onsubmit="handleFormSubmit(this)" autocomplete=off>
 <input name="PuzzleID" type="hidden" value="PUZZLEID" />
 <span id="Puzzle_InputWrapper_PUZZLEID">
@@ -212,32 +213,25 @@ function init() {
 	const data = document.getElementById("answerdata");
 	if(!data) { return;}
 
-	const bodydata = document.getElementById("bodydata");	
-	if(!bodydata) { return;}	
-
-	let oldbody = bodydata.innerText
+	const el = document.getElementById("container")
+	if(!el) return
 	
-	let rows = data.innerText.split(/\r?\n/);
-	let changes = 0
+	const rows = data.innerText.split(/\r?\n/);
 
 	for(let i=0; i < rows.length; i++) {
 		let fields = rows[i].split(/:/);
-		if(fields[0] == '' || fields.length < 2) continue
+		if(fields[0] == '' || fields.length < 3) continue
 		
 		let pid = fields[0].trim()
 		answerdata_hashes[pid] = fields[1].trim() 
 
-		if(!oldbody.match(`%__PUZZLE_${pid}__%`)) continue
-		changes++
-		oldbody = oldbody.replaceAll(
-			`%__PUZZLE_${pid}__%`, puzzleFormTemplate)
-			.replaceAll('PUZZLEID', pid)
+		el.insertAdjacentHTML('beforeend', 
+					puzzleFormTemplate.replaceAll('PUZZLEID', pid)
+						.replaceAll('DAYNUM', parseInt(pid))
+						.replaceAll('AUTHOR', fields[2].trim()))
 	}
 
-	oldbody += puzzleResetTemplate	
-	
-	const el = document.getElementById("container")
-	el.innerHTML += oldbody
+	el.insertAdjacentHTML('beforeend', puzzleResetTemplate)	
 	
 	preventFormSubmit()
 	restoreFromState()	

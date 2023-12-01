@@ -35,27 +35,25 @@ h2 { margin-bottom: 10px; }
 body {
 
 	font-family: "Verdana", sans-serif;
-
 /* Wrapping paper: https://codepen.io/bennettfeely/pen/jEbraK */
     background:
         repeating-linear-gradient(
             -45deg,
             transparent 0,
-            transparent 25%,
+            transparent 30%,
             #F40009 0,
             #F40009 50%
        ),
        repeating-linear-gradient(
             45deg,
             transparent 0,
-            transparent 25%,
+            transparent 30%,
             #50C878 0,
             #50C878 50%
         ),
 				white;
     background-blend-mode: multiply;
     background-size: 150px 150px;
-
  
 /* https://opdiv.com/2021/02/28/torn-edges-css/ */
 	/* Settings */
