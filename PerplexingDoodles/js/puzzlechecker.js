@@ -208,6 +208,48 @@ async function hashToConsole(pid) {
 	sha256hash(answer).then(console.log)		
 }
 
+// updates torn edge variable dynamically for larger boxes
+function updateTornEdges() {
+
+	const el = document.getElementById("container")
+	if(!el) return
+	if(el.scrollHeight < 400) return
+	
+	let yinc_base = Math.floor(10000 / el.scrollHeight)/10  // decimal, not percent
+
+	if (yinc_base < .5) yinc_base = 0.5
+
+	let pathstr = '100% 0%,'
+	let ycum = yinc_base
+	
+	do {
+		let xpct = Math.round(Math.random()*1000) / 10
+		pathstr += ` ${xpct}% ${ycum}%,`
+
+		let yvar = Math.round(10 * yinc_base * (1 + Math.random()- 0.5)) / 10
+		ycum = Math.round(ycum + yvar)
+
+	} while (ycum < 100)
+
+	pathstr +=  'calc(100% + 1px) 100%, calc(100% + 1px) 0%'
+	document.body.style.setProperty('--torn-left-clip-path',`polygon(${pathstr})`)
+
+	pathstr = '100% 0%,'
+	ycum = yinc_base
+		
+	do {
+		xpct = Math.round(Math.random()*1000) / 10
+		pathstr += ` ${xpct}% ${ycum}%,`
+
+		let yvar = Math.round(10 * yinc_base * (1 + Math.random()- 0.5)) / 10
+		ycum = Math.round(ycum + yvar)
+
+	} while (ycum < 100)
+
+	pathstr +=  '-10% 100%, -10% 0%'
+	document.body.style.setProperty('--torn-right-clip-path',`polygon(${pathstr})`)
+}
+
 function init() {
 
 	const data = document.getElementById("answerdata");
@@ -234,5 +276,6 @@ function init() {
 	el.insertAdjacentHTML('beforeend', puzzleResetTemplate)	
 	
 	preventFormSubmit()
+	updateTornEdges()
 	restoreFromState()	
 }
