@@ -13,7 +13,7 @@ function init() {
 	for(let i=0; i < rows.length; i++) {
 		let fields = rows[i].split(/\t/);
 		if(fields[0] == '') {}
-		else if(fields[0].match(/^ACROSS$|^DOWN(?:\W(?:RIGHT|LEFT))?/i)) {
+		else if(fields[0].match(/^(?:ACROSS|UP|DOWN)(?:\W(?:RIGHT|LEFT))?/i)) {
 			tr = table.insertRow(-1);
 			var txt = fields[0].toLowerCase() 
 								.replace( /^(.)/, (match, p1) => p1.toUpperCase())
