@@ -1957,7 +1957,7 @@ Exolve.prototype.checkConsistency = function() {
 }
 
 Exolve.prototype.caseCheck = function(c) {
-  if (c.length > 1 && this.hasRebusCells) {
+  if (c.length > 1 && (this.hasRebusCells || this.langMaxCharCodes > 1)) {
     for (const letter of c) {
       if (!this.caseCheck(letter)) {
         return false;
@@ -2563,7 +2563,7 @@ Exolve.prototype.findEnum = function(clueLine) {
       numeric = false;
       // Look for the strings 'words'/'letters' or subwords, or ?, in parens.
       enumLocation = cluePart.search(
-          /\([^)]*(w[o]?[r]?[d]?[s]?|l[e]?[t]?[t]?[e]?[r]?[s]?|\?)[^)a-z]*\)/i);
+          /\(([^)]*\s(w[o]?[r]?[d]?[s]?|l[e]?[t]?[t]?[e]?[r]?[s]?)[^)a-z]*|\s*\?\s*)\)/i);
     }
     if (enumLocation < 0) {
       break;
@@ -2928,7 +2928,7 @@ Exolve.prototype.parseCCCC = function(s) {
     ret.isLight = true;
     return ret;
   }
-  const elts = document.getElementsByClassName(s2);
+  const elts = this.frame.getElementsByClassName(s2);
   if (elts && elts.length > 0) {
     ret.cls = s2;
     return ret;
@@ -4437,7 +4437,7 @@ Exolve.prototype.displayClues = function() {
 Exolve.prototype.equalizeClueWidths = function(w) {
   // Make all xlv-clues-box divs have the same width w.
   if (w > 0) {
-    const cbs = document.getElementsByClassName('xlv-clues-box')
+    const cbs = this.frame.getElementsByClassName('xlv-clues-box')
     for (let x = 0; x < cbs.length; x++) {
       cbs[x].style.width = w + 'px'
     }
@@ -5430,32 +5430,36 @@ Exolve.prototype.cnavTo = function(activeClueIndex, grabFocus=true) {
 Exolve.prototype.copyPlaceholderBlank = function(clueIndex) {
   if (this.hideCopyPlaceholders || this.activeCells.length < 1 ||
       !clueIndex || !this.clues[clueIndex] || !this.clues[clueIndex].clueTR) {
-    return
+    return;
   }
   const inp = this.clues[clueIndex].placeholderBlank;
   if (!inp) {
-    return
+    return;
   }
-  let entry = inp.value
-  let letters = ''
-  for (let i = 0; i < entry.length; i++) {
-    let letter = entry[i]
+  const entry = inp.value;
+  let splitter = '';
+  if (this.langMaxCharCodes > 1 && entry.indexOf(' ') >= 0) {
+    splitter = ' ';
+  }
+  const letters = [];
+  const candLetters = entry.split(splitter);
+  for (const letter of candLetters) {
     if (!this.caseCheck(letter)) {
       if (!this.allowChars || !this.allowChars[letter]) {
         continue;
       }
     }
-    letters = letters + letter
+    letters.push(letter);
   }
   if (letters.length < 1) {
-    return
+    return;
   }
   if (letters.length != this.activeCells.length) {
-    let msg = this.textLabels['confirm-mismatched-copy']
+    const msg = this.textLabels['confirm-mismatched-copy'];
     if (msg &&
         !this.maybeConfirm(msg + ' ' + letters.length +
                            ':' + this.activeCells.length)) {
-      return
+      return;
     }
   }
   let index = 0
@@ -5465,36 +5469,36 @@ Exolve.prototype.copyPlaceholderBlank = function(clueIndex) {
     if (index >= this.activeCells.length) {
       break;
     }
-    let x = this.activeCells[index++]
-    row = x[0]
-    col = x[1]
-    let gridCell = this.grid[row][col]
+    const x = this.activeCells[index++];
+    row = x[0];
+    col = x[1];
+    const gridCell = this.grid[row][col];
     if (gridCell.prefill) {
-      continue
+      continue;
     }
-    let letter = letters[i]
-    let oldLetter = gridCell.currLetter
+    const letter = letters[i];
+    const oldLetter = gridCell.currLetter;
     if (oldLetter != letter) {
-      gridCell.currLetter = letter
-      let revealedChar = this.stateToDisplayChar(letter)
-      gridCell.textNode.nodeValue = revealedChar
+      gridCell.currLetter = letter;
+      const revealedChar = this.stateToDisplayChar(letter);
+      gridCell.textNode.nodeValue = revealedChar;
       if (this.atCurr(row, col)) {
-        this.gridInput.value = revealedChar
+        this.gridInput.value = revealedChar;
       }
     }
   }
   this.adjustRebusFonts();
   if (index < this.activeCells.length) {
     // Advance to the next square.
-    let x = this.activeCells[index]
-    row = x[0]
-    col = x[1]
+    const x = this.activeCells[index];
+    row = x[0];
+    col = x[1];
   }
   if (row >= 0 && col >= 0) {
-    this.activateCell(row, col)
+    this.activateCell(row, col);
   }
-  this.updateActiveCluesState()
-  this.updateAndSaveState()
+  this.updateActiveCluesState();
+  this.updateAndSaveState();
 }
 
 // inCurr is set to true when this is called oninput in the currClue strip
@@ -5656,10 +5660,12 @@ Exolve.prototype.toggleCurrDir = function() {
   this.currDir = newDir
 }
 
-Exolve.prototype.toggleCurrDirAndActivate = function() {
-  this.usingGnav = true
-  this.toggleCurrDir()
-  this.activateCell(this.currRow, this.currCol)
+Exolve.prototype.toggleCurrDirAndActivate = function(e) {
+  this.usingGnav = true;
+  if (e && !e.shiftKey) {
+    this.toggleCurrDir();
+  }
+  this.activateCell(this.currRow, this.currCol);
 }
 
 // Handle navigation keys. Used by a listener, and also used to auto-advance
@@ -6630,7 +6636,7 @@ Exolve.prototype.redisplayNinas = function(scale=1) {
     for (let cccc of nina.list) {
       if (cccc.cls) {
         // span-class-specified nina
-        const elts = document.getElementsByClassName(cccc.cls);
+        const elts = this.frame.getElementsByClassName(cccc.cls);
         if (!elts || elts.length == 0) {
           console.log('Nina ' + cccc.str + ' is not a cell/clue ' +
                       'location nor a class with html tags');
