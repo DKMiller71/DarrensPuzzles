@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!--
+MIT License
+Copyright (c) 2019 Viresh Ratnakar
+See the full Exolve license notice in exolve-m.js.
+-->
+<link rel="stylesheet" type="text/css" href="exolve/exolve-m.css"/>
+<script src="exolve/exolve-m.js"></script>
+<title>Cryptic 2024-06 by Darren Miller</title>
+
+<style>
+	body {
+		font-family: "Gill Sans", Verdana, sans-serif;
+	}
+	@media print {
+		.extractButton, .checkPuzzleButton, .hintButton {
+		     visibility: hidden;
+		}
+	}
+</style>
+<link rel="stylesheet" type="text/css" href="exolve/dkm-popup.css"/>
+<script src="exolve/dkm-popup.js"></script>
+<script src="exolve/dkm-checker.js"></script>
+<script src="exolve/dkm-extractor.js"></script>
+<script src="exolve/dkm-decode.js"></script>
+</head>
+<body>
+<div id="popupModal" class="modal"></div>
+<div id='scroll-wrapper'><div id="exolve"></div>
+<script>
+
+var puzid = 'dkm-cryptic-202406';
+var exolveanswers = {}
+// var hinturl = '../../hints/Cryptic202305_hints.html';
+
+const exolvedata = `
+	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
+	==
+`
+
+function customizeExolve(puz) {
+	if(typeof markedCells !== 'undefined') {
+		markupCells(puz, markedCells, 10, 6, 'darkgreen');
+  	puz.extractButton = addButton(puz, 'Extract cells', getMarkedCells);
+  }
+  if (Object.keys(exolveanswers).length) {
+  	puz.checkPuzzleButton = addButton(puz, 'Check puzzle', checkPuzzle);
+	}
+	if(typeof hinturl !== 'undefined') {
+ 		puz.hintButton = addButton(puz, 'Get hints', openHint);
+	}
+	puz.clearArea.after(puz.currClue);
+	puz.resizeCurrClueAndControls = customResizeCurrClueAndControls;
+
+}
+
+customResizeCurrClueAndControls = function() {
+  const bPos = this.frame.getBoundingClientRect();
+  const gpPos = this.gridPanel.getBoundingClientRect();
+  const width = Math.max(this.maxCurrClueWidth, gpPos.width);
+  const widthPx = width + 'px';
+  this.controlsEtc.style.width = widthPx;
+  this.currClue.style.width = '100%';
+  /** 
+   * We can go from the top of the grid to the top of this.frame, leaving
+   * maybe 4 pixels (and any this.visTop) out.
+   */
+  const maxHeight = Math.max(80, (gpPos.top - bPos.top) - 4 - this.visTop);
+  this.currClue.style.maxHeight = maxHeight + 'px';
+  const ciPos = this.currClueInner.getBoundingClientRect();
+  const minHeight = Math.min(maxHeight, ciPos.height + this.topClueClearance);
+  this.currClue.style.minHeight = minHeight + 'px';
+  const cPos = this.currClue.getBoundingClientRect();
+  this.currClue.style.marginTop = '-' + cPos.height + 'px';
+
+  const gPos = this.gridParent.getBoundingClientRect();
+  const horOffset = (gPos.width >= width) ?
+    gPos.left : ((gpPos.width - width) / 2);
+  this.currClue.style.left = horOffset + 'px';
+}
+
+
+
+function markupCells(p, cells, ht, basewid, labelcolor='') {
+	for(let i=0; i<cells.length; i++) {
+		let coords = p.parseCellLocation(cells[i]);   // [row,col]
+		let wid = (i+1).toString().length*basewid+1;
+		let c = p.addCellText(coords[0], coords[1], (i+1), ht, wid, false, true);
+		c.style['stroke-width'] = 0.4;
+		if(labelcolor) {
+			c.style.stroke = labelcolor;	
+		}
+	}
+	
+	p.cellActivator(0,0); 
+}
+
+function openHint() {
+	if(hinturl) { window.open(hinturl, '_blank'); }
+}
+
+</script>
+<script src="exolve/dkm-exolve-utils.js"></script>
+</div>
+</body>
+</html>
