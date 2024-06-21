@@ -1,231 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<!--
-MIT License
-Copyright (c) 2019 Viresh Ratnakar
-See the full Exolve license notice in exolve-m.js.
--->
-<link rel="stylesheet" type="text/css" href="exolve/exolve-m.css"/>
-<script src="exolve/exolve-m.js"></script>
-<title>Cryptic 2024-06 by Darren Miller</title>
-
-<style>
-	body {
-		font-family: "Gill Sans", Verdana, sans-serif;
-	}
-	@media print {
-		.extractButton, .checkPuzzleButton, .hintButton {
-		     visibility: hidden;
-		}
-	}
-</style>
-<link rel="stylesheet" type="text/css" href="exolve/dkm-popup.css"/>
-<script src="exolve/dkm-popup.js"></script>
-<script src="exolve/dkm-checker.js"></script>
-<script src="exolve/dkm-extractor.js"></script>
-<script src="exolve/dkm-decode.js"></script>
-</head>
-<body>
-<div id="popupModal" class="modal"></div>
-<div id='scroll-wrapper'><div id="exolve"></div>
-<script>
-
-var puzid = 'dkm-cryptic-202406';
-var exolveanswers = {
-	'A1':	'02f6ea12816a9e7b8ce846f149281b130033cf5145d260dfea7405bc8866ee1e',
-	'A5':	'eb0eb09cd2356d394a171eaa90abdb19134964aa1882daf893152fda17cf595f',
-	'A9':	'c9a81e8528c1bc6c1967c015fec49605c535b077ac975a0043f7b56992960b34',
-	'A11':	'efa414912b4b88a6ec1c8b2ab8f499370b1616202ad5ecc1151af8311f272a9b',
-	'A12':	'c92bcb2ea7bb84e1c56bd8e0f16b9f01fc8fb928de8ce5f71ca91cb84cc753dd',
-	'A13':	'ce6f58b18dab329a4f87955ceb9ee58f78c1843e71c11c837e387b36134bf75f',
-	'A15':	'11f5231c0dab726fe6d3acd2dca4e6acca7a1baaa5033079f8f9472ba8170bf0',
-	'A16':	'49b42d8ff02a373707d532df7e896651d786f4b948b18cc9488aecb30db84584',
-	'A18':	'6a3ff41ee4babaa2167a34c2db483f0d823adcb63877abea245a5dd1e84868b0',
-	'A20':	'd7b0bbea3a935222c4198c38e30b2eb3e111d11dea87fa53547eac1c8a4ff03b',
-	'A23':	'dcf3ce2f485322226f4be813e91fc539e632f91cccf6f1000c1b1b5bf52774ad',
-	'A26':	'0df0a1257f2f770c91726bf73ea5b7a0221a4dddf03df54916d124759a748e1e',
-	'A28':	'ba5481c5bee980dadc1959edb104a5582ac9a54f2192e00e7576398d6d7f8046',
-	'A30':	'3a90aa2e8e49c3a0400ce420f87fca88fec4b2ca2f6a6e1d67f7a1f6945775d7',
-	'A33':	'123531ac9646f17e309631dcf86611e9e3fc822e900b61b4e5fb2ee9a3c0a103',
-	'A34':	'98e81ee1810cdbfb7c0de8af34d7f8309d931416350c575755a170328984c853',
-	'A36':  'b33d981252c62c97704b4c2afffc3b05c6a8c7c760562fad02fd16f7ee154d09',
-	'A37':	'88edf6aae86e88ea75cbeaa92f8feb2aa739ec3014ed8dfeae0f8b4de3eab823',
-	'A38':	'a897e8a7619491e6bba5f89cd26f3d716f92ebb096a40b77f47da258121284dd',
-	'A39':	'697f11d8d5cc7b308e75f8f5dcf2678f9ab0b22a4ca8ad415f6d0d875db1e82f',
-	'A40':	'cbab39784cef16ab04fcad749d479550af09aef7e7f83627b307a5c1b4ee9bde',
-	'D1':	'733ce88c9ebd9f1c704d0dc143669bd75988b3f83262d6791ea2546b600cc227',
-	'D2':	'bb63edfd21fee738d050fb8f8d91037301713ddbc16c1180fb86b801b90b9704',
-	'D3':	'e6e1e4c2a7317dc73b6311e6da9b738178f2eb6663dea65c4cfea72d1b60c2a8',
-	'D4':	'4bcb24cbf54c68012ee0ccaee8df0f02f1233e80a4dd6e5acd4a9b9e84ddfec3',
-	'D6':	'5c4974ba69ca9c85c062695a78e0a9335e877094049fad5b281a409e15a34d22',
-	'D7':	'1575d99ef71c7709b3ef5f34c264f5f52b030883e1e79436e519157759e150db',
-	'D8':	'd590578b0bbe6d1b73bbd7cc5f8aa72aac36ead2cc18e8aca9ccb6fe916a0ecf',
-	'D10':	'4d7f6380d68c07d30a78482f17e173ba51e63b2d47a4b1912151f769bcf46b0a',
-	'D14':	'6049f15b49dd03237d72264188cfdcb2d834ae79d366ef1e255145dadec030fe',
-	'D17':	'fe2732f284dcc0424ad707ec9a22f6476c9bab8b26b996232780f79e779def7e',
-	'D19':	'cc6080c86703b41f5c6aad6198304d257a0026292d6ef38a01e8c4f6bb1b7307',
-	'D21':	'099d90cbee62f89e6478e153eb3240efcbe4ac2231bedc3e84549bbeaaba87e8',
-	'D22':	'cc1ff053ef4002132898807cb3b7b5db156e7c0da30f1d07f7b11b091a5dc00e',
-	'D24':	'bf85a96b9b78349af16ed6201c08bb32df669477dfe19823c49da31cb259fb03',
-	'D25':	'ddbde340b6cd8fed42a482dd9811a9aaf82c73c7e4cb47de53bb41fedad98c34',
-	'D27':	'32e2d3999f57f0345be1eaad96b8ee182397cc5ed81554b2323422bbf1031009',
-	'D29':	'4805402c3a023817890b59c337360cd8755671a2413ac56706bf2bbcf92db422',
-	'D31':	'05571939ced87070f8cd44c8cee84c7f665e95eeac04ac5b0703c70735df98b4',
-	'D32':	'60937d4eaa1a2e3b5312fa22ab1970c4ec7e090732c55779088569b8ec488e10',
-	'D33':	'665956740bd261132c6648ad9a8ab1a99c9c0f5698ad501e11756acab0f07b8c',
-	'D35':	'18ba5c477fc5ca4c4b9a37b84918a3710870993254bda2e99446119878ee046f'
-}
-// var hinturl = '../../hints/Cryptic202305_hints.html';
-
-const exolvedata = `
-	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
-`
-
-function customizeExolve(puz) {
-	if(typeof markedCells !== 'undefined') {
-		markupCells(puz, markedCells, 10, 6, 'darkgreen');
-  	puz.extractButton = addButton(puz, 'Extract cells', getMarkedCells);
-  }
-  if (Object.keys(exolveanswers).length) {
-  	puz.checkPuzzleButton = addButton(puz, 'Check puzzle', checkPuzzle);
-	}
-	if(typeof hinturl !== 'undefined') {
- 		puz.hintButton = addButton(puz, 'Get hints', openHint);
-	}
-	puz.clearArea.after(puz.currClue);
-	puz.resizeCurrClueAndControls = customResizeCurrClueAndControls;
-
-}
-
-customResizeCurrClueAndControls = function() {
-  const bPos = this.frame.getBoundingClientRect();
-  const gpPos = this.gridPanel.getBoundingClientRect();
-  const width = Math.max(this.maxCurrClueWidth, gpPos.width);
-  const widthPx = width + 'px';
-  this.controlsEtc.style.width = widthPx;
-  this.currClue.style.width = '100%';
-  /** 
-   * We can go from the top of the grid to the top of this.frame, leaving
-   * maybe 4 pixels (and any this.visTop) out.
-   */
-  const maxHeight = Math.max(80, (gpPos.top - bPos.top) - 4 - this.visTop);
-  this.currClue.style.maxHeight = maxHeight + 'px';
-  const ciPos = this.currClueInner.getBoundingClientRect();
-  const minHeight = Math.min(maxHeight, ciPos.height + this.topClueClearance);
-  this.currClue.style.minHeight = minHeight + 'px';
-  const cPos = this.currClue.getBoundingClientRect();
-  this.currClue.style.marginTop = '-' + cPos.height + 'px';
-
-  const gPos = this.gridParent.getBoundingClientRect();
-  const horOffset = (gPos.width >= width) ?
-    gPos.left : ((gpPos.width - width) / 2);
-  this.currClue.style.left = horOffset + 'px';
-}
-
-
-
-function markupCells(p, cells, ht, basewid, labelcolor='') {
-	for(let i=0; i<cells.length; i++) {
-		let coords = p.parseCellLocation(cells[i]);   // [row,col]
-		let wid = (i+1).toString().length*basewid+1;
-		let c = p.addCellText(coords[0], coords[1], (i+1), ht, wid, false, true);
-		c.style['stroke-width'] = 0.4;
-		if(labelcolor) {
-			c.style.stroke = labelcolor;	
-		}
-	}
-	
-	p.cellActivator(0,0); 
-}
-
-function openHint() {
-	if(hinturl) { window.open(hinturl, '_blank'); }
-}
-
-</script>
-<script src="exolve/dkm-exolve-utils.js"></script>
-</div>
-</body>
-</html>
+ACROSS          
+A1      SETTINGS  
+A5      AWAKEN    
+A9      OREGANO   
+A11     SHEAF     
+A12     TRUTH     
+A13     TEMPEST   
+A15     BELAY     
+A16     POTATO    
+A18     COLA      
+A20     WORLD     
+A23     STRAW POLL
+A26     RASPY     
+A28     DRUM      
+A30     PLASMA    
+A33     CHASE     
+A34     ILLICIT   
+A36     CORAL     
+A37     MEDIA     
+A38     INMATES   
+A39     CURATE    
+A40     DUCT TAPE 
+DOWN          
+D1      SPORTS CAR
+D2      THERMAL   
+D3      IRATE     
+D4      GROTTO    
+D6      WASHBOWL  
+D7      KNEELER   
+D8      NIFTY     
+D10     TUBA      
+D14     SPUR      
+D17     TOWNS     
+D19     ASP       
+D21     OLD       
+D22     DEMITASSE 
+D24     TYPECAST  
+D25     OPAL      
+D27     SLANDER   
+D29     RICOTTA   
+D31     ACRE      
+D32     MILIEU    
+D33     COMIC     
+D35     LIMIT     
+          
+          
+          
+          
+          
