@@ -1,49 +1,240 @@
-ACROSS          
-A1      SETTINGS  
-A5      AWAKEN    
-A9      OREGANO   
-A11     SHEAF     
-A12     TRUTH     
-A13     TEMPEST   
-A15     BELAY     
-A16     POTATO    
-A18     COLA      
-A20     WORLD     
-A23     STRAW POLL
-A26     RASPY     
-A28     DRUM      
-A30     PLASMA    
-A33     CHASE     
-A34     ILLICIT   
-A36     CORAL     
-A37     MEDIA     
-A38     INMATES   
-A39     CURATE    
-A40     DUCT TAPE 
-DOWN          
-D1      SPORTS CAR
-D2      THERMAL   
-D3      IRATE     
-D4      GROTTO    
-D6      WASHBOWL  
-D7      KNEELER   
-D8      NIFTY     
-D10     TUBA      
-D14     SPUR      
-D17     TOWNS     
-D19     ASP       
-D21     OLD       
-D22     DEMITASSE 
-D24     TYPECAST  
-D25     OPAL      
-D27     SLANDER   
-D29     RICOTTA   
-D31     ACRE      
-D32     MILIEU    
-D33     COMIC     
-D35     LIMIT     
-          
-          
-          
-          
-          
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!--
+MIT License
+Copyright (c) 2019 Viresh Ratnakar
+See the full Exolve license notice in exolve-m.js.
+-->
+<link rel="stylesheet" type="text/css" href="exolve/exolve-m.css"/>
+<script src="exolve/exolve-m.js"></script>
+<title>Cryptic 2024-06 by Darren Miller</title>
+<style>
+	body {
+		font-family: "Gill Sans", Verdana, sans-serif;
+	}
+	@media print {
+		.extractButton, .checkPuzzleButton, .hintButton {
+		     visibility: hidden;
+		}
+	}
+</style>
+<link rel="stylesheet" type="text/css" href="exolve/dkm-popup.css"/>
+<script src="exolve/dkm-popup.js"></script>
+<script src="exolve/dkm-checker.js"></script>
+<script src="exolve/dkm-extractor.js"></script>
+</head>
+<body>
+<div id="popupModal" class="modal"></div>
+<div id='scroll-wrapper'><div id="exolve"></div>
+<script>
+
+var puzid = 'dkm-cryptic-202406';
+var exolveanswers = {
+	'A1':	'02f6ea12816a9e7b8ce846f149281b130033cf5145d260dfea7405bc8866ee1e',
+	'A5':	'eb0eb09cd2356d394a171eaa90abdb19134964aa1882daf893152fda17cf595f',
+	'A9':	'c9a81e8528c1bc6c1967c015fec49605c535b077ac975a0043f7b56992960b34',
+	'A11':	'efa414912b4b88a6ec1c8b2ab8f499370b1616202ad5ecc1151af8311f272a9b',
+	'A12':	'c92bcb2ea7bb84e1c56bd8e0f16b9f01fc8fb928de8ce5f71ca91cb84cc753dd',
+	'A13':	'ce6f58b18dab329a4f87955ceb9ee58f78c1843e71c11c837e387b36134bf75f',
+	'A15':	'11f5231c0dab726fe6d3acd2dca4e6acca7a1baaa5033079f8f9472ba8170bf0',
+	'A16':	'49b42d8ff02a373707d532df7e896651d786f4b948b18cc9488aecb30db84584',
+	'A18':	'6a3ff41ee4babaa2167a34c2db483f0d823adcb63877abea245a5dd1e84868b0',
+	'A20':	'd7b0bbea3a935222c4198c38e30b2eb3e111d11dea87fa53547eac1c8a4ff03b',
+	'A23':	'dcf3ce2f485322226f4be813e91fc539e632f91cccf6f1000c1b1b5bf52774ad',
+	'A26':	'0df0a1257f2f770c91726bf73ea5b7a0221a4dddf03df54916d124759a748e1e',
+	'A28':	'ba5481c5bee980dadc1959edb104a5582ac9a54f2192e00e7576398d6d7f8046',
+	'A30':	'3a90aa2e8e49c3a0400ce420f87fca88fec4b2ca2f6a6e1d67f7a1f6945775d7',
+	'A33':	'123531ac9646f17e309631dcf86611e9e3fc822e900b61b4e5fb2ee9a3c0a103',
+	'A34':	'98e81ee1810cdbfb7c0de8af34d7f8309d931416350c575755a170328984c853',
+	'A36':  'b33d981252c62c97704b4c2afffc3b05c6a8c7c760562fad02fd16f7ee154d09',
+	'A37':	'88edf6aae86e88ea75cbeaa92f8feb2aa739ec3014ed8dfeae0f8b4de3eab823',
+	'A38':	'a897e8a7619491e6bba5f89cd26f3d716f92ebb096a40b77f47da258121284dd',
+	'A39':	'697f11d8d5cc7b308e75f8f5dcf2678f9ab0b22a4ca8ad415f6d0d875db1e82f',
+	'A40':	'cbab39784cef16ab04fcad749d479550af09aef7e7f83627b307a5c1b4ee9bde',
+	'D1':	'733ce88c9ebd9f1c704d0dc143669bd75988b3f83262d6791ea2546b600cc227',
+	'D2':	'bb63edfd21fee738d050fb8f8d91037301713ddbc16c1180fb86b801b90b9704',
+	'D3':	'e6e1e4c2a7317dc73b6311e6da9b738178f2eb6663dea65c4cfea72d1b60c2a8',
+	'D4':	'4bcb24cbf54c68012ee0ccaee8df0f02f1233e80a4dd6e5acd4a9b9e84ddfec3',
+	'D6':	'5c4974ba69ca9c85c062695a78e0a9335e877094049fad5b281a409e15a34d22',
+	'D7':	'1575d99ef71c7709b3ef5f34c264f5f52b030883e1e79436e519157759e150db',
+	'D8':	'd590578b0bbe6d1b73bbd7cc5f8aa72aac36ead2cc18e8aca9ccb6fe916a0ecf',
+	'D10':	'4d7f6380d68c07d30a78482f17e173ba51e63b2d47a4b1912151f769bcf46b0a',
+	'D14':	'6049f15b49dd03237d72264188cfdcb2d834ae79d366ef1e255145dadec030fe',
+	'D17':	'fe2732f284dcc0424ad707ec9a22f6476c9bab8b26b996232780f79e779def7e',
+	'D19':	'cc6080c86703b41f5c6aad6198304d257a0026292d6ef38a01e8c4f6bb1b7307',
+	'D21':	'099d90cbee62f89e6478e153eb3240efcbe4ac2231bedc3e84549bbeaaba87e8',
+	'D22':	'cc1ff053ef4002132898807cb3b7b5db156e7c0da30f1d07f7b11b091a5dc00e',
+	'D24':	'bf85a96b9b78349af16ed6201c08bb32df669477dfe19823c49da31cb259fb03',
+	'D25':	'ddbde340b6cd8fed42a482dd9811a9aaf82c73c7e4cb47de53bb41fedad98c34',
+	'D27':	'32e2d3999f57f0345be1eaad96b8ee182397cc5ed81554b2323422bbf1031009',
+	'D29':	'4805402c3a023817890b59c337360cd8755671a2413ac56706bf2bbcf92db422',
+	'D31':	'05571939ced87070f8cd44c8cee84c7f665e95eeac04ac5b0703c70735df98b4',
+	'D32':	'60937d4eaa1a2e3b5312fa22ab1970c4ec7e090732c55779088569b8ec488e10',
+	'D33':	'665956740bd261132c6648ad9a8ab1a99c9c0f5698ad501e11756acab0f07b8c',
+	'D35':	'18ba5c477fc5ca4c4b9a37b84918a3710870993254bda2e99446119878ee046f'
+}
+
+var hinturl = '../../hints/Cryptic202406_hints.html';
+
+function customizeExolve(puz) {
+	if(typeof markedCells !== 'undefined') {
+		markupCells(puz, markedCells, 10, 6, 'darkgreen');
+  	puz.extractButton = addButton(puz, 'Extract cells', getMarkedCells);
+  }
+  if (Object.keys(exolveanswers).length) {
+  	puz.checkPuzzleButton = addButton(puz, 'Check puzzle', checkPuzzle);
+	}
+	if(typeof hinturl !== 'undefined') {
+ 		puz.hintButton = addButton(puz, 'Get hints', openHint);
+	}
+	
+	puz.clearArea.after(puz.currClue);
+	puz.resizeCurrClueAndControls = customResizeCurrClueAndControls;
+
+}
+
+customResizeCurrClueAndControls = function() {
+  const bPos = this.frame.getBoundingClientRect();
+  const gpPos = this.gridPanel.getBoundingClientRect();
+  const width = Math.max(this.maxCurrClueWidth, gpPos.width);
+  const widthPx = width + 'px';
+  this.controlsEtc.style.width = widthPx;
+  this.currClue.style.width = '100%';
+  /** 
+   * We can go from the top of the grid to the top of this.frame, leaving
+   * maybe 4 pixels (and any this.visTop) out.
+   */
+  const maxHeight = Math.max(80, (gpPos.top - bPos.top) - 4 - this.visTop);
+  this.currClue.style.maxHeight = maxHeight + 'px';
+  const ciPos = this.currClueInner.getBoundingClientRect();
+  const minHeight = Math.min(maxHeight, ciPos.height + this.topClueClearance);
+  this.currClue.style.minHeight = minHeight + 'px';
+  const cPos = this.currClue.getBoundingClientRect();
+  this.currClue.style.marginTop = '-' + cPos.height + 'px';
+
+  const gPos = this.gridParent.getBoundingClientRect();
+  const horOffset = (gPos.width >= width) ?
+    gPos.left : ((gpPos.width - width) / 2);
+  this.currClue.style.left = horOffset + 'px';
+}
+
+
+function markupCells(p, cells, ht, basewid, labelcolor='') {
+	for(let i=0; i<cells.length; i++) {
+		let coords = p.parseCellLocation(cells[i]);   // [row,col]
+		let wid = (i+1).toString().length*basewid+1;
+		let c = p.addCellText(coords[0], coords[1], (i+1), ht, wid, false, true);
+		c.style['stroke-width'] = 0.4;
+		if(labelcolor) {
+			c.style.stroke = labelcolor;	
+		}
+	}
+	
+	p.cellActivator(0,0); 
+}
+
+function openHint() {
+	if(hinturl) { window.open(hinturl, '_blank'); }
+}
+
+window.addEventListener('load', function () {
+window.puz = createExolve(`
+======REPLACE WITH YOUR PUZZLE BELOW======
+
+exolve-begin
+  exolve-id: dkm-cryptic-202406
+  exolve-title: Cryptic 2024-06
+  exolve-setter: Darren Miller
+  exolve-copyright: 2024 Darren Miller
+	exolve-credits: Testers: kitsovereign
+  exolve-width: 15
+  exolve-height: 15
+  exolve-preamble: 	
+  exolve-option: font-family:inherit
+	exolve-option: color-active:lightyellow
+	exolve-option: color-active-clue:lightyellow
+  exolve-option: color-input:lightblue color-arrow:lightyellow
+  exolve-option: color-light-label-input:white
+  exolve-option: color-light-text-input:white
+  exolve-option: color-overwritten-start:#FFF5EE
+  exolve-option: color-overwritten-end:	#FAF9F6
+  exolve-option: highlight-overwritten-seconds:0.05
+  exolve-option: color-button:blue color-button-hover:lightblue
+  exolve-option: hide-copy-placeholder-buttons
+  exolve-relabel:
+    clear: Clear this word
+    reveal: Show hint for method(s)
+  exolve-grid:
+		0 0 0 0 0 0 0 0 . 0 0 0 0 0 0 
+		0 . 0 . 0 . 0 . . . 0 . 0 . 0 
+		0 0 0 0 0 0 0 . 0 . 0 0 0 0 0 
+		0 . 0 . 0 . 0 0 0 0 0 . 0 . 0 
+		0 0 0 0 0 0 0 . 0 . 0 0 0 0 0 
+		0 . 0 . . 0 0 0 0 0 0 . 0 . . 
+		0 0 0 0 . 0 . 0 . . 0 0 0 0 0 
+		0 . . 0 0 0 0 0 0 0 0 0 . . 0 
+		0 0 0 0 0 . . 0 . 0 . 0 0 0 0 
+		. . 0 . 0 0 0 0 0 0 . . 0 . 0 
+		0 0 0 0 0 . 0 . 0 0 0 0 0 0 0 
+		0 . 0 . 0 0 0 0 0 . 0 . 0 . 0 
+		0 0 0 0 0 . 0 . 0 0 0 0 0 0 0 
+		0 . 0 . 0 . . . 0 . 0 . 0 . 0 
+		0 0 0 0 0 0 . 0 0 0 0 0 0 0 0 
+	exolve-across:
+		1  Smarts involving coasts of excellent locations&nbsp;(8)
+		5  Come to a war cut short by understanding&nbsp;(6)
+		9  Herb&#8217;s ego ran wild after premiere of Othello&nbsp;(7)
+		11  Wrapped up collection of fraud and embezzlement, having school&#8217;s leaders recalled&nbsp;(5)
+		12  Motormouth trashes every man without any love for honesty&nbsp;(5)
+		13  Commotion caused by vermin chasing headless thing&nbsp;(7)
+		15  Halt baseball early every so often&nbsp;(5)
+		16  Contents of teapot at Okinawa that may be hot or sweet&nbsp;(6)
+		18  Mix coal into a frothy, dark liquid&nbsp;(4)
+		20  Globe spun around noisily&nbsp;(5)
+		23  According to the Reverend, Father Mosey has a lot of opinions&nbsp;(5,4) (9)*
+		26  Gravelly river like empty parkway&nbsp;(5)
+		28  Tom perhaps mourned one departing westbound&nbsp;(4)
+		30  A psalm about life&#8209;giving fluid&nbsp;(6)
+		33  Police matter engages hard pursuit&nbsp;(5)
+		34  I cool down over hospital going away; it&#8217;s not right&nbsp;(7)
+		36  Distillation of lo&#8209;cal Coca-Cola color becomes kind of pink&nbsp;(5)
+		37  Setter bringing back help and news&nbsp;(5)
+		38  Those unable to leave matinees foolishly ignoring tip to escape&nbsp;(7)
+		39  Cleric picked up remedy after seven&nbsp;(6)
+		40  Doctor aced putt to get a silver ring?&nbsp;(4,4) (8)*
+	exolve-down:
+		1  Raptor&#8217;s flying around South Carolina &ndash; it goes fast&nbsp;(6,3) (9)*
+		2  The right guy, for the most part, can keep you warm&nbsp;(7)
+		3  Cross that is borne by Judas&nbsp;(5)
+		4  Go trot around Batman&#8217;s lair, maybe&nbsp;(6)
+		6  Was boy entertained by shriek in a tub?&nbsp;(8)
+		7  Discs stolen from fancy silk&#8209;screened cushion&nbsp;(7)
+		8  Sharp knife lacking sheath? Thank you!&nbsp;(5)
+		10  Big brass vessel on top of altar&nbsp;(4)
+		14  Pivoted, eliminating name on bottom of bumper sticker&nbsp;(4)
+		17  Ghost ultimately possesses dwelling places&nbsp;(5)
+		19  Reptile biting off head of stinging insect&nbsp;(3)
+		21  Retro part of school dance&nbsp;(3)
+		22  Confused maid sees tea inside a small cup&nbsp;(9)
+		24  Put into the same situation, dictator ran away taking frantic paces&nbsp;(8)
+		25  Circle and go round the track backwards to get a precious stone&nbsp;(4)
+		27  Mud and core of plasterboard supporting hollow shell&nbsp;(7)
+		29  Cheese, from attic or otherwise&nbsp;(7)
+		31  A lot of pimples having early sign of rash covering last bit of skin&nbsp;(4)
+		32  I am upset over falsehood on university setting&nbsp;(6)
+		33  Tailless rodents holding up business? That&#8217;s funny&nbsp;(5)
+		35  Some multi&#8209;millionaires brought up regulation&nbsp;(5)
+	exolve-end
+
+======REPLACE WITH YOUR PUZZLE ABOVE======
+`);
+})
+
+</script>
+<script src="exolve/dkm-exolve-utils.js"></script>
+</div>
+</body>
+</html>
