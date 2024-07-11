@@ -1,6 +1,8 @@
 var answer_hashes = {};
 var checklock = 0;
 var hashpromises = [];
+let autoCheckCorrect = false;
+
 
 function sha256hash(string) {
   const utf8 = new TextEncoder().encode(string);
@@ -21,7 +23,7 @@ function getLight(puz, clueIndex) {
   return light
 }
 
-function checkPuzzle() {
+function checkPuzzle(autoCheck=false) {
 
 	if(checklock) { return false; }
 	answer_hashes = {};
@@ -30,7 +32,7 @@ function checkPuzzle() {
 	var puz = exolvePuzzles[puzid];
 	
 	if(!puz) { return; }
-	showModal('Check puzzle', 'Checking...');
+	if(!autoCheck) { showModal('Check puzzle', 'Checking...'); }
 	checklock = 1;
 	const keys = Object.keys(exolveanswers);
 	var p;
@@ -53,11 +55,11 @@ function checkPuzzle() {
 		return false;
 	}
 
-	processAnswers();
+	processAnswers(autoCheck);
 	return false;
 }
 
-async function processAnswers() {
+async function processAnswers(autoCheck) {
 	
 	var incomplete_count = 0;
 	var incorrect_count = 0;
@@ -104,6 +106,19 @@ async function processAnswers() {
 		}
 		msg += '.';
 	}
-	showModal('Check puzzle', msg);
+	
+	checkShowModal(msg, autoCheck);
 	checklock = 0;
+	return msg;
+}
+
+function checkShowModal(msg, autoCheck) {
+	console.log(msg)
+	if(!autoCheck || msg == 'Correct!') { showModal('Check Puzzle', msg); }
+	autoCheckCorrect = (msg == 'Correct!');
+}
+
+function autoCheckPuzzle() {
+	if(autoCheckCorrect) { return; }
+	checkPuzzle(true);
 }
