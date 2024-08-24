@@ -11,7 +11,6 @@ See the full Exolve license notice in exolve-m.js.
 <link rel="stylesheet" type="text/css" href="exolve/exolve-m.css"/>
 <script src="exolve/exolve-m.js"></script>
 <title>Cryptic 2024-08 by Darren Miller</title>
-
 <style>
 	body {
 		font-family: "Gill Sans", Verdana, sans-serif;
@@ -26,7 +25,6 @@ See the full Exolve license notice in exolve-m.js.
 <script src="exolve/dkm-popup.js"></script>
 <script src="exolve/dkm-checker.js"></script>
 <script src="exolve/dkm-extractor.js"></script>
-<script src="exolve/dkm-decode.js"></script>
 </head>
 <body>
 <div id="popupModal" class="modal"></div>
@@ -69,82 +67,7 @@ var exolveanswers = {
 	'D26':	'dc6afcd3246a434da2b9dde29f6c68a5074cec0a83844fdd1fc92555df095f9b'	
 }
 
-// var hinturl = '../../hints/Cryptic202305_hints.html';
-
-const exolvedata = `
-	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
-`
+var hinturl = '../../hints/Cryptic202408_hints.html';
 
 function customizeExolve(puz) {
 	if(typeof markedCells !== 'undefined') {
@@ -160,9 +83,9 @@ function customizeExolve(puz) {
 	if(typeof hinturl !== 'undefined') {
  		puz.hintButton = addButton(puz, 'Get hints', openHint);
 	}
+	
 	puz.clearArea.after(puz.currClue);
 	puz.resizeCurrClueAndControls = customResizeCurrClueAndControls;
-
 }
 
 customResizeCurrClueAndControls = function() {
@@ -191,7 +114,6 @@ customResizeCurrClueAndControls = function() {
 }
 
 
-
 function markupCells(p, cells, ht, basewid, labelcolor='') {
 	for(let i=0; i<cells.length; i++) {
 		let coords = p.parseCellLocation(cells[i]);   // [row,col]
@@ -209,6 +131,89 @@ function markupCells(p, cells, ht, basewid, labelcolor='') {
 function openHint() {
 	if(hinturl) { window.open(hinturl, '_blank'); }
 }
+
+window.addEventListener('load', function () {
+window.puz = createExolve(`
+======REPLACE WITH YOUR PUZZLE BELOW======
+
+exolve-begin
+  exolve-id: dkm-cryptic-202408
+  exolve-title: Cryptic 2024-08
+  exolve-setter: Darren Miller
+  exolve-copyright: 2024 Darren Miller
+	exolve-credits: Testers: kitsovereign, Amy F
+  exolve-width: 15
+  exolve-height: 15
+  exolve-preamble: 	
+  exolve-option: font-family:inherit
+	exolve-option: color-active:lightyellow
+	exolve-option: color-active-clue:lightyellow
+  exolve-option: color-input:lightblue color-arrow:lightyellow
+  exolve-option: color-light-label-input:white
+  exolve-option: color-light-text-input:white
+  exolve-option: color-overwritten-start:#FFF5EE
+  exolve-option: color-overwritten-end:	#FAF9F6
+  exolve-option: highlight-overwritten-seconds:0.05
+  exolve-option: color-button:blue color-button-hover:lightblue
+  exolve-option: hide-copy-placeholder-buttons
+  exolve-relabel:
+    clear: Clear this word
+    reveal: Show hint for method(s)
+  exolve-grid:
+		 0 0 0 0 0 0 0 . 0 0 0 0 0 0 0 
+		 0 . 0 . 0 . 0 . 0 . 0 . 0 . 0 
+		 0 0 0 0 0 . 0 0 0 0 0 0 0 0 0 
+		 0 . 0 . 0 . 0 . 0 . 0 . 0 . 0 
+		 0 0 0 0 0 0 0 . 0 0 0 0 0 0 . 
+		 0 . 0 . . . 0 . 0 . 0 . 0 . 0 
+		 0 0 0 0 0 0 . 0 0 0 0 0 0 0 0 
+		 0 . . . 0 . 0 . 0 . 0 . . . 0 
+		 0 0 0 0 0 0 0 0 . 0 0 0 0 0 0 
+		 0 . 0 . 0 . 0 . 0 . . . 0 . 0 
+		 . 0 0 0 0 0 0 . 0 0 0 0 0 0 0 
+		 0 . 0 . 0 . 0 . 0 . 0 . 0 . 0 
+		 0 0 0 0 0 0 0 0 0 . 0 0 0 0 0 
+		 0 . 0 . 0 . 0 . 0 . 0 . 0 . 0 
+		 0 0 0 0 0 0 0 . 0 0 0 0 0 0 0 
+	exolve-across:
+		1  Most prestigious emblem&#8217;s centerpiece set in fancy stone&nbsp;(7)
+		5  Bishop Daniels regularly precedes one very loud constable&nbsp;(7)
+		9  Pull out some crab &ndash; or tuna?&nbsp;(5)
+		10  Made improvements to study at university? Perfect, if revolutionary&nbsp;(4&#8209;5) (9)*
+		11  Come between me and companion, crowding yours truly&nbsp;(7)
+		12  Small insect circling head of one that&#8217;s bald&nbsp;(6)
+		14  Top of swimsuit and a large thong&nbsp;(6)
+		16  Giddy lovers are missing ring &ndash; it&#8217;s a setback&nbsp;(8)
+		18  Exerted right, going for member parking without obligation&nbsp;(8)
+		20  Performing Act One immediately&nbsp;(2,4) (6)*
+		23  Urgent letter&#8217;s contents are delicate&nbsp;(6)
+		24  Every other tree&#8217;s cut by single female. Why? To set things right&nbsp;(7)
+		27  Overwhelmed, Dale hides in bed, eating pizzas, essentially&nbsp;(9)
+		28  Messenger turning tail in a corner&nbsp;(5)
+		29  Offer blessing for runny red nose&nbsp;(7)
+		30  Action stopped by half of finger, whatever that means?&nbsp;(7)
+	exolve-down:
+		1  Close calls of northeastern troops losing energy on southern enemies&#8217; borders&nbsp;(4,6) (10)*
+		2  Benjamin occupied by drive to expand&nbsp;(7)
+		3  Overly dramatic former partner brought up talent&nbsp;(5)
+		4  Joe trades piece of cake for tea that&#8217;s kind of sweet&nbsp;(6)
+		5  Threw out awful bean dish&nbsp;(8)
+		6  Silent type doesn&#8217;t react, hiding most of treasure&nbsp;(9)
+		7  Part of design: it essentially lights up&nbsp;(7)
+		8  Get pale bringing up the Medicare fee every so often&nbsp;(4)
+		13  Secret agent capturing Lee, that guy, and a director for one wanting to retire&nbsp;(10)
+		15  Spoil a prize pet with a little bite&nbsp;(9)
+		17  Gang flees from village green, rattled by sound of alarm&nbsp;(8)
+		19  Initially edited manuscript, eagerly nailing down each detail!&nbsp;(7)
+		21  Spooner said, &ldquo;Blast, nobody&#8217;s a sharp shooter?&rdquo;&nbsp;(4,3) (7)*
+		22  Ed takes on riding competition without finishing, becoming worn out&nbsp;(6)
+		25  Cold hotel with a furnace primarily full of rubbish&nbsp;(5)
+		26  Expert report of a strong market&nbsp;(4)
+	exolve-end
+
+======REPLACE WITH YOUR PUZZLE ABOVE======
+`);
+})
 
 </script>
 <script src="exolve/dkm-exolve-utils.js"></script>
