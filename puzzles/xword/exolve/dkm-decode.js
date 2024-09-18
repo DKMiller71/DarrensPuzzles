@@ -16,7 +16,7 @@ function loadexolve(exdata) {
 			if(exdata.match(/[^\s\x20-\x7E]/)) {
 			// bad characters or key didn't match
 		} else if(exdata.match(/exolve/)) {
-			createExolve(exdata);		
+			window.puz = createExolve(exdata);		
 		}
 }	}
 
