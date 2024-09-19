@@ -10,8 +10,7 @@ See the full Exolve license notice in exolve-m.js.
 -->
 <link rel="stylesheet" type="text/css" href="exolve/exolve-m.css"/>
 <script src="exolve/exolve-m.js"></script>
-<title>Cryptic 2024-09 by Darren Miller</title>
-
+<title>Cryptic 2024-09: Pugnacious Pirates by Darren Miller</title>
 <style>
 	body {
 		font-family: "Gill Sans", Verdana, sans-serif;
@@ -30,7 +29,6 @@ See the full Exolve license notice in exolve-m.js.
 <script src="exolve/dkm-checker.js"></script>
 <script src="exolve/dkm-extractor.js"></script>
 <script src="exolve/dkm-userhighlights.js"></script>
-<script src="exolve/dkm-decode.js"></script>
 </head>
 <body>
 <div id="popupModal" class="modal"></div>
@@ -39,141 +37,84 @@ See the full Exolve license notice in exolve-m.js.
 
 var puzid = 'dkm-cryptic-202409';
 var exolveanswers = {
-	'A1':	'6ce0f6c869b499c86a5f17bacf701ce80547b894cd380e1081459e81c61e465c',
-	'A5':	'12a1f04d81c42c062f99ec27bf2af4e72f5839d6c201396d039c2439dcefb6c1',
-	'A11':	'8d0472eee6d6d4c1c3349576dd75ad8f9f6b549d19fdddead38c109030a0f760',
+	'A1':	['6ce0f6c869b499c86a5f17bacf701ce80547b894cd380e1081459e81c61e465c',
+				'51037737e1d461a3be82561588ffa804f4502f624e7678ccc3ece3816571783a'],
+	'A5':	['12a1f04d81c42c062f99ec27bf2af4e72f5839d6c201396d039c2439dcefb6c1',
+				'a868871d416ece1975d7ac7068d3f0712866536648924ca2734d3527ff23513e'],
+	'A11':	['8d0472eee6d6d4c1c3349576dd75ad8f9f6b549d19fdddead38c109030a0f760',
+				'a8690d1effe20b4c768d038d090b026def4af5ba7317bda4f43c637fb6578ec4'],
 	'A12':	'bee7847d7cab66c93c735f7576cccf184386274680a24ef8166d030ccb0504ab',
-	'A14':	'61675f701b868e00905d2a03d615bd86332a571878b8abf8fae5228b48fc879a',
-	'A15':	'735c42bb1356b71b2d10698e1ca980953eeda2bfb51525d888260b2ee2815724',
-	'A16':	'9c1c5fd7e17326bdf5d980a11e6836747714e41914ce62454aadcb5d80108737',
-	'A17':	'018ecfd87d0802b8c67cc2ce189118e4f6d5fb06308afbcbc94259eb64a5b5b5',
-	'A18':	'353c0ebac44048e173502415ed8156a9f67659743f071f994e39e0539bc893fd',
+	'A14':	['61675f701b868e00905d2a03d615bd86332a571878b8abf8fae5228b48fc879a',
+				'd2c9ad5a5154edb3103cf88352b0b44a723e7b527e61519165bc068924375207'],
+	'A15':	['735c42bb1356b71b2d10698e1ca980953eeda2bfb51525d888260b2ee2815724',
+				'3a27a7db0a18deabe0029851016c2e400dadedd4d3bf001f731a488dddbb3e6c'],
+	'A16':	['9c1c5fd7e17326bdf5d980a11e6836747714e41914ce62454aadcb5d80108737',
+				'27b79bbf226eaa72b305e5cbe65d02521f6098cd1c50ea90a474aeec1e3f3324'],
+	'A17':	['018ecfd87d0802b8c67cc2ce189118e4f6d5fb06308afbcbc94259eb64a5b5b5',
+				'7fef8b13cd42b3b39b64c5f34d31bbe35f3fb8e5484b0eaac8714a629e9ae162'],
+	'A18':	['353c0ebac44048e173502415ed8156a9f67659743f071f994e39e0539bc893fd',
+				'beeabbdeb2ce51d888b8e6f79671f18f747cdc9faf6b6498d7a7e2a2932f7af1'],
 	'A19':	'badb43aad1d6dd20ec4e76779d94894cb3c9de34a8d504e7c56d8da415999961',
-	'A22':	'506cdf3d0cc525f67b2e24ba2e985984ab506d98779323492d6204a8d6911f15',
-	'A25':	'e087239bc9aad48132e6fde49a6902e105fb99ffbfc59b4cb68b082d2c16c84c',
-	'A28':	'ab3bcd11468350b70bdd8558774535b81b4ff742e7f5765d611aadea43e6b095',
-	'A31':	'2e5d8b60a0c88951032c9e3045dc2a3725a1b7a8ace0c09f851da4e4054f5066',
-	'A32':	'8917d001bf7b0999052d72a68b05a04e8ebfbf2be774ab33720eec542a4c044c',
-	'A34':	'b549b6abe3f8c990d198ddb2261121883c652e23899802c5f1b2c4964c629f68',
-	'A35':	'5392aa8d409984639948b8cf6cdecc878531182eedff66e551da40f373f1fe4a',
-	'A36':	'b28393ba29459454bc2cb01a2fbefceb21993c08c01903280cec594725d46b2a',
+	'A22':	['506cdf3d0cc525f67b2e24ba2e985984ab506d98779323492d6204a8d6911f15',
+				'd5beeda05881d647a8a23d534f63940336b94473f3aff422c780bc93418c8119'],
+	'A25':	['e087239bc9aad48132e6fde49a6902e105fb99ffbfc59b4cb68b082d2c16c84c',
+				'ad06e7576bcb31bf1d86b27897d63bf4a3e90b6b81e7edd999c3c113db513aa8'],
+	'A28':	['ab3bcd11468350b70bdd8558774535b81b4ff742e7f5765d611aadea43e6b095',
+				'ea02ea47dbc772192964d25516a4ade168b663b2385f87ad32aea7d49739afe4'],
+	'A31':	['2e5d8b60a0c88951032c9e3045dc2a3725a1b7a8ace0c09f851da4e4054f5066',
+				'ba593d93930d1f9ba662a750ce41a75dd508d6ea259582d41146e7a6c11edd76'],
+	'A32':	['8917d001bf7b0999052d72a68b05a04e8ebfbf2be774ab33720eec542a4c044c',
+				'379dfacad5c3e3209436864a3141d759b1352b342bd380674d56cf5ce304581b'],
+	'A34':	['b549b6abe3f8c990d198ddb2261121883c652e23899802c5f1b2c4964c629f68',
+				'aefc2733dd9e53bc232f7079ad942c2acba59eea3a0c1afe1be310fa3024d17f'],
+	'A35':	['5392aa8d409984639948b8cf6cdecc878531182eedff66e551da40f373f1fe4a',
+				'431bbb8b4d590ef2e00e0ef2e72750528349b642b9958fb1f47988a29fed7c97'],
+	'A36':	['b28393ba29459454bc2cb01a2fbefceb21993c08c01903280cec594725d46b2a',
+				'bc3ea2a6591a36bea50d412d7aa7dc09ad6d73ef000ed6269e789af31dc2a3a7'],
 	'A37':	'07337d0a4c989585ca1fab875012bfeccecda9d5ebcd030f12686072e5bece5e',
-	'A38':	'6acd9e97df272ec898fa6f53f1233914b71489d5b2cefb7f8c94fdbd3100ba46',
-	'D2':	'15a8ab813540290b09fd925a423e5c0643c9bedf0b9360cb2430906e9fb4dd9a',
-	'D3':	'320a4f49d389dc3221dbb04504df523e3bf911a5de102c3b4fad4a3a48a48e46',
-	'D4':	'39cff4d9bf0a1e31b08bee28ceebccae1c00808a2484d775c971b327b217d7fc',
-	'D6':	'4b3eb7564b2648a5d056b587c4e2deaabac0a6249e62318c95707765aab4a9b9',
-	'D7':	'4c7a324a28d87c63b9b9090e4ba75bde202e268abe053cff1f9e7f1bb803c653',
-	'D8':	'5be33d134e8724bac30e9153bda6e157cbef563fc647baa956574b77fe695a08',
+	'A38':	['6acd9e97df272ec898fa6f53f1233914b71489d5b2cefb7f8c94fdbd3100ba46',
+				'ef9ccc1027b719b8addf2539570712586e0e4890ab60a701fdb5f1be2faa1934'],
+	'D2':	['15a8ab813540290b09fd925a423e5c0643c9bedf0b9360cb2430906e9fb4dd9a',
+				'1d96fb3da562c5e7e948baa01ca2290e6a7067f3cb953715543098adda64d175'],
+	'D3':	['320a4f49d389dc3221dbb04504df523e3bf911a5de102c3b4fad4a3a48a48e46',
+				'4c54f6a03eb6400dcb446a72417577339f1d7f52245ddbf78ec96e5886460d37'],
+	'D4':	['39cff4d9bf0a1e31b08bee28ceebccae1c00808a2484d775c971b327b217d7fc',
+				'a14fb0a4a35d36cfc40cbcdcdfc41fd0f16e4ea581155ce030c06311baa6e4b3'],
+	'D6':	['4b3eb7564b2648a5d056b587c4e2deaabac0a6249e62318c95707765aab4a9b9',
+				'22576f6e4fcd95328b3461dd540c7db76709d130dc9d76039c7246a6bc3be608'],
+	'D7':	['4c7a324a28d87c63b9b9090e4ba75bde202e268abe053cff1f9e7f1bb803c653',
+				'aec1bc4c151a8759ba014dd120e4719fc48384dbe9cb2833bea7684df58e06d8'],
+	'D8':	['5be33d134e8724bac30e9153bda6e157cbef563fc647baa956574b77fe695a08',
+				'5c5a1bf5f9dcab3fb11b71efd81f3b9b636f14acc07886ae13a4ba4cce090726'],
 	'D9':	'9604ba2b426470d79f8fb67535e25a21a569d3f9a5a6d5b2b0b55465e5013bd7',
-	'D10':	'40bea8f958bc5c551a90fb13c93a55b54dbe2a29edf5c7c18ae3d94c78fb956a',
+	'D10':	['40bea8f958bc5c551a90fb13c93a55b54dbe2a29edf5c7c18ae3d94c78fb956a',
+				'7f22bbcddbafb1e10eaa357f43be92dd13e790c9ba1b1c07064839d125de8ba3'],
 	'D11':	'5adfabaf0034944241e990102d633da1570763930acbb84213b8552bd393a17c',
-	'D13':	'6a4dcc5bf8f8d5160f151dbf315ea94ef756d735a267500b09ee57a51f559611',
-	'D20':	'47e3b15f086604e32dd2c76a24f51cfc9a4d56b1233b8c72e666a945fda5edc6',
+	'D13':	['6a4dcc5bf8f8d5160f151dbf315ea94ef756d735a267500b09ee57a51f559611',
+				'2da13928a467905899239a7acc681522c24a57dd95a4145840242a20328ec884'],
+	'D20':	['47e3b15f086604e32dd2c76a24f51cfc9a4d56b1233b8c72e666a945fda5edc6',
+				'43514d7516e708e1af3df929ac97809c54377274255859eca259c589253ecf67'],
 	'D21':	'3f9fae89c65caa40842a5f075789e2def36f430325f901021d1a40e65bb5e712',
-	'D23':	'54b7dd2959c8d0c1bc52f1062b3a3014f68057766af3e15983c3fea1c87c8493',
-	'D24':	'b7addd0d414eaad7266c3c1823a09f33da7921df2997c3cc49bbc4c8f5f2cc3b',
-	'D26':	'b8d132860cb6af09c6e34df6a75a3b14ad080b1849cd5180fed487892501a844',
-	'D27':	'44f04223798967ec8169799219058ccc29250b9ce4a0b8a1111454a9af1a9aae',
-	'D28':	'1e467a743bac07136c55410094b20e2af4eb0dd04f4077520957931081378d42',
-	'D29':	'048f0f8007da975a94377c3f367f4dd2aa4fe02aba6307c87082aa5e05547f7e',
-	'D30':	'd830a8cc1b1ff117a98b7e9124b42095e23d0703801e22ed160069c94e245a3a',
-	'D33':	'95872340aa76e0597b115e22840d83c179b16aa938cc5217d1a2a551de5394c3'
+	'D23':	['54b7dd2959c8d0c1bc52f1062b3a3014f68057766af3e15983c3fea1c87c8493',
+				'9523f19d5c4a0618492b4c2b7e769bb21322334c1520980575a115264d516b03'],
+	'D24':	['b7addd0d414eaad7266c3c1823a09f33da7921df2997c3cc49bbc4c8f5f2cc3b',
+				'95962deb3b3cb7beb4cd6edfe6c1a868969f16e28ddee48588b75e88a8c0fe33'],
+	'D26':	['b8d132860cb6af09c6e34df6a75a3b14ad080b1849cd5180fed487892501a844',
+				'e33a16b99e94d5c77c8c30a959db47893e5b5615dab8568d33112eba1169f614'],
+	'D27':	['44f04223798967ec8169799219058ccc29250b9ce4a0b8a1111454a9af1a9aae',
+				'61150127b0b70058ac5e5cd3090d04792ce031f82f449b0cd1c02138d2e7ffca'],
+	'D28':	['1e467a743bac07136c55410094b20e2af4eb0dd04f4077520957931081378d42',
+				'ea97604cbdf84f54980e5bd1fa6c6af47a458dbfd748373e0c253e6177a977f2'],
+	'D29':	['048f0f8007da975a94377c3f367f4dd2aa4fe02aba6307c87082aa5e05547f7e',
+				'1a9062e543281e5c15fe1fe6aa298344f8d947f782641d7e3d1c782efdf94272'],
+	'D30':	['d830a8cc1b1ff117a98b7e9124b42095e23d0703801e22ed160069c94e245a3a',
+				'605785889115d22783070764149e511f1a5ccdb7316c4838e8673f7a73097c3b'],
+	'D33':	['95872340aa76e0597b115e22840d83c179b16aa938cc5217d1a2a551de5394c3',
+				'db990fca615ce328c4b8a9ca0e22be450f252510a68eae17ee91f77e0efb1d0a']
 }
 
-// var hinturl = '../../hints/Cryptic202305_hints.html';
+var hinturl = '../../hints/Cryptic202409_hints.html';
 
-const exolvedata = `
-	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
-`
 function customizeExolve(puz) {
 	if(typeof markedCells !== 'undefined') {
 		markupCells(puz, markedCells, 10, 6, 'darkgreen');
@@ -188,6 +129,7 @@ function customizeExolve(puz) {
 	if(typeof hinturl !== 'undefined') {
  		puz.hintButton = addButton(puz, 'Get hints', openHint);
 	}
+	
 	puz.clearArea.after(puz.currClue);
 	puz.resizeCurrClueAndControls = customResizeCurrClueAndControls;
 
@@ -241,6 +183,102 @@ function markupCells(p, cells, ht, basewid, labelcolor='') {
 function openHint() {
 	if(hinturl) { window.open(hinturl, '_blank'); }
 }
+
+window.addEventListener('load', function () {
+window.puz = createExolve(`
+======REPLACE WITH YOUR PUZZLE BELOW======
+
+exolve-begin
+  exolve-id: dkm-cryptic-202409
+  exolve-title: Cryptic 2024-09: Pugnacious Pirates
+  exolve-setter: Darren Miller
+  exolve-copyright: 2024 Darren Miller
+	exolve-credits: Testers: Daranatius, JesseM, AmyF, MattK
+  exolve-width: 12
+  exolve-height: 12
+  exolve-preamble: 	
+  exolve-preamble:
+  	<p>Pirates live a life of turmoil and conflict. They can&#8217;t even get along in the puzzle below. 
+  	Maybe you can help them find a middle ground &mdash; but what will you need to get your point across? (7)</p>
+  	<p>Most entries (not all) will have challenges going into the grid.<span class='xlv-dont-print'> You can toggle highlighting cells of interest with the 1 key. The answer checker may give confusing results too.</span></p>
+  	<p>You can check your final answer at
+		<span class='xlv-dont-print'><a href='https://darrenspuzzles.blogspot.com/2024/09/cryptic-2024-09.html' title='Go to Darren&apos;s Puzzles blog' target='_blank'>Darren&apos;s Puzzles blog</a>.</span>
+  	<span class='xlv-only-print'>https://darrenspuzzles.blogspot.com/2024/09/cryptic-2024-09.html</span></p>
+	exolve-cell-size: 32 32
+	exolve-option: font-family:inherit
+  exolve-option: font-family:inherit
+	exolve-option: color-active:lightyellow
+	exolve-option: color-active-clue:lightyellow
+  exolve-option: color-input:#BDB5D5 color-arrow:lightyellow
+  exolve-option: color-light-label-input:white
+  exolve-option: color-light-text-input:white
+  exolve-option: color-overwritten-start:#FFF5EE
+  exolve-option: color-overwritten-end:	#FAF9F6
+  exolve-option: highlight-overwritten-seconds:0.05
+  exolve-option: color-button:#630330 color-button-hover:#800080
+  exolve-option: hide-copy-placeholder-buttons
+  exolve-relabel:
+    clear: Clear this word
+    reveal: Show hint for method(s)
+  exolve-grid:
+		0_0 0_0 0|0_0 0 0_0|0|0 
+		0 0 0_0 0 0_0|0|0_0 0 0 
+		0|0|0|0|0|0_0 0 0_0|0|0 
+		0 0 0 0_0 0+0|0 0_0 0 0 
+		0+0|0|0_0 0_0 0_0_0+0|0_
+		0_0_0 0+0|0_0_0 0_0 0_0_
+		0_0 0_0_0_0 0+0|0_0 0 0_
+		0|0|0 0_0 0 0_0 0+0|0|0 
+		0 0 0 0_0|0|0_0 0 0 0 0 
+		0|0|0 0_0 0 0+0|0|0+0|0 
+		0 0 0 0+0|0 0_0 0 0_0 0_
+		0|0|0 0 0 0 0|0 0 0 0 0 
+	exolve-across:
+		1  Large, angry male guarding capital of Poland&nbsp;(5)
+		5  Scare crab away from scrapbook&nbsp;(5)
+		11  One who clarifies can be mediator in critical location?&nbsp;(7)
+		12  Reported escape of a bloody pest&nbsp;(4)
+		14  Old article covering return of bombastic actor to Midwestern city&nbsp;(5)
+		15  Silly farce about a pitcher&nbsp;(6)
+		16  Left bow with tree&nbsp;(5)
+		17  Curt and the French ejected from rowdy burlesque&nbsp;(7)
+		18  Empty keg trapping urchin&nbsp;(4)
+		19  Computer department leader&#8217;s head of finance becoming surly, essentially more irritating&nbsp;(7)
+		22  Work out after a bishop&#8217;s release&nbsp;(7)
+		25  Lying about first signs of extreme heat causes angry throbbing&nbsp;(4)
+		28  Mistakenly used van of those who are lost&nbsp;(7)
+		31  Oddly, guitar note is very high&nbsp;(5)
+		32  Old female horse taking half&#8209;turn&nbsp;(6)
+		34  Typical: nonchalant, you coming in for the first nip of alcohol, topless&nbsp;(5)
+		35  Eric cleared out? No returns at any time&nbsp;(4)
+		36  Daughter steers around final course&nbsp;(7)
+		37  Proceed with tense duel out of bounds&nbsp;(5)
+		38  Charlie and I avoiding robbery of treasure box&nbsp;(5)
+	exolve-down:
+		2  Sickness of boy hiding in can&nbsp;(6)
+		3  Bread provided by hospitality&nbsp;(4)
+		4  Trap husband in shabby rental&nbsp;(7)
+		6  Father&#8217;s distillation of prettiest stepsister&#8217;s spirits&nbsp;(6)
+		7  Ring with pearls, no emeralds nor rubies at first, and other gems&nbsp;(5)
+		8  Look angrily at excessive brilliance&nbsp;(5)
+		9  Deliverance from awful curse and curse&#8217;s outcome&nbsp;(6)
+		10  Spooner said, &ldquo;Jan, bow to get an instrument&rdquo;&nbsp;(5)
+		11  Metal, perhaps at the edges of roadblock&nbsp;(4)
+		13  Dances with men swapping places with women in fronts of ships&nbsp;(5)
+		20  Scrub dirty lances with piece of emery&nbsp;(7)
+		21  Freeze over nice cup without lids&nbsp;(3,2) (5)*
+		23  Boy staggers to flying machines&nbsp;(6)
+		24  Mark and Ursula, initially inspired by a place of paradise&nbsp;(6)
+		26  Every so often, major user group roasts panelists&nbsp;(6)
+		27  Victor&#8217;s ignoring court, struggling with shade&nbsp;(5)
+		28  Lithium turns into gold in section of cheek&nbsp;(5)
+		29  Eye problems caused by designs without luminance&nbsp;(5)
+		30  Bark from half of yellow pine&#8217;s top&nbsp;(4)
+		33  Charge for marsh plant&nbsp;(4)
+	exolve-end
+======REPLACE WITH YOUR PUZZLE ABOVE======
+`);
+})
 
 </script>
 <script src="exolve/dkm-exolve-utils.js"></script>
