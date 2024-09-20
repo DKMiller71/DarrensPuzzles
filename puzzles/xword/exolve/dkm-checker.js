@@ -17,6 +17,7 @@ function sha256hash(string) {
 
 function getLight(puz, clueIndex) {
   let light = ''
+  console.log(clueIndex)
   for (let rowcol of puz.clues[clueIndex].cells) {
     light = light + puz.grid[rowcol[0]][rowcol[1]].currLetter
   }
@@ -79,7 +80,13 @@ async function processAnswers(autoCheck) {
 			if(ans == '') {
 				incomplete_count++;
 			} else {
-				if(ans != exolveanswers[keys[k]]) {
+				if(Array.isArray(exolveanswers[keys[k]])) {
+					if(!exolveanswers[keys[k]].includes(ans)) {
+						if(incorrect_count) { incorrect_msg +=', '; }
+						incorrect_msg += keys[k];
+						incorrect_count++;		
+					}
+				} else if(ans != exolveanswers[keys[k]]) {
 					if(incorrect_count) { incorrect_msg +=', '; }
 					incorrect_msg += keys[k];
 					incorrect_count++;
