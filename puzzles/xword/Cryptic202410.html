@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!--
+MIT License
+Copyright (c) 2019 Viresh Ratnakar
+See the full Exolve license notice in exolve-m.js.
+-->
+<link rel="stylesheet" type="text/css" href="exolve/exolve-m.css"/>
+<script src="exolve/exolve-m.js"></script>
+<title>Cryptic 2024-10: Haunted House by Darren Miller</title>
+<style>
+	body {
+		font-family: "Gill Sans", sans-serif;
+		background: rgb(200,200,200);
+		background: linear-gradient(10deg, rgba(210,210,210,1) 0%, rgba(160,160,160,1) 16%, rgba(220,200,200,1) 20%, rgba(255,255,255,1) 35%, rgba(200,200,200,1) 83%, rgba(60,60,60,1) 90%, rgba(20,20,20) 95%, rgba(10,10,10,1) 100%);
+	}
+	h2 {
+		text-shadow:	0px 0px 30px white,
+		 							0px 0px 30px orange,
+		 							0px 0px 30px yellow,
+		 							0px 0px 10px #553300,
+		 							0px 0px 10px white;
+	}
+	.xlv-setter {
+		text-shadow:	0px 0px 30px white,
+									0px 0px 10px white;
+	}
+	.xlv-frame {
+		background-color: #fff;
+		background-color: rgba(255,255,255,0.05);
+	}
+	#xlv1-preamble {
+		background-color: #fff;
+		background-color: rgba(255,255,255,0.1);
+	}
+	#xlv1-reveal {
+		visibility: hidden;
+	}
+	@media print {
+		.extractButton, .checkPuzzleButton, .hintButton {
+		     visibility: hidden;
+		}
+	}
+</style>
+<link rel="stylesheet" type="text/css" href="exolve/dkm-popup.css"/>
+<script src="exolve/dkm-popup.js"></script>
+<script src="exolve/dkm-checker.js"></script>
+<script src="exolve/dkm-extractor.js"></script>
+<script src="exolve/dkm-userhighlights.js"></script>
+</head>
+<body>
+<div id="popupModal" class="modal"></div>
+<div id='scroll-wrapper'><div id="exolve"></div>
+<script>
+
+var puzid = 'dkm-cryptic-202410';
+var exolveanswers = {
+	'A2':	'081e414b181d769cb4491fdeec1c67798429d96e5e223de5279a6c4ca23ef3e4',
+	'A5':	'410d1c68e84d0d482bb3e28f0f9b91b170be5ef5e0a398ea194ae212ded35c2b',
+	'A7':	'c131a2d2518ca5db2df3cc03a8eb36514e714c2e5eb32ac9cf45660e2ff3b9b7',
+	'A10':	'5ecea0fdfe14d3a860bf621aaf696e3cac81392df62a2aa87e4185853e99cf64',
+	'A12':	'85394732e141bbd5689745acd0a6a409770d687ed1e7f9897574377898f6876d',
+	'A13':	'3976ed014f073234c0afecfae0b2af0678ddad7fa2d29bb6192eb4ac887fcca5',
+	'A14':	'39ade9d9af38ad5b66fe0ec3b592a72af4d71077a014afbae608c3179d53f057',
+	'A16':	'012017138717015528f7cd7e6b73ebcf87dcb79a904754e9c415573d05ce6f6b',
+	'A18':	'f81c275d3b7c0d84d21d3a1fc1c002c8c92650c3cba34ff6bcb2ca90e34c6dea',
+	'A20':	'23278f9c03cc25722c958a2f4230423ec0ef72629a0ec5e1094296550c6cdc8b',
+	'A21':	'6ad7b15e1436938d041176e01986194f67450f1d7aaa4aacf386c31b9f6122a1',
+	'A23':	'10e86db09b0d8aec23db2e1361605bb4d874cbd7aab5c34edf16dbac2ede1349',
+	'A25':	'2667c39f04cdbdc65f359548928e9017ad09754be6c4a3be84db83a25909540c',
+	'A27':	'b85ef009712df281de282344832f70b57edda9331cc04c27ba6198d96b75afa0',
+	'A30':	'444e997c2cefcff191c6dcaf2f4853ced5a8f7b695bf5b76eebea5a3bbf3069a',
+	'A32':	'2f9acb02faa121bb2a3621951f57b4c690655337edee2e5ac350be2b3be88ea8',
+	'A34':	'1d6c32eb2245e717e676094c16f87450b8468a5e996a444041a0f1694fa97871',
+	'A36':	'5ffa7441c22e34b7c30f73e62bd3a0e02a30f39ceec1e156513b865e5550bf11',
+	'A37':	'aa7df7436b8b48246b3fc2b391dc09441a67a45df556cd3ad11ad021e2d915f5',
+	'A38':	'b5c7aed7cd2a308523e7d2847b7815909e864b2fd9c4ea88b00d35adb2ecdfd7',
+	'A39':	'a2adb4a3a01d40354142df7c393a3e7c8fdf822e1bbd88f13a1d9749c4c3f2f6',
+	'A41':	'b0944d70dbac1460a5818df33ae2cf2ec5ea678ebcc670faace703691ed6a516',
+	'A42':	'ea69fe17051b2d914f8a5fcf5cb9bb722d89ce5a345224e888ec76ea85c10af2',
+	'A43':	'90b501cb910b2cff3d469cc1395c7b40f47bdab541a6a95eaddd6755446281c8',
+	'A44':	'53e67eb85ce178ed6cb32da0af7f971d8f22aa065380a5114a16d8af53d123c5',
+	'D1':	'eab4fd789f4d46296712db9889958bd3188f2bc3a822c816dd6fff31d7aada25',
+	'D3':	'8550f340539484c0a7d9425bd20e5bfe51e0c49b123d04ca527614b250880953',
+	'D4':	'679eaac16659c013675081e715f7ef761bdd183f1d7f55d079eb46ad6e322ac5',
+	'D6':	'596005e18749250354730f8a8aae70417337c481d6e73ceee3386ab7240f635c',
+	'D8':	'e77e817ea4dc891930b10b7b8b5543cc1b79f2cbeeee84b0dcf68bbe3e0abde3',
+	'D9':	'd763e8757e7fecf10d82eee63f9d25ce0bd98acb5a89949016abe0eff867df98',
+	'D11':	'86dfd5d899ce505f1225db7c249d53c137b4e1d5e91316dc3c6a94b74d9aa46f',
+	'D15':	'7cd725be7de41047325a4a28da8f0ee622a6c20a1b6c699a49c9b084a25880d8',
+	'D17':	'dede26632723faa72d08bdf86880739254322cb5cd6bc9b3d0e93d42ea9abda8',
+	'D19':	'12fbf1145b3f29a65fbbf66ce69840539a09a09f39d7d42debd73e312e43862e',
+	'D20':	'd1ce643a3a3b64b061b053dbd40bec2caaf7899bbd89ee02caacfb6347f1cbca',
+	'D22':	'bee7847d7cab66c93c735f7576cccf184386274680a24ef8166d030ccb0504ab',
+	'D24':	'd8882cfcad453ed3e2766cfd243372eb6365b6f7107d166a09b2bd814a4919a6',
+	'D26':	'dfaf858f7f787bab6d436cdc394ab9ac921d32b0aca967a3596980a8905bba7d',
+	'D28':	'73275ebba2bc4984987bed149a2698119771b40d8bf1b76f669b763f7d1bb4ec',
+	'D29':	'8370d4a16e703497dd84eebd768fe716d73c452359c24a9da8b09b9de1d94c9e',
+	'D31':	'383d84f9b8510a8486c50d007e82662a78b729710b1b00172bc866d50c54fedc',
+	'D33':	'ef1880beaee794f69df0b6502ba21e9d85f281b0274c32ba42f2aa9dc5c46492',
+	'D35':	'5905b7a0cd6bdafbce3c4e45785499e04db1b2a561c887d74afb9ba6365f973e',
+	'D40':	'31f4d9308732b491b2d502ca8c5979a1f8f0a0972753c8b4573009ef35af0890'
+}
+
+var hinturl = '../../hints/Cryptic202410_hints.html';
+
+function customizeExolve(puz) {
+	redrawLinesForLightCells(puz, 'darkgreen', 'black');
+	if(typeof markedCells !== 'undefined') {
+		markupCells(puz, markedCells, 10, 6, 'darkgreen');
+  	puz.extractButton = addButton(puz, 'Extract cells', getMarkedCells);
+  }
+  if (Object.keys(exolveanswers).length) {
+  	puz.checkPuzzleButton = addButton(puz, 'Check puzzle', checkPuzzle);
+		document.addEventListener('exolve', function (e) {
+			autoCheckPuzzle();
+		});
+	}
+	if(typeof hinturl !== 'undefined') {
+ 		puz.hintButton = addButton(puz, 'Get hints', openHint);
+	}
+	
+	puz.clearArea.after(puz.currClue);
+	puz.resizeCurrClueAndControls = customResizeCurrClueAndControls;
+
+  puz.gridInput.addEventListener('keyup', handleToggleHighlight.bind(this, puz, '#2E8B57'));
+	restoreUserHighlights(puz,'#2E8B57')
+	puz.recolourCells = customRecolourCells
+	
+	puz.printFontMenu.value = 'other'
+	puz.printFontInput.value = '16px'
+}
+
+customResizeCurrClueAndControls = function() {
+  const bPos = this.frame.getBoundingClientRect();
+  const gpPos = this.gridPanel.getBoundingClientRect();
+  const width = Math.max(this.maxCurrClueWidth, gpPos.width);
+  const widthPx = width + 'px';
+  this.controlsEtc.style.width = widthPx;
+  this.currClue.style.width = '100%';
+  /** 
+   * We can go from the top of the grid to the top of this.frame, leaving
+   * maybe 4 pixels (and any this.visTop) out.
+   */
+  const maxHeight = Math.max(80, (gpPos.top - bPos.top) - 4 - this.visTop);
+  this.currClue.style.maxHeight = maxHeight + 'px';
+  const ciPos = this.currClueInner.getBoundingClientRect();
+  const minHeight = Math.min(maxHeight, ciPos.height + this.topClueClearance);
+  this.currClue.style.minHeight = minHeight + 'px';
+  const cPos = this.currClue.getBoundingClientRect();
+  this.currClue.style.marginTop = '-' + cPos.height + 'px';
+
+  const gPos = this.gridParent.getBoundingClientRect();
+  const horOffset = (gPos.width >= width) ?
+    gPos.left : ((gpPos.width - width) / 2);
+  this.currClue.style.left = horOffset + 'px';
+}
+
+function markupCells(p, cells, ht, basewid, labelcolor='') {
+	for(let i=0; i<cells.length; i++) {
+		let coords = p.parseCellLocation(cells[i]);   // [row,col]
+		let wid = (i+1).toString().length*basewid+1;
+		let c = p.addCellText(coords[0], coords[1], (i+1), ht, wid, false, true);
+		c.style['stroke-width'] = 0.4;
+		if(labelcolor) {
+			c.style.stroke = labelcolor;	
+		}
+	}
+	
+	p.cellActivator(0,0); 
+}
+
+function openHint() {
+	if(hinturl) { window.open(hinturl, '_blank'); }
+}
+
+window.addEventListener('load', function () {
+window.puz = createExolve(`
+======REPLACE WITH YOUR PUZZLE BELOW======
+
+exolve-begin
+  exolve-id: dkm-cryptic-202410
+  exolve-title: Cryptic 2024-10: Haunted House
+  exolve-setter: Darren Miller and Amy Fisher
+  exolve-copyright: 2024 Darren Miller and Amy Fisher
+	exolve-credits: 
+  exolve-width: 11
+  exolve-height: 14
+  exolve-preamble: 	
+  exolve-preamble:
+  	<P>The house below seems to be haunted with strange creatures walking through these walls! Who knows what else could be lurking within? (5)</P>
+  	<p>You can check your final answer at
+		<span class='xlv-dont-print'><a href='https://darrenspuzzles.blogspot.com/2024/10/cryptic-2024-10.html' title='Go to Darren&apos;s Puzzles blog' target='_blank'>Darren&apos;s Puzzles blog</a>.</span>
+  	<span class='xlv-only-print'>https://darrenspuzzles.blogspot.com/2024/10/cryptic-2024-10.html</span></p>
+	exolve-cell-size: 34 34
+	exolve-option: font-family:inherit
+ 	exolve-option: color-active:#ECFFDC
+	exolve-option: color-active-clue:#FFD580
+  exolve-option: color-input:#FFD580 color-arrow:#ECFFDC
+  exolve-option: color-light-label-input:white
+  exolve-option: color-light-text-input:white
+  exolve-option: color-separator:darkorange
+  exolve-option: color-overwritten-start:#FFF5EE
+  exolve-option: color-overwritten-end:	#FAF9F6
+  exolve-option: highlight-overwritten-seconds:0.05
+  exolve-option: color-button:#CC5500 color-button-hover:#800080
+  exolve-option: hide-copy-placeholder-buttons
+  exolve-option: color-background:transparent
+  exolve-relabel:
+    clear: Clear this word
+    reveal: Show hint for method(s)
+  exolve-grid:
+		. . . . . 0 . . . . . 
+		. . . 0_0 0 0 0_. . . 
+		. 0_0 0_0 0|0 0 0_0 . 
+		0_0 0 0_0|0 0 0 0_0 0_
+		0_0 0 0_0+0|0_0 0+0|0 
+		0_0 0_0|0_0 0 0 0_0 0 
+		0 0 0_0 0+0|0 0_0 0|0 
+		0 0_0 0|0_0_0 0_0 0 0 
+		0|0|0|0_0 0_0_0|0|0+0 
+		0 0 0 0_0 0 0+0 0_0 0 
+		0|0 0 0 0|0|0_0 0_0 0_
+		0 0 0_0|0 0 0+0 0 0 0_
+		0+0|0_0 0+0|0_0 0 0 0_
+		0 0 0 0 0 0|0 0 0 0 0 
+	exolve-across:
+		2  While skipping, he cuts half off flags&nbsp;(5)
+		5  Drop the database binary backup regularly&nbsp;(5)
+		7  Attila could be king and lady killer&nbsp;(4)
+		10  Smuggled in handbag: a pendant that&#8217;s wide open&nbsp;(5)
+		12  Wanting to spike gin cocktail&nbsp;(6)
+		13  I am pursuing study of tough material&nbsp;(5)
+		14  Remain lacking a pen&nbsp;(3)
+		16  Hot&#8209;shot browses oddly&nbsp;(4)
+		18  Magical antidote eliminating duke&#8217;s rust&nbsp;(3,4) (7)*
+		20  A medic entertains hospital on demand&nbsp;(2,3) (5)*
+		21  Bulk of robbery doesn&#8217;t begin&nbsp;(4)
+		23  Weakened, the French departing, coming back for Chuck perhaps?&nbsp;(4)
+		25  Movie darling to kick in with a lot of leg&nbsp;(7)
+		27  At first, angry villain cries in pain and swears&nbsp;(5)
+		30  Recklessly, Rambo infiltrates evacuated club to find terror device&nbsp;(3,4) (7)*
+		32  Permit treaty to replace Connecticut with ship&nbsp;(4)
+		34  Metal core of gizmo surrounded by carbon&nbsp;(4)
+		36  Clears tables to exercise inside empty buildings&nbsp;(5)
+		37  Captain Hook&#8217;s assistant returns from insane adventure finally&nbsp;(4)
+		38  Everything is appalling, essentially&nbsp;(3)
+		39  Move over cycling&nbsp;(4)
+		41  Lump from receding swamp&nbsp;(3)
+		42  Guide read aloud in card piles&nbsp;(5)
+		43  Restricts performances&nbsp;(6)
+		44  Tricks leader to retreat to find those in control&nbsp;(5)
+	exolve-down:
+		1  Demolish the panel; it&#8217;s a problem in the room&nbsp;(8)
+		3  Object to leaders of industry taking employee&#8217;s money&nbsp;(4)
+		4  Rising temperature hits the object in question&nbsp;(4)
+		6  Prohibits taverns with name covering top of receipt&nbsp;(4)
+		8  Naked quintet dances for free&nbsp;(5)
+		9  Kitten playing with diamonds made with needles&nbsp;(7)
+		11  Crystal god sees somehow without any eyes ultimately&nbsp;(5)
+		15  Hotel tosses out woman having an affair&nbsp;(7)
+		17  Pieces of airplane covering crash site?&nbsp;(4)
+		19  Laugh in the middle of trigger warning; soften up!&nbsp;(4)
+		20  Inflammation from nut taken from strange substances&nbsp;(7)
+		22  Rotating leaf produces jumping bug&nbsp;(4)
+		24  Every other jewelry item is unsettling&nbsp;(5)
+		26  Report has Matt getting dangerous substances shortly&nbsp;(6)
+		28  Victor brought up bacon endlessly in short list of words&nbsp;(5)
+		29  Rejects intro of script with jokes about Romeo&nbsp;(6)
+		31  Ponders spices&nbsp;(5)
+		33  Silly verse cut short&nbsp;(5)
+		35  Newton loses weight, gets gas&nbsp;(4)
+		40  Tribute to old Delaware&nbsp;(3)
+	exolve-end
+======REPLACE WITH YOUR PUZZLE ABOVE======
+`);
+})
+
+</script>
+<script src="exolve/dkm-exolve-utils.js"></script>
+</div>
+</body>
+</html>
