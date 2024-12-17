@@ -1,0 +1,97 @@
+/* https://codepen.io/MarkBoots/pen/abKGByO */
+
+@layer demo, bgpattern;
+
+@layer bgpattern{
+  [bgpattern]{
+    --pattern-size: 5vmin;
+    --pattern-color1: #FBFAE6; 
+    --pattern-color2: #639B76;
+    --pattern-color3: #ED5256;
+  }
+  [bgpattern="triangles"]{
+    background-color: var(--pattern-color1);
+    background-image: repeating-conic-gradient(
+      from 30deg, 
+      var(--pattern-color2) 0 60deg, 
+      transparent 0 120deg,
+      var(--pattern-color3) 0 180deg,
+      transparent 0 240deg
+    );
+    background-size: var(--pattern-size) calc((var(--pattern-size) * 1.732));
+  }
+  [bgpattern="stripes"]{
+    --pattern-angle: 135deg;
+    background-color: var(--pattern-color1);
+    background-image: repeating-linear-gradient(
+      var(--pattern-angle),
+      transparent 0 calc(var(--pattern-size) / 3),
+      var(--pattern-color2) 0 calc(var(--pattern-size) / 1.5),
+      var(--pattern-color3) 0 var(--pattern-size)
+    );
+  }
+  [bgpattern="chequered"]{
+    --pattern-angle: 0deg;
+    background-color: var(--pattern-color1);
+    background-image: 
+      repeating-linear-gradient(
+        calc(90deg - var(--pattern-angle) * -1),
+        transparent 0 calc(var(--pattern-size) / 2),
+        var(--pattern-color3) 0 var(--pattern-size)
+      ),
+      repeating-linear-gradient(
+        var(--pattern-angle),
+        transparent 0 calc(var(--pattern-size) / 2),
+        var(--pattern-color2) 0 var(--pattern-size)
+      );
+    background-blend-mode: multiply;
+  }
+  [bgpattern="dots"]{
+    --pattern-dot-size: 12.5%;
+    background-color: var(--pattern-color1);
+    background-image:
+      radial-gradient(
+        at 25% 25%,
+        var(--pattern-color2) 0 var(--pattern-dot-size),
+        transparent 0
+      ),
+      radial-gradient(
+        at 75% 75%,
+        var(--pattern-color3) 0 var(--pattern-dot-size),
+        transparent 0
+      );
+    background-size: var(--pattern-size)  var(--pattern-size)
+  }
+  [bgpattern="zigzag"]{
+    background-color: var(--pattern-color1);
+    background-image: 
+      linear-gradient(135deg, var(--pattern-color3) 25%, transparent 0),
+      linear-gradient(225deg, var(--pattern-color2) 25%, transparent 0),
+      linear-gradient(315deg, var(--pattern-color3) 25%, transparent 0),
+      linear-gradient(45deg, var(--pattern-color2) 25%, transparent 0);	
+    background-position: 
+      calc(var(--pattern-size) / -2) 0,
+      calc(var(--pattern-size) / -2) 0,
+      0 0, 0 0;
+    background-size: var(--pattern-size) var(--pattern-size);
+    
+  }
+}
+
+@layer demo {
+  * {box-sizing: border-box }
+  html, body { height: 100%; margin: 0 }
+  body { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(min(10rem,100%), 1fr)); 
+    padding: 2vmin;
+    gap: 2vmin;
+    background-color: #060606;
+  }
+ /*
+ div { 
+    box-shadow: inset 0 0 1vmin 0.25vmin rgb(0 0 0);
+    border-radius: 2vmin
+  }
+  */
+}
