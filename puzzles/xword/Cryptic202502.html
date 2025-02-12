@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!--
+MIT License
+Copyright (c) 2019 Viresh Ratnakar
+See the full Exolve license notice in exolve-m.js.
+-->
+<link rel="stylesheet" type="text/css" href="exolve/exolve-m.css"/>
+<script src="exolve/exolve-m.js"></script>
+<title>Cryptic 2025-02 by Darren Miller</title>
+
+<style>
+	body {
+		font-family: "Gill Sans", Verdana, sans-serif;
+	}
+	@media print {
+		.extractButton, .checkPuzzleButton, .hintButton {
+		     visibility: hidden;
+		}
+	}
+</style>
+<link rel="stylesheet" type="text/css" href="exolve/dkm-popup.css"/>
+<script src="exolve/dkm-popup.js"></script>
+<script src="exolve/dkm-checker.js"></script>
+<script src="exolve/dkm-extractor.js"></script>
+<script src="exolve/dkm-decode.js"></script>
+</head>
+<body>
+<div id="popupModal" class="modal"></div>
+<div id='scroll-wrapper'><div id="exolve"></div>
+<script>
+
+var puzid = 'dkm-cryptic-202502';
+var exolveanswers = {}
+
+// var hinturl = '../../hints/Cryptic202305_hints.html';
+
+const exolvedata = `
+	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
+	TopSUrUPyd
+`
+
+function customizeExolve(puz) {
+	if(typeof markedCells !== 'undefined') {
+		markupCells(puz, markedCells, 10, 6, 'darkgreen');
+  	puz.extractButton = addButton(puz, 'Extract cells', getMarkedCells);
+  }
+  if (Object.keys(exolveanswers).length) {
+  	puz.checkPuzzleButton = addButton(puz, 'Check puzzle', checkPuzzle);
+		document.addEventListener('exolve', function (e) {
+			autoCheckPuzzle();
+		});
+	}
+	if(typeof hinturl !== 'undefined') {
+ 		puz.hintButton = addButton(puz, 'Get hints', openHint);
+	}
+	puz.clearArea.after(puz.currClue);
+	puz.resizeCurrClueAndControls = customResizeCurrClueAndControls;
+
+}
+
+customResizeCurrClueAndControls = function() {
+  const bPos = this.frame.getBoundingClientRect();
+  const gpPos = this.gridPanel.getBoundingClientRect();
+  const width = Math.max(this.maxCurrClueWidth, gpPos.width);
+  const widthPx = width + 'px';
+  this.controlsEtc.style.width = widthPx;
+  this.currClue.style.width = '100%';
+  /** 
+   * We can go from the top of the grid to the top of this.frame, leaving
+   * maybe 4 pixels (and any this.visTop) out.
+   */
+  const maxHeight = Math.max(80, (gpPos.top - bPos.top) - 4 - this.visTop);
+  this.currClue.style.maxHeight = maxHeight + 'px';
+  const ciPos = this.currClueInner.getBoundingClientRect();
+  const minHeight = Math.min(maxHeight, ciPos.height + this.topClueClearance);
+  this.currClue.style.minHeight = minHeight + 'px';
+  const cPos = this.currClue.getBoundingClientRect();
+  this.currClue.style.marginTop = '-' + cPos.height + 'px';
+
+  const gPos = this.gridParent.getBoundingClientRect();
+  const horOffset = (gPos.width >= width) ?
+    gPos.left : ((gpPos.width - width) / 2);
+  this.currClue.style.left = horOffset + 'px';
+}
+
+
+
+function markupCells(p, cells, ht, basewid, labelcolor='') {
+	for(let i=0; i<cells.length; i++) {
+		let coords = p.parseCellLocation(cells[i]);   // [row,col]
+		let wid = (i+1).toString().length*basewid+1;
+		let c = p.addCellText(coords[0], coords[1], (i+1), ht, wid, false, true);
+		c.style['stroke-width'] = 0.4;
+		if(labelcolor) {
+			c.style.stroke = labelcolor;	
+		}
+	}
+	
+	p.cellActivator(0,0); 
+}
+
+function openHint() {
+	if(hinturl) { window.open(hinturl, '_blank'); }
+}
+
+</script>
+<script src="exolve/dkm-exolve-utils.js"></script>
+</div>
+</body>
+</html>
