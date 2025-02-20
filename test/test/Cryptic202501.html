@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="stylesheet" type="text/css" href="exolve/exolve-m.css"/>
+<script src="exolve/exolve-m.js"></script>
+<script src="exolve/Hex2Exolve.js"></script>
+<title>Cryptic 2025-01 by Darren Miller</title>
+</head>
+<body style="background-color:#f0f0ff;">
+><div id="exolve"></div>
+<script>
+var puzid = 'dkm-cryptic-202501';
+
+const exolvetemplate = `
+exolve-begin
+  exolve-id: dkm-cryptic-202501
+  exolve-title: Cryptic 2025-02
+  exolve-setter: Darren Miller
+  exolve-copyright: 2025 Darren Miller
+  exolve-credits:
+  exolve-preamble:  
+  exolve-option: font-family:inherit
+  exolve-option: color-active:lightyellow
+  exolve-option: color-active-clue:lightyellow
+  exolve-option: color-input:lightblue color-arrow:lightyellow
+  exolve-option: color-light-label-input:white
+  exolve-option: color-light-text-input:white
+  exolve-option: color-overwritten-start:#FFF5EE
+  exolve-option: color-overwritten-end:#FAF9F6
+  exolve-option: highlight-overwritten-seconds:0.05
+  exolve-option: color-button:blue color-button-hover:lightblue
+  exolve-option: override-number-GRIDLINE:0 offset-top:10 offset-left:10
+  exolve-option: color-background:transparent
+  exolve-grid-spacing: %COLWIDTH% %ROWHEIGHT%
+  exolve-cell-size: %CELLWIDTH% %CELLHEIGHT%
+  exolve-width: %WIDTH%
+  exolve-height: %HEIGHT%
+  exolve-shaped-cell: %SHAPE%
+%DECORATORS%
+  exolve-grid:
+%GRID%
+  exolve-nodir:%CLUES%
+exolve-end
+`
+const hexdata = `
+	separator-color:gray
+	separator-width:1
+	border-color:black
+	border-width:1
+	orient:v
+	directions:SO,NE,SE
+	hexside:25
+	grid:
+		.  .  .  .  .  .  P  .  .  .  .  .  .
+		.  .  .  .  .  .  .  .  .  .  .  .
+		.  .  .  .  G  .  L  .  A  .  .  .  .
+		.  .  .  .  .  L/ .  R/ .  .  .  .
+		.  .  S  .  I  .  E/ .  C/ .  L  .  .
+		.  .  .  M  .  .  .  .  .  A  .  .
+		U  .  A= .  A  .  N  .  T  .  K- .  R
+		.  P= .  .  .  R= .  O/ .  .  .  E
+		.  .  D  .  N= .  T  .  O/ .  Y- .  .
+		.  O= .  A= .  .  .  .  .  A/ .  E-
+		B= .  .  .  T  .  Y  .  R  .  .  .  S
+		.  L  .  C- .  E= .  P/ .  U- .  M-
+		.  .  E  .  .  .  .  .  .  .  R  .  .
+		.  L  .  N- .  Y- .  S- .  E- .  A
+		E  .  .  .  D  .  A^ .  T  .  .  .  L
+		.  Y- .  A- .  .  .  .  .  R- .  S=
+		.  .  E  .  R/ .  S  .  W= .  I= .  .
+		.  T- .  .  .  N/ .  U= .  .  .  K
+		S  .  H- .  A  .  P^ .  I  .  C= .  E
+		.  .  .  E  .  .  .  .  .  T= .  .
+		.  .  J- .  M  .  E  .  S  .  E  .  .
+		.  .  .  .  .  W/ .  A/ .  .  .  .
+		.  .  .  .  A  .  C/ .  T/ .  .  .  .
+		.  .  .  .  .  .  .  .  .  .  .  .
+		.  .  .  .  .  .  T  .  .  .  .  .  .
+	clues-NE-Up-Right:
+		5  Time involved in therapy&nbsp;(3)
+		7  Sick after Monday&#8217;s grind&nbsp;(4)
+		10  Tenor and alto confused everything&nbsp;(5)
+		14  Call for help from athlete going left to right&nbsp;(6)
+		17  In Spain, the alien bored by college is put into office&nbsp;(5)
+		20  Semesters basically!&nbsp;(5)
+		24  Stayed angry and resolute&nbsp;(6)
+		25  Strong pants: they&#8217;re handed down from parents, reportedly&nbsp;(5)
+		26  All of us following article with amazement&nbsp;(3)
+		27  Throw away mold&nbsp;(4)
+	clues-SE-Down-Right:
+		4  Polished museum features regularly with scrap of towel&nbsp;(5)
+		6  Sorry! Leaving Ayers Rock. Moving to Black Forest, maybe&nbsp;(4)
+		8  Press release from fantastic Pennsylvania duet&nbsp;(6)
+		11  You bet second, following you in the past&nbsp;(3)
+		12  Mixture of wind over lake&nbsp;(5)
+		13  Some popular Uruguayans returning to country&nbsp;(5)
+		16  Fancy skirt added to empty box&nbsp;(6)
+		17  Look both ways&nbsp;(3)
+		21  Batch of candy for the audience&nbsp;(5)
+		23  Unfinished melody for those people&nbsp;(4)
+	clues-SO-Down:
+		1  According to the Reverend, more than nine ask for excess&nbsp;(6)
+		2  Gnat flying around yours truly is huge&nbsp;(5)
+		3  Extract of lilac to relax someone with multiple personalities&nbsp;(5)
+		4  Followers of mass media misled and depressed&nbsp;(3)
+		9  Vote with tablet: one to nothing&nbsp;(4)
+		15  Camouflage skis Tammy brings up every so often&nbsp;(4)
+		18  Intense situation caused by a short man holding up doctor&nbsp;(5)
+		19  Feature of Netscape uncovered needing repair&nbsp;(6)
+		20  Unexpected outcome from twits turning tail&nbsp;(5)
+		22  Crystals found in centers of moist rocky reefs&nbsp;(3)
+`
+let exolvedata = ''
+
+window.addEventListener('load', function () {
+	exolvedata = getHex2Exolve(exolvetemplate, hexdata).replaceAll("\t","  ")
+	const e = document.createElement("xmp");
+	e.innerText = exolvedata;
+	e.style = "font-family: monospace;"
+	document.body.appendChild(e);
+	window.puz = createExolve(exolvedata)
+})
+
+const markedCells = [
+  'g25', 'e21', 'i21', 'k19',
+  'f14', 'c17', 'j14', 'h14',
+  'd14', 'h18', 'm11', 'e11',
+  'a15', 'c9',  'g11', 'f8',
+  'i5',  'j6',  'm7',  'f4'
+]
+
+function customizeExolve(puz) {
+	if(typeof markedCells !== 'undefined') {
+		markupCells(puz, markedCells, 10, 6, 'darkgreen');
+}}
+function markupCells(p, cells, ht, basewid, labelcolor='') {
+	for(let i=0; i<cells.length; i++) {
+		let coords = p.parseCellLocation(cells[i]);   // [row,col]
+		let wid = (i+1).toString().length*basewid+1;
+		let c = p.addCellText(coords[0], coords[1], (i+1), ht, wid, false, true);
+		c.style['stroke-width'] = 0.4;
+		if(labelcolor) {
+			c.style.stroke = labelcolor;	
+		}
+	}
+	
+	p.cellActivator(0,0); 
+}
+
+</script>
+</body>
+</html>

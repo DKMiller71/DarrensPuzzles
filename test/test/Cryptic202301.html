@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="stylesheet" type="text/css" href="exolve/exolve-m.css"/>
+<script src="exolve/exolve-m.js"></script>
+<script src="exolve/Hex2Exolve.js"></script>
+<title>Cryptic 2023-01 by Darren Miller</title>
+</head>
+<body style="background-color:#f0f0ff;">
+><div id="exolve"></div>
+<script>
+var puzid = 'dkm-cryptic-202301';
+
+const exolvetemplate = `
+exolve-begin
+  exolve-id: dkm-cryptic-202301
+  exolve-title: Cryptic 2023-02
+  exolve-setter: Darren Miller
+  exolve-copyright: 2023 Darren Miller
+  exolve-credits:
+  exolve-preamble:  
+  exolve-option: font-family:inherit
+  exolve-option: color-active:lightyellow
+  exolve-option: color-active-clue:lightyellow
+  exolve-option: color-input:lightblue color-arrow:lightyellow
+  exolve-option: color-light-label-input:white
+  exolve-option: color-light-text-input:white
+  exolve-option: color-overwritten-start:#FFF5EE
+  exolve-option: color-overwritten-end:#FAF9F6
+  exolve-option: highlight-overwritten-seconds:0.05
+  exolve-option: color-button:blue color-button-hover:lightblue
+  exolve-option: override-number-GRIDLINE:0 offset-top:10 offset-left:10
+  exolve-option: color-background:transparent
+  exolve-grid-spacing: %COLWIDTH% %ROWHEIGHT%
+  exolve-cell-size: %CELLWIDTH% %CELLHEIGHT%
+  exolve-width: %WIDTH%
+  exolve-height: %HEIGHT%
+  exolve-shaped-cell: %SHAPE%
+%DECORATORS%
+  exolve-grid:
+%GRID%
+  exolve-nodir:%CLUES%
+exolve-end
+`
+const hexdata = `
+	separator-color:gray
+	separator-width:1
+	border-color:black
+	border-width:1
+	orient:h
+	directions:EE,SE,SW
+	hexside:25
+	grid:
+		.  .  .  .  .  .  S  .  .  .  .  .  .  .  .  .  .  .  F  .  .  .  .  .  .
+		.  .  .  .  .  .  .  C  .  L  .  A  .  U  .  S  .  E  .  .  .  .  .  .  .  .
+		.  .  .  .  .  .  A  .  H> .  .  .  F  .  .  .  D< .  X| .  .  .  .  .  .
+		.  .  .  .  .  U  .  .  .  I= .  O< .  A> .  O| .  .  .  C  .  .  .  .  .  .
+		.  .  .  .  G  .  S> .  D| .  S| .  .  .  R  .  V> .  L| .  E| .  .  .  .
+		.  .  .  H  .  .  .  E  .  .  .  M  .  A| .  .  .  A  .  .  .  L  .  .  .  .
+		A  .  T  .  L/ .  A  .  S  .  T= .  .  .  S/ .  P  .  L  .  A= .  S  .  H
+		.  .  .  R= .  .  .  L  .  .  .  O/ .  C> .  .  .  E  .  .  .  A/ .  .  .  .
+		.  .  .  .  A= .  E| .  A| .  B| .  .  .  L  .  G| .  A| .  C| .  .  .  .
+		.  .  .  .  .  D  .  .  .  S| .  A| .  O| .  O| .  .  .  R  .  .  .  .  .  .
+		.  .  .  .  .  .  E  .  E| .  .  .  K  .  .  .  U  .  E| .  .  .  .  .  .
+		.  .  .  .  .  .  .  S  .  H/ .  I  .  E  .  L= .  D  .  .  .  .  .  .  .  .
+		.  .  .  .  .  .  S  .  .  .  .  .  .  .  .  .  .  .  Y  .  .  .  .  .  .
+	clues-EE-Across:
+		3  Listen to Santa&#8217;s subordinate, perhaps&nbsp;(6)
+		11  Finally remove top hat and scatter salt&nbsp;(2,4)
+		15  Empty pistol smuggled in waistband causes newspaper headline&nbsp;(6)
+		23  Protection from lid she tossed&nbsp;(6)
+	clues-SE-Down-Right:
+		1  South Carolina greeting by southern man causes disruption&nbsp;(6)
+		4  Nowhere near agnostic; following accepted religious principles&nbsp;(4)
+		6  Has-been pitches to the audience and does very well&nbsp;(6)
+		7  Inspired by housesitting applications&nbsp;(4)
+		9  Extremely overcritical of the President&#8217;s office, for example&nbsp;(4)
+		12  Exchanges hug from daughters by mistake&nbsp;(6)
+		13  Sending back cut greens? Too bad&nbsp;(4)
+		16  Bartlett, for one, denies starting ape war&nbsp;(4)
+		20  You, trapped in lump of earth. Why? It&#8217;s unclear&nbsp;(6)
+		21  Essential to grab a kettle to make cookies&nbsp;(4)
+	clues-SW-Down-Left:
+		2  Dome cover regularly found in field journal&nbsp;(6)
+		3  Trapped in a mushy hug in Connecticut&nbsp;(6)
+		5  Strange craft even in mud flows&nbsp;(4)
+		8  A diet without tea? Strange concept&nbsp;(4)
+		10  Friend came back to see a big hand&nbsp;(4)
+		14  Scout Leader was first to go downhill&nbsp;(4)
+		17  Entertained by little golden brick&nbsp;(4)
+		18  Rock CDs are heavenly&nbsp;(6)
+		19  Latest developments: the tyrannosaurus was chasing old boy&#8217;s hound&nbsp;(6)
+		22  Trickster narrates humble legend&nbsp;(4)
+`
+let exolvedata = ''
+
+window.addEventListener('load', function () {
+	exolvedata = getHex2Exolve(exolvetemplate, hexdata).replaceAll("\t","  ")
+	const e = document.createElement("xmp");
+	e.innerText = exolvedata;
+	e.style = "font-family: monospace;"
+	document.body.appendChild(e);
+	window.puz = createExolve(exolvedata)
+})
+
+</script>
+</body>
+</html>
