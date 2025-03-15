@@ -171,8 +171,8 @@ function markupCells(p, cells, ht, basewid, labelcolor='') {
 		let wid = (i+1).toString().length*basewid+1;
 		let c = p.addCellText(coords[0], coords[1], (i+1), ht, wid, false, true);
 		c.style['stroke-width'] = 0.4;
-		c.setAttribute('x', parseFloat(c.getAttribute('x'))+p.cellW/2-2);
-		c.setAttribute('y', parseFloat(c.getAttribute('y'))+6);
+//		c.setAttribute('x', parseFloat(c.getAttribute('x'))+p.cellW/2-2);
+		c.setAttribute('y', parseFloat(c.getAttribute('y'))-p.cellH/4+3);
 		if(labelcolor) {
 			c.style.stroke = labelcolor;	
 		}
@@ -180,6 +180,7 @@ function markupCells(p, cells, ht, basewid, labelcolor='') {
 	
 	p.cellActivator(0,0); 
 }
+
 
 function openHint() {
 	if(hinturl) { window.open(hinturl, '_blank'); }
