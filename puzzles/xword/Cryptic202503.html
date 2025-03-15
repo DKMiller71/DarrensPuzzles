@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!--
+MIT License
+Copyright (c) 2019 Viresh Ratnakar
+See the full Exolve license notice in exolve-m.js.
+-->
+<link rel="stylesheet" type="text/css" href="exolve/exolve-m.css"/>
+<script src="exolve/exolve-m.js"></script>
+<title>Cryptic 2025-03 by Darren Miller</title>
+
+<style>
+	body {
+		font-family: "Gill Sans", Verdana, sans-serif;
+	}
+	@media print {
+		.extractButton, .checkPuzzleButton, .hintButton {
+		     visibility: hidden;
+		}
+	}
+</style>
+<link rel="stylesheet" type="text/css" href="exolve/dkm-popup.css"/>
+<script src="exolve/dkm-popup.js"></script>
+<script src="exolve/dkm-checker.js"></script>
+<script src="exolve/dkm-extractor.js"></script>
+<script src="exolve/Hex2Exolve.js"></script>
+<script src="exolve/dkm-decode.js"></script>
+</head>
+<body>
+<div id="popupModal" class="modal"></div>
+<div id='scroll-wrapper'><div id="exolve"></div>
+<script>
+
+var puzid = 'dkm-cryptic-202503';
+var exolveanswers = {}
+
+// var hinturl = '../../hints/Cryptic202305_hints.html';
+
+const markedCells = [
+	'm7', 'n8', 'f8', 'c1', 'l6', 'b8', 'm9', 'l4',
+	'k1', 'b2', 'o7', 'j6', 'e3', 'q3', 'e7', 'p4',
+	'k3', 'o3', 'j4', 'd8', 'b4', 'g3', 'f4'
+]
+
+const exolvetemplate = `
+exolve-begin
+  exolve-id: dkm-cryptic-202503
+  exolve-title: Cryptic 2025-03
+  exolve-setter: Darren Miller
+  exolve-copyright: 2025 Darren Miller
+  exolve-credits:
+  exolve-preamble:
+  	You&#8217;ve found a four-leaf clover! Maybe you&#8217;re on the look out for these (6)
+  exolve-option: font-family:inherit
+  exolve-option: color-active:lightgreen
+  exolve-option: color-active-clue:lightgreen
+  exolve-option: color-input:darkgreen color-arrow:green
+  exolve-option: color-solved:#228B22
+  exolve-option: color-light-label-input:white
+  exolve-option: color-light-text-input:white
+  exolve-option: color-overwritten-start:#FFF5EE
+  exolve-option: color-overwritten-end:#FAF9F6
+  exolve-option: highlight-overwritten-seconds:0.05
+  exolve-option: color-button:green color-button-hover:lightgreen
+  exolve-option: override-number-GRIDLINE:0 offset-top:10 offset-left:10
+  exolve-option: color-background:transparent
+  exolve-grid-spacing: %COLWIDTH% %ROWHEIGHT%
+  exolve-cell-size: %CELLWIDTH% %CELLHEIGHT%
+  exolve-width: %WIDTH%
+  exolve-height: %HEIGHT%
+  exolve-shaped-cell: %SHAPE%
+%DECORATORS%
+  exolve-grid:
+%GRID%
+  exolve-nodir:%CLUES%
+exolve-end
+`
+const hexdata = `
+	/OHhjYLUaacKJ64HPQpQptRIX5USsX3UjeXtyXEWgy1HgUnL3NxPW/v03EDDIsybnCGqcW
+	fNfp4g4+4+EZM9UUZ1lyUHyRYYXD2AFQ851IKccAr7629SSBspgO0Pv2zf51YIaYQKZeQ5
+	gJmsVobJdxM2h9tLEnLb0FYvXmTvUUxqtUfNTXRlXErn6XY1AKUwb6vI7zwT3NyuMFyKAE
+	XqUuTPdim5CnhNW4BuezK7TKMTIBbqmbk7fqUrKWkSb4sBpuEzVIwi4EtE804bn3cNtGeR
+	QyZJFbxdBKwEZuHGzepqug1YmGXsUXi1Hb/lofWbdgM+ayj0CWGAxZt8ULitGLtsnZTAtN
+	EQtWIW8/yjPN6Jot4QEhD6y2xulvDkmGk9tf28qdlo+oyOE75dfMixIV/gzm8XVIjIFqq5
+	HMOxTM4VXklWdN0Yuu5UjvmL/3BdaE44LNmNONO1noRfzXst0fgJaAvCU/A3pXthUppdk3
+	Squ0ZEiumxoyPSONeZueBqXh3j3lXEBa/zf7exq4qqC6bja7aAJGcJbpn4o1MVDAjTfA4t
+	gq0SV7iEoMx1nqmAT93bYVooxLCxV3+BREnMAWzgX73akoD6ngvinFobg36NhVPsIlYqtI
+	/ux+Ju3KBCoHP4YOjF3UtWmRm2R9A/7SoSx9ib/UM/ez8saILyRFNuhmxIX2R3HsEQlROL
+	Yd+itFfHXe7qD8CTXPAg6j/RJJ30z2zUFk6YUfU1++MccMAjMlaH6kSDk16wXd0Lx2p6QN
+	VxZWJYcJq7+7KongF3xKKXRIQ5RCOaktNYzPQj2LIf2gCu+FLe6C7OePlKiNEYorSTEcFy
+	16XICTYAZIetEKLwvR3IqudAs09RlMurPUldgwyPeP39v9tJpvU/a+PvRQkUdBm/nYkuhD
+	l6g6yU5P+K5FvE/CylIcR+liINfZjvf7f3jjZYT7Sio2jrR0ajnzuWF5xC6lSam1w7TX1r
+	dxqhsGZnsa3YlNUIdAeFXGDIGg7jVvQxEPhwTDbvYIdDrIf8fATcIVn6EEDQCuFyUPJKIS
+	JF7CIL/zXMCj8YcgWwHse1Ibzg3SltPmLaJP+HGfqjTHzRY3q9ZqapFGFAqe8FKIyYObOE
+	DvajbXgPbKgRG6LVsZ9W/qDWnm2eUdpv2ygHxCiRK4q5rFdKD/trgUmi2QvfCGvFN3zS8h
+	7F19Jumwh2fzKz3J+TaezN8dqzkjgD482ffxRuZF3F12H+CCIoPHaXTZ/dfR6077/bleTr
+	G7Y9ePkUrl3r67ADEP/YPeXY2UweQGl9/gUW5KaHxO/v/tqlHHxqZ6Zoxd7Bwc+Ws9fY9q
+	LfU1PtV9vAgEpQgLaAl0v80o09er9MX4fw8sowH6tky3VkNj1rlJFSxRq5Dt/XtSh3hCYu
+	us6wmlD1oGnnO7KfFPVRxhIsCsbn0QWPn04VTtBAkB0eEjNDHoNaqYKoH4l7bbUdLJ1OAH
+	7GNJn/4NYHDh2kpP5Qh9itkGm4G0nepi4zG0xRx6ZYvt/Tm6e+Mdw2wXAzHHFHICzv1dMx
+	yjPcygh5pO9Y3d9vtlpcSd9ZVHr1UUOyWV4kO4XXZautEiYLBqGED4TBcUme5X34Aix9hd
+	4/WQVQJh+N9GEM/FdeHzevaxYYp6TyFmhQJ7w903PgfxmbLIQYjU+kl0fYz9KYPl0soqRw
+	9BAdHOtbARtvPvFGFsj934uw5Ig9ECAINlEil6Q1miMyu6tpdbK1PCC5dog6opoQ7/mlXp
+	ZFY8kFXSjqvkBUCtms8o5wM4GvdOI1mvWHoVeHFtoS8FnlGdyZ+dNwVKHD2yBNyDZDC6Ad
+	REvI9RQr+JVpYdgCOZD8u6zioLzllOpb+HOHrtP4mqDhhOOEIvGxcKrsnXhhCNbimcnOTf
+	Tg7qBGNC8bNN7JJzfGPFcMTcB6lTzJWSqzF2VYCaxPDJC6fsSpq0G+0wAXi/aLTYRgqZPe
+	rxt1Jwse08DeVKd7MMghM9whtwiv8ID9tVZRP1u4mQjuW3Ib4fPPgTDEFu//nxtfcP5Vm/
+	lQiM0mtHWjsqkTqFtHMmoH+msZ6iN3zQCPFtqe/CaaWRbp94M+xIBxZpvaeY5aJJsbVt1j
+	6Zygc1L4SJ3cGFYeiRIX38EHXS3mTDoI0Rm8mi/OQFjoPOK/CJOua1orpD3bgPt0956fAz
+	gZqZ46x0JhPUjKP8f633ZVEt9OvUEyPmoTYWCRNhBXhWS7kxTlmTfeRTQaQvRivGoNbfMq
+	gWLCFdryZqttQtGq9R0Bnd5Oo33BQSUE3ZrBo1+4ZxNy1BqqZU890Mu8QOdZK6j+0ojdHG
+	3JS4ratvt7m9z27eEfoKg1Vf6nD9YX8p1oSHq1EZWtmmih62DINZeJxYrdBFGVT6Cfj5eo
+	g4/u7/pRKH/7WsTH2TCaLgywZmViMxO8rcQeHXKQoIWkXsHi+0/Jzf8OT9l3kMnSoGnQik
+	trw2nGHaRUncSF/xlnqxoAP0LC3M59UbsMo8p461SRVAabGEyDJdB2USKB3qfAnEhBQ6Bk
+	i7X6+mj9EDpxMCFbM+guhJkG/RDDDUXp7frFhapWaQWBvLUiMjM3hr4Sd7DgqnmpHpZkJm
+	BA8oxvTOHzq9pdWjk91gsPBqMTqeYRo0USCpUi6oLszTBcNnfSli5MPButav6GE5ibz02k
+	0nTuAwz3F8g3HAL+4dmv/Me4oJPXHKeR+XdCAEo0hD54v76PZ4kHDVbZVliefN5EkZDbJB
+	qEQUuX7CkR52fJJlmkrQ+N0wWrhwCk4bVLszkw7/I=
+`
+
+function customizeExolve(puz) {
+	if(typeof markedCells !== 'undefined') {
+		markupCells(puz, markedCells, 10, 6, 'darkgreen');
+  	puz.extractButton = addButton(puz, 'Extract cells', getMarkedCells);
+  }
+  if (Object.keys(exolveanswers).length) {
+  	puz.checkPuzzleButton = addButton(puz, 'Check puzzle', checkPuzzle);
+		document.addEventListener('exolve', function (e) {
+			autoCheckPuzzle();
+		});
+	}
+	if(typeof hinturl !== 'undefined') {
+ 		puz.hintButton = addButton(puz, 'Get hints', openHint);
+	}
+	puz.clearArea.after(puz.currClue);
+	puz.resizeCurrClueAndControls = customResizeCurrClueAndControls;
+
+}
+
+customResizeCurrClueAndControls = function() {
+  const bPos = this.frame.getBoundingClientRect();
+  const gpPos = this.gridPanel.getBoundingClientRect();
+  const width = Math.max(this.maxCurrClueWidth, gpPos.width);
+  const widthPx = width + 'px';
+  this.controlsEtc.style.width = widthPx;
+  this.currClue.style.width = '100%';
+  /** 
+   * We can go from the top of the grid to the top of this.frame, leaving
+   * maybe 4 pixels (and any this.visTop) out.
+   */
+  const maxHeight = Math.max(80, (gpPos.top - bPos.top) - 4 - this.visTop);
+  this.currClue.style.maxHeight = maxHeight + 'px';
+  const ciPos = this.currClueInner.getBoundingClientRect();
+  const minHeight = Math.min(maxHeight, ciPos.height + this.topClueClearance);
+  this.currClue.style.minHeight = minHeight + 'px';
+  const cPos = this.currClue.getBoundingClientRect();
+  this.currClue.style.marginTop = '-' + cPos.height + 'px';
+
+  const gPos = this.gridParent.getBoundingClientRect();
+  const horOffset = (gPos.width >= width) ?
+    gPos.left : ((gpPos.width - width) / 2);
+  this.currClue.style.left = horOffset + 'px';
+}
+
+function markupCells(p, cells, ht, basewid, labelcolor='') {
+	for(let i=0; i<cells.length; i++) {
+		let coords = p.parseCellLocation(cells[i]);   // [row,col]
+		let wid = (i+1).toString().length*basewid+1;
+		let c = p.addCellText(coords[0], coords[1], (i+1), ht, wid, false, true);
+		c.style['stroke-width'] = 0.4;
+		c.setAttribute('x', parseFloat(c.getAttribute('x'))+p.cellW/2-2);
+		c.setAttribute('y', parseFloat(c.getAttribute('y'))+6);
+		if(labelcolor) {
+			c.style.stroke = labelcolor;	
+		}
+	}
+	
+	p.cellActivator(0,0); 
+}
+
+function openHint() {
+	if(hinturl) { window.open(hinturl, '_blank'); }
+}
+
+let exolvehexdata = ''
+
+window.addEventListener('load', initHexDecode);
+
+function initHexDecode() {
+	let params = new URLSearchParams(document.location.search);
+	let query = params.get('key');
+
+	if(query && typeof(hexdata) !== 'undefined') {
+		let key = query instanceof Array ? query[0] : query;
+		do_decodeHex(hexdata, key);
+	}
+}
+
+async function do_decodeHex(data, key) {
+	decryptData(data, key).then(exdata => loadHexExolve(exdata));
+}
+
+function loadHexExolve(hexdecoded) {
+	exolvehexdata = getHex2Exolve(exolvetemplate, hexdecoded).replaceAll("\t","  ")
+	window.puz = createExolve(exolvehexdata)
+	mapPuzzleClues(puz)
+}
+
+</script>
+<script src="exolve/dkm-exolve-utils.js"></script>
+</div>
+</body>
+</html>
