@@ -167,20 +167,16 @@ customResizeCurrClueAndControls = function() {
 
 function markupCells(p, cells, ht, basewid, labelcolor='') {
 	for(let i=0; i<cells.length; i++) {
-		let coords = p.parseCellLocation(cells[i]);   // [row,col]
+		let [row, col] = p.parseCellLocation(cells[i]);   // [row,col]
 		let wid = (i+1).toString().length*basewid+1;
-		let c = p.addCellText(coords[0], coords[1], (i+1), ht, wid, false, true);
+		let c = p.addCellText(row, col, (i+1), ht, wid, false, true);
 		c.style['stroke-width'] = 0.4;
-//		c.setAttribute('x', parseFloat(c.getAttribute('x'))+p.cellW/2-2);
-		c.setAttribute('y', parseFloat(c.getAttribute('y'))-p.cellH/4+3);
-		if(labelcolor) {
-			c.style.stroke = labelcolor;	
-		}
+		if(labelcolor) c.style.stroke = labelcolor
+		hexAdjustCellText(p, c, ht, row, col)
 	}
 	
 	p.cellActivator(0,0); 
 }
-
 
 function openHint() {
 	if(hinturl) { window.open(hinturl, '_blank'); }

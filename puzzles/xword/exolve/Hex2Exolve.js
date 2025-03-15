@@ -58,16 +58,15 @@ const clueshdr = {}
 const cellseq = {}
 const cells = {}
 const grid = []
+const param = {
+		'separator-color': 'gray',
+		'border-color': 'black'
+}
 
 function getHex2Exolve(template, hexdata) {
 	const datarows = hexdata.split(/\r?\n/);
 	let section = ''
 	let dir = ''
-
-	let param = {
-		'separator-color': 'gray',
-		'border-color': 'black'
-	}
 	let output = template
 	let height = 0
 	let width = 0
@@ -166,8 +165,7 @@ function getHex2Exolve(template, hexdata) {
 
 	if(!geo) return
 
-	// TODO: adjust index baseline by index font-height
-	output = output.replaceAll('%SHAPE%', `${geo.idx_x} ${geo.idx_y+10} <polygon points="${geo.points.join(' ')}" stroke="${param['separator-color']}" stroke-width="1">`)
+	output = output.replaceAll('%SHAPE%', `${geo.idx_x} ${geo.idx_y} <polygon points="${geo.points.join(' ')}" stroke="${param['separator-color']}" stroke-width="1">`)
 
 // Phase 1: process the grid:
 	
@@ -382,7 +380,7 @@ function gethexgeo(orient, hexside) {
 			'ctr_x': ctr_x,
 			'ctr_y': ctr_y, 
 			'idx_x': ctr_x-(hexside/2)+2,
-			'idx_y': ctr_y-rowh+2,
+			'idx_y': ctr_y-rowh+parseInt(2*rowh/3),
 			'rowheight': rowh,
 			'colwidth': colw,
 			'cellheight': 2*rowh,
@@ -417,7 +415,7 @@ function gethexgeo(orient, hexside) {
 			'ctr_x': ctr_x,
 			'ctr_y': ctr_y, 
 			'idx_x': ctr_x-colw+2,
-			'idx_y': hexpoint+2,
+			'idx_y': hexpoint+Math.round(2*colw/3),
 			'rowheight': rowh,
 			'colwidth': colw,
 			'cellheight': 1.25*hexside+1.75*hexpoint,
@@ -513,6 +511,34 @@ oldGetLight = getLight
 function hexGetLight(puz, clueIndex) {
   clueIndex = clueMap[clueIndex]
   return oldGetLight(puz, clueIndex)
+}
+
+function hexAdjustCellText(p, c, ht, row, col) {
+	const geo = gethexgeo(param['orient'], param['hexside'])
+
+	let [offX, offY] = [0,0]
+	let newX = parseFloat(c.getAttribute('x'))
+	let newY = parseFloat(c.getAttribute('y'))
+	
+	switch(param['orient']) {
+		case 'v':
+			[offX, offY] = geo.points[4].split(',').map(Number)
+			newY = p.cellTopPos(row, offY)
+			newX = p.cellLeftPos(col+1, 0)
+			c.setAttribute('x', newX-0.5)
+			c.setAttribute('y', newY-3)
+			c.style['text-anchor'] = 'end'
+			break
+	  case 'h': 
+	  	[offX, offY] = geo.points[3].split(',').map(Number)
+			newX = p.cellLeftPos(col, offX)
+			c.setAttribute('x', newX)
+			c.setAttribute('y', newY-3)
+			c.style['text-anchor'] = 'middle'
+			break
+		default: console.log('hexAdjustCellText: unknown orientation')
+
+	}
 }
 
 window.getLight = hexGetLight
