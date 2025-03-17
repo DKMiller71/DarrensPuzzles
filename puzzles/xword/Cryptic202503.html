@@ -11,10 +11,10 @@ See the full Exolve license notice in exolve-m.js.
 <link rel="stylesheet" type="text/css" href="exolve/exolve-m.css"/>
 <script src="exolve/exolve-m.js"></script>
 <title>Cryptic 2025-03 by Darren Miller</title>
-
 <style>
 	body {
-		font-family: "Gill Sans", Verdana, sans-serif;
+		font-family: "Optima", Verdana, sans-serif;
+		background-color: #f0f0ff;
 	}
 	@media print {
 		.extractButton, .checkPuzzleButton, .hintButton {
@@ -27,7 +27,7 @@ See the full Exolve license notice in exolve-m.js.
 <script src="exolve/dkm-checker.js"></script>
 <script src="exolve/dkm-extractor.js"></script>
 <script src="exolve/Hex2Exolve.js"></script>
-<script src="exolve/dkm-decode.js"></script>
+
 </head>
 <body>
 <div id="popupModal" class="modal"></div>
@@ -35,15 +35,102 @@ See the full Exolve license notice in exolve-m.js.
 <script>
 
 var puzid = 'dkm-cryptic-202503';
-var exolveanswers = {}
+var exolveanswers = {
+	'A7':	'fca976590e58688e4b1c7d9c7c2ce60744369f7094c1b238874b70cdf479d387',
+	'A8':	'431afeee4fa73a8707f8273bb1f6a9a416d8600e9f5fbd3de2f5ebff30b9f495',
+	'A9':	'0a872f3bd9ab18d5b429e0457c2457b34fe79d162f28ae0da8083c7e8f5d61b0',
+	'A10':	'd8f65e96e482a37e047634e3a087f6fd6a88a636587d7d3b622bb2e123b546fb',
+	'A12':	'355371ee53f21080568dbef3860873dbcbd3e924577813557bb5e51bacfebb47',
+	'A16':	'3577b4e2c68ad0b546fe2bdcb72bbe654e9f764f137438f58b33e48dc3bc19af',
+	'A17':	'07c4571c0ae36a827d75f27a3f0d10b76f72b09ca4100dc016c6db89dde1ec6b',
+	'A19':	'498785455dcb5a9e49d815731ead0399021427b333d2b29c79075525c12c2c17',
+	'DL1':	'f26d73723a89d54dda3eeeab50c0ed30be0ade39d8e8222f0acfd030970f69fb',
+	'DL2':	'826dec160df5dec2712906281a0c61fadc24f10a145f470024f988c0e57b3d38',
+	'DL3':	'af96e366471f42567942423bc51dbcdb1c59eb0d67cd5d2982f40542e108d05f',
+	'DL5':	'd1c83049124a031413a9947cd464037ddc30504722fc1a983f57967d8c576040',
+	'DL6':	'2c5df905f512c6a62b65f6ca04d09344fa537ad360e276653c3b011bfde2466a',
+	'DL7':	'1a9dbcab212e6f9a2b76b4efe38b5ee0eee498e80aa5669e1b47724899cf6566',
+	'DL11':	'05b7157e7011403401f7f5ac923676a0245b1d713c2ecab1b2db3b0045d6af26',
+	'DL13':	'07b4ed8e4e4eadcc7ffe05d41b5717255ae72a4881893e1d69e13889631c846f',
+	'DL14':	'e81ef46c5cab9964fe7da8679d912785aff28a3e801c2da176155ff8628b2843',
+	'DL15':	'6a1e963371a64b32aff302ef7f3a7d6df8df903fce10f3db6ee918f18ac11f2a',
+	'DL18':	'c20e0a05837e5760fd59568636b348530fe3dd20b9f372ac086d02adf234f62b',
+	'DR1':	'48cb5dba41f044ffecd8ac4f7442634223cc0d22eba7b12bb4a3cb17f30c86da',
+	'DR2':	'8c50189ea1858f00c60d858d27698479c3dff49c272f70b1b1ff9d52d2980d69',
+	'DR4':	'1bcbd437fd2eb72bfbce2759e63454d13690b294ef5fbb957d52069633cb1b8c',
+	'DR10':	'bbe097bb1744150fbd632e15569b83cced7c7a9d38e79f8bbc03f59cba82c7e3',
+	'DR12':	'7fde0cda769036a10f9f626c63808960763f255da9c0b86026b3584a5395ae0c'
+}
 
-// var hinturl = '../../hints/Cryptic202305_hints.html';
+var hinturl = '../../hints/Cryptic202503_hints.html';
 
 const markedCells = [
 	'm7', 'n8', 'f8', 'c1', 'l6', 'b8', 'm9', 'l4',
 	'k1', 'b2', 'o7', 'j6', 'e3', 'q3', 'e7', 'p4',
 	'k3', 'o3', 'j4', 'd8', 'b4', 'g3', 'f4'
 ]
+
+function customizeExolve(puz) {
+	if(typeof markedCells !== 'undefined') {
+		markupCells(puz, markedCells, 10, 6, 'darkgreen');
+  	puz.extractButton = addButton(puz, 'Extract cells', getMarkedCells);
+  }
+  if (Object.keys(exolveanswers).length) {
+  	puz.checkPuzzleButton = addButton(puz, 'Check puzzle', checkPuzzle);
+		document.addEventListener('exolve', function (e) {
+			autoCheckPuzzle();
+		});
+	}
+	if(typeof hinturl !== 'undefined') {
+ 		puz.hintButton = addButton(puz, 'Get hints', openHint);
+	}
+	
+	puz.clearArea.after(puz.currClue);
+	puz.resizeCurrClueAndControls = customResizeCurrClueAndControls;
+}
+
+customResizeCurrClueAndControls = function() {
+  const bPos = this.frame.getBoundingClientRect();
+  const gpPos = this.gridPanel.getBoundingClientRect();
+  const width = Math.max(this.maxCurrClueWidth, gpPos.width);
+  const widthPx = width + 'px';
+  this.controlsEtc.style.width = widthPx;
+  this.currClue.style.width = '100%';
+  /** 
+   * We can go from the top of the grid to the top of this.frame, leaving
+   * maybe 4 pixels (and any this.visTop) out.
+   */
+  const maxHeight = Math.max(80, (gpPos.top - bPos.top) - 4 - this.visTop);
+  this.currClue.style.maxHeight = maxHeight + 'px';
+  const ciPos = this.currClueInner.getBoundingClientRect();
+  const minHeight = Math.min(maxHeight, ciPos.height + this.topClueClearance);
+  this.currClue.style.minHeight = minHeight + 'px';
+  const cPos = this.currClue.getBoundingClientRect();
+  this.currClue.style.marginTop = '-' + cPos.height + 'px';
+
+  const gPos = this.gridParent.getBoundingClientRect();
+  const horOffset = (gPos.width >= width) ?
+    gPos.left : ((gpPos.width - width) / 2);
+  this.currClue.style.left = horOffset + 'px';
+}
+
+
+function markupCells(p, cells, ht, basewid, labelcolor='') {
+	for(let i=0; i<cells.length; i++) {
+		let [row, col] = p.parseCellLocation(cells[i]);   // [row,col]
+		let wid = (i+1).toString().length*basewid+1;
+		let c = p.addCellText(row, col, (i+1), ht, wid, false, true);
+		c.style['stroke-width'] = 0.4;
+		if(labelcolor) c.style.stroke = labelcolor
+		hexAdjustCellText(p, c, ht, row, col)
+	}
+	
+	p.cellActivator(0,0); 
+}
+
+function openHint() {
+	if(hinturl) { window.open(hinturl, '_blank'); }
+}
 
 const exolvetemplate = `
 exolve-begin
@@ -79,132 +166,58 @@ exolve-begin
 exolve-end
 `
 const hexdata = `
-	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
+	separator-color:gray
+	separator-width:1
+	border-color:green
+	border-width:1
+	orient:h
+	directions:EE,SE,SW
+	hexside:30
+	grid:
+		.  .  01 .  01 .  02 .  .  .  .  .  05 .  02 .  . 
+		.  03 .  01 .  01 .  0  .  .  .  02 .  0  .  06 . 
+		02 .  02 .  0  .  0  .  .  .  02 .  02 .  04 .  04
+		.  01 .  01 .  01 .  05 .  0  .  0  .  0  .  0  . 
+		.  .  .  .  .  .  01 .  01 .  04 .  .  .  .  .  . 
+		.  04 .  06 .  02 .  01 .  01 .  01 .  03 .  02 . 
+		02 .  04 .  02 .  0  .  .  .  0  .  0  .  02 .  0 
+		.  02 .  0  .  04 .  .  .  03 .  01 .  01 .  0  . 
+		.  .  01 .  0  .  .  .  .  .  01 .  01 .  0  .  . 
+	clues-EE-Across:
+		7  Every other nation&#8217;s leaders assembled for a long time&nbsp;(3)
+		8  Swapped halves of identical table&nbsp;(4)
+		9  Grunge music played without hint of irony&nbsp;(4)
+		10  Yak is cold; fire lacks energy&nbsp;(4)
+		12  Get bent out of shape from conflict with parking&nbsp;(4)
+		16  Stick in a bag&nbsp;(4)
+		17  One&#8217;s partner is active and extremely lively&nbsp;(4)
+		19  Went in front and ran away, losing cap&nbsp;(3)
+	clues-SE-Down-Right:
+		1  Pigs so excitedly dig up dirt&nbsp;(6)
+		2  Most of y&#8217;all love boring scheme? Good, just go with it&nbsp;(4,5) (9)*
+		4  Drive away from track encircling the middle of Toronto&nbsp;(4)
+		10  Bug climbs into bonnet for a little snooze&nbsp;(6)
+		12  Some franchise owners brought up problems&nbsp;(4)
+	clues-SW-Down-Left:
+		1  Groups met occasionally to get something to chew on&nbsp;(3)
+		2  Lad leaves squirming tadpole with meter man?&nbsp;(4)
+		3  Heard about Punch and Tailor too&nbsp;(4)
+		5  The Reverend talks about deep sleep and strong coffee&nbsp;(5)
+		6  Setter quits games to get some air&nbsp;(3)
+		7  Ace sped off and got away&nbsp;(7)
+		11  Tattooed with tip of nose becoming red and irritated&nbsp;(5)
+		13  Lid is something you spin around&nbsp;(3)
+		14  Express ways to access public houses&nbsp;(4)
+		15  Standard of social media marketing&#8217;s terms&nbsp;(4)
+		18  People initially supported you once upon a time, right?&nbsp;(3)
 `
+let exolvedata = ''
 
-function customizeExolve(puz) {
-	if(typeof markedCells !== 'undefined') {
-		markupCells(puz, markedCells, 10, 6, 'darkgreen');
-  	puz.extractButton = addButton(puz, 'Extract cells', getMarkedCells);
-  }
-  if (Object.keys(exolveanswers).length) {
-  	puz.checkPuzzleButton = addButton(puz, 'Check puzzle', checkPuzzle);
-		document.addEventListener('exolve', function (e) {
-			autoCheckPuzzle();
-		});
-	}
-	if(typeof hinturl !== 'undefined') {
- 		puz.hintButton = addButton(puz, 'Get hints', openHint);
-	}
-	puz.clearArea.after(puz.currClue);
-	puz.resizeCurrClueAndControls = customResizeCurrClueAndControls;
-
-}
-
-customResizeCurrClueAndControls = function() {
-  const bPos = this.frame.getBoundingClientRect();
-  const gpPos = this.gridPanel.getBoundingClientRect();
-  const width = Math.max(this.maxCurrClueWidth, gpPos.width);
-  const widthPx = width + 'px';
-  this.controlsEtc.style.width = widthPx;
-  this.currClue.style.width = '100%';
-  /** 
-   * We can go from the top of the grid to the top of this.frame, leaving
-   * maybe 4 pixels (and any this.visTop) out.
-   */
-  const maxHeight = Math.max(80, (gpPos.top - bPos.top) - 4 - this.visTop);
-  this.currClue.style.maxHeight = maxHeight + 'px';
-  const ciPos = this.currClueInner.getBoundingClientRect();
-  const minHeight = Math.min(maxHeight, ciPos.height + this.topClueClearance);
-  this.currClue.style.minHeight = minHeight + 'px';
-  const cPos = this.currClue.getBoundingClientRect();
-  this.currClue.style.marginTop = '-' + cPos.height + 'px';
-
-  const gPos = this.gridParent.getBoundingClientRect();
-  const horOffset = (gPos.width >= width) ?
-    gPos.left : ((gpPos.width - width) / 2);
-  this.currClue.style.left = horOffset + 'px';
-}
-
-function markupCells(p, cells, ht, basewid, labelcolor='') {
-	for(let i=0; i<cells.length; i++) {
-		let [row, col] = p.parseCellLocation(cells[i]);   // [row,col]
-		let wid = (i+1).toString().length*basewid+1;
-		let c = p.addCellText(row, col, (i+1), ht, wid, false, true);
-		c.style['stroke-width'] = 0.4;
-		if(labelcolor) c.style.stroke = labelcolor
-		hexAdjustCellText(p, c, ht, row, col)
-	}
-	
-	p.cellActivator(0,0); 
-}
-
-function openHint() {
-	if(hinturl) { window.open(hinturl, '_blank'); }
-}
-
-let exolvehexdata = ''
-
-window.addEventListener('load', initHexDecode);
-
-function initHexDecode() {
-	let params = new URLSearchParams(document.location.search);
-	let query = params.get('key');
-
-	if(query && typeof(hexdata) !== 'undefined') {
-		let key = query instanceof Array ? query[0] : query;
-		do_decodeHex(hexdata, key);
-	}
-}
-
-async function do_decodeHex(data, key) {
-	decryptData(data, key).then(exdata => loadHexExolve(exdata));
-}
-
-function loadHexExolve(hexdecoded) {
-	exolvehexdata = getHex2Exolve(exolvetemplate, hexdecoded).replaceAll("\t","  ")
-	window.puz = createExolve(exolvehexdata)
+window.addEventListener('load', function () {
+	exolvedata = getHex2Exolve(exolvetemplate, hexdata).replaceAll("\t","  ")
+	window.puz = createExolve(exolvedata)
 	mapPuzzleClues(puz)
-}
+})
 
 </script>
 <script src="exolve/dkm-exolve-utils.js"></script>
