@@ -11,10 +11,9 @@ See the full Exolve license notice in exolve-m.js.
 <link rel="stylesheet" type="text/css" href="exolve/exolve-m.css"/>
 <script src="exolve/exolve-m.js"></script>
 <title>Cryptic 2025-04 by Darren Miller</title>
-
 <style>
 	body {
-		font-family: "Gill Sans", Verdana, sans-serif;
+		font-family: "Optima", Verdana, sans-serif;
 	}
 	@media print {
 		.extractButton, .checkPuzzleButton, .hintButton {
@@ -26,7 +25,6 @@ See the full Exolve license notice in exolve-m.js.
 <script src="exolve/dkm-popup.js"></script>
 <script src="exolve/dkm-checker.js"></script>
 <script src="exolve/dkm-extractor.js"></script>
-<script src="exolve/dkm-decode.js"></script>
 </head>
 <body>
 <div id="popupModal" class="modal"></div>
@@ -37,7 +35,7 @@ var puzid = 'dkm-cryptic-202504';
 var exolveanswers = {
 	'A1':	'bdfe2a07456641ad971abc3ae12fff1dd9c67b2f8710498c570d6759fe076717',
 	'A5':	'0365474486245eb9651ea9ff0c191a0937630acaa998e60215bbfe32ccbea41d',
-	'A7':	'6c0678604a1faa9cb591050a9e99bba182d2df3c5da57ea3134da4ca4e74e9bc',
+	'A7':	'4dae226cfc434e4d75893e9db663d42fdaeab1d303d8b80c50e3479c84e173d2',
 	'A8':	'f6e9f271421aed536cc4267cbea8e5ae12e49a5bff48f8994d49a5cf43fec486',
 	'A9':	'9befe6f1a4aad991a89961b88ccbdd15617218565fe7408180e4b3db9b2eaae0',
 	'A10':	'05d669869d776de3a1b6ce205ba4555589879b074cbd0c7cb674a33855846f7d',
@@ -55,59 +53,7 @@ var exolveanswers = {
 	'D13':	'f954c16a0f2b9f91e492490be0d2b3391e9e76ffee73292c59e96c63c0e5497a'
 }
 
-// var hinturl = '../../hints/Cryptic202305_hints.html';
-
-const exolvedata = `
-	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
-`
+var hinturl = '../../hints/Cryptic202504_hints.html';
 
 function customizeExolve(puz) {
 	if(typeof markedCells !== 'undefined') {
@@ -123,9 +69,9 @@ function customizeExolve(puz) {
 	if(typeof hinturl !== 'undefined') {
  		puz.hintButton = addButton(puz, 'Get hints', openHint);
 	}
+	
 	puz.clearArea.after(puz.currClue);
 	puz.resizeCurrClueAndControls = customResizeCurrClueAndControls;
-
 }
 
 customResizeCurrClueAndControls = function() {
@@ -153,8 +99,6 @@ customResizeCurrClueAndControls = function() {
   this.currClue.style.left = horOffset + 'px';
 }
 
-
-
 function markupCells(p, cells, ht, basewid, labelcolor='') {
 	for(let i=0; i<cells.length; i++) {
 		let coords = p.parseCellLocation(cells[i]);   // [row,col]
@@ -172,6 +116,73 @@ function markupCells(p, cells, ht, basewid, labelcolor='') {
 function openHint() {
 	if(hinturl) { window.open(hinturl, '_blank'); }
 }
+
+window.addEventListener('load', function () {
+window.puz = createExolve(`
+======REPLACE WITH YOUR PUZZLE BELOW======
+
+exolve-begin
+  exolve-id: dkm-cryptic-202504
+  exolve-title: Cryptic 2025-04
+  exolve-setter: Darren Miller
+  exolve-copyright: 2025 Darren Miller
+	exolve-credits:
+  exolve-width: 11
+  exolve-height: 11
+  exolve-preamble: Something&#8217;s going on here... I&#8217;m sure you&#8217;ll figure it out.
+	exolve-color: palegreen a1 b2 c3 d4 e5 g7 h8 i9 j10 k11
+	exolve-cell-size: 35 35
+  exolve-option: font-family:inherit
+	exolve-option: color-active:lightyellow
+	exolve-option: color-active-clue:lightyellow
+  exolve-option: color-input:lightblue color-arrow:lightyellow
+  exolve-option: color-light-label-input:white
+  exolve-option: color-light-text-input:white
+  exolve-option: color-overwritten-start:#FFF5EE
+  exolve-option: color-overwritten-end:	#FAF9F6
+  exolve-option: highlight-overwritten-seconds:0.05
+  exolve-option: color-button:blue color-button-hover:lightblue
+  exolve-option: hide-copy-placeholder-buttons
+  exolve-relabel:
+    clear: Clear this word
+    reveal: Show hint for method(s)
+  exolve-grid:
+		0 0 0 0 0 0 . 0 0 0 0 
+		. 0 . 0 . 0 . 0 . 0 . 
+		0 0 0 0 . 0 0 0 0 0 0 
+		. 0 . 0 . 0 . 0 . 0 . 
+		. 0 0 0 0 0 0 0 0 0 0 
+		. . . 0 . . . 0 . . . 
+		0 0 0 0 0 0 0 0 0 0 . 
+		. 0 . 0 . 0 . 0 . 0 . 
+		0 0 0 0 0 0 . 0 0 0 0 
+		. 0 . 0 . 0 . 0 . 0 . 
+		0 0 0 0 . 0 0 0 0 0 0 
+	exolve-across:
+		1  Destroyed enemy&#8217;s supporters&nbsp;(3,3) (6)* _
+		5  Brand of equipment sister preferred to golf&nbsp;(4) _
+		7  Caught a wildebeest again&nbsp;(4) _
+		8  Police escort initially hiding in ship areas&nbsp;(6) _
+		9  No longer available to put in for recycling&nbsp;(3&#8209;2&#8209;5) (10)* _
+		10  Suspect lone shooter nearly escaped&nbsp;(2,3,5) (10)* _
+		14  Prime members of choir are weird and nasty&nbsp;(6) _
+		15  Pie stolen from buccaneers turned over to somebody&nbsp;(4) _
+		16  Portion of people angry at petition&nbsp;(4) _
+		17  Yell and empty pocket with old currency&nbsp;(6) _
+	exolve-down:
+		2  Frill featured in centerpiece of latest tune&nbsp;(5) _
+		3  Police raids naughty magazines&nbsp;(11) _
+		4  Annoying to press a key every so often&nbsp;(5) _
+		5  Reusing characters in a trope for someone who drops in unexpectedly&nbsp;(11) _
+		6  Shogun cleverly stopped by Sam, perhaps&nbsp;(5) _
+		11  Electronic images of adventures&nbsp;(5) _
+		12  Amber is extremely organic with her bananas&nbsp;(5) _
+		13  Nostalgic about some reporters&nbsp;(5) _
+	exolve-end
+
+======REPLACE WITH YOUR PUZZLE ABOVE======
+`);
+})
 
 </script>
 <script src="exolve/dkm-exolve-utils.js"></script>
