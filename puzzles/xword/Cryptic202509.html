@@ -11,10 +11,9 @@ See the full Exolve license notice in exolve-m.js.
 <link rel="stylesheet" type="text/css" href="exolve/exolve-m.css"/>
 <script src="exolve/exolve-m.js"></script>
 <title>Cryptic 2025-09 by Darren Miller</title>
-
 <style>
 	body {
-		font-family: "Gill Sans", Verdana, sans-serif;
+		font-family: "Optima", Verdana, sans-serif;
 	}
 	@media print {
 		.extractButton, .checkPuzzleButton, .hintButton {
@@ -26,7 +25,6 @@ See the full Exolve license notice in exolve-m.js.
 <script src="exolve/dkm-popup.js"></script>
 <script src="exolve/dkm-checker.js"></script>
 <script src="exolve/dkm-extractor.js"></script>
-<script src="exolve/dkm-decode.js"></script>
 </head>
 <body>
 <div id="popupModal" class="modal"></div>
@@ -65,85 +63,7 @@ var exolveanswers = {
 	'D24':	'c6b8d528fd5182e7f85321eb0cf23f866c81ef5dadb46400a772de53bd64a63a'
 }
 
-// var hinturl = '../../hints/Cryptic202305_hints.html';
-
-const exolvedata = `
-	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
-	IFLkDtum
-`
+var hinturl = '../../hints/Cryptic202509_hints.html';
 
 function customizeExolve(puz) {
 	if(typeof markedCells !== 'undefined') {
@@ -159,6 +79,7 @@ function customizeExolve(puz) {
 	if(typeof hinturl !== 'undefined') {
  		puz.hintButton = addButton(puz, 'Get hints', openHint);
 	}
+	
 	puz.clearArea.after(puz.currClue);
 	puz.resizeCurrClueAndControls = customResizeCurrClueAndControls;
 }
@@ -188,8 +109,6 @@ customResizeCurrClueAndControls = function() {
   this.currClue.style.left = horOffset + 'px';
 }
 
-
-
 function markupCells(p, cells, ht, basewid, labelcolor='') {
 	for(let i=0; i<cells.length; i++) {
 		let coords = p.parseCellLocation(cells[i]);   // [row,col]
@@ -207,6 +126,90 @@ function markupCells(p, cells, ht, basewid, labelcolor='') {
 function openHint() {
 	if(hinturl) { window.open(hinturl, '_blank'); }
 }
+
+window.addEventListener('load', function () {
+window.puz = createExolve(`
+======REPLACE WITH YOUR PUZZLE BELOW======
+
+exolve-begin
+  exolve-id: dkm-cryptic-202509
+  exolve-title: Cryptic 2025-09
+  exolve-setter: Darren Miller
+  exolve-copyright: 2025 Darren Miller
+  exolve-preamble:
+  	<p>These pirates spend their lives living on the outside. 
+  	Perhaps you can keep them in order? (8)</p>
+  	<p>You can check your final answer at
+		<span class='xlv-dont-print'><a href='https://darrenspuzzles.blogspot.com/2025/09/cryptic-2025-09.html' title='Go to Darren&apos;s Puzzles blog' target='_blank'>Darren&apos;s Puzzles blog</a>.</span>
+  	<span class='xlv-only-print'>https://darrenspuzzles.blogspot.com/2025/09/cryptic-2025-09.html</span></p>
+  exolve-width: 15
+  exolve-height: 15
+  exolve-credits: Testers: kitsovereign, Amy F
+  exolve-option: font-family:inherit
+	exolve-option: color-active:lightyellow
+	exolve-option: color-active-clue:lightyellow
+  exolve-option: color-input:lightblue color-arrow:lightyellow
+  exolve-option: color-light-label-input:white
+  exolve-option: color-light-text-input:white
+  exolve-option: color-overwritten-start:#FFF5EE
+  exolve-option: color-overwritten-end:	#FAF9F6
+  exolve-option: highlight-overwritten-seconds:0.05
+  exolve-option: color-button:blue color-button-hover:lightblue
+  exolve-option: hide-copy-placeholder-buttons
+  exolve-relabel:
+    clear: Clear this word
+    reveal: Show hint for method(s)
+  exolve-grid:
+		. 0 . 0 . 0 . 0 . 0 . 0 . 0 .
+		0 0 0 0 0 0 0 0 . 0 0 0 0 0 0
+		. 0 . 0 . 0 . 0 . 0 . 0 . 0 .
+		0 0 0 0 0 0 . 0 0 0 0 0 0 0 0
+		. 0 . . . 0 . 0 . . . 0 . 0 .
+		0 0 0 0 0 0 0 0 . 0 0 0 0 0 0
+		. 0 . 0 . 0 . . . 0 . 0 . . .
+		0 0 0 0 0 0 . . . 0 0 0 0 0 0
+		. . . 0 . 0 . . . 0 . 0 . 0 .
+		0 0 0 0 0 0 . 0 0 0 0 0 0 0 0
+		. 0 . 0 . . . 0 . 0 . . . 0 .
+		0 0 0 0 0 0 0 0 . 0 0 0 0 0 0
+		. 0 . 0 . 0 . 0 . 0 . 0 . 0 .
+		0 0 0 0 0 0 . 0 0 0 0 0 0 0 0
+		. 0 . 0 . 0 . 0 . 0 . 0 . 0 .                               
+	exolve-across:
+		8  Purchase hotel, and elderly husband is included&nbsp;(8)
+		9  Man going topless, with diamonds to seduce&nbsp;(6)
+		10  Most sarcastic scripts kicking antagonist&#8217;s butt towards the finale&nbsp;(6)
+		11  City often struggles clearing out yellow paper tossed everywhere&nbsp;(8)
+		12  Unmotivated without Santa&#8217;s help?&nbsp;(8)
+		14  Girl is not as angry about sister leaving&nbsp;(6)
+		15  Sides of coffee and natural oatmeal&nbsp;(6)
+		16  That thing is lying about grandma? For shame!&nbsp;(6)
+		18  How to come up with a riddle? Confused, I went away&nbsp;(6)
+		20  Deathly sick, exhausted by replies to all regularly&nbsp;(8)
+		21  Woodsy type to provide lodging, including 15A essentially&nbsp;(8)
+		23  Naked idiot chases pair of students at university to an apartment&nbsp;(6)
+		25  Say that again: shirt&#8217;s becoming large? Take it back!&nbsp;(6)
+		26  According to report, Ronald estimated with the least accuracy&nbsp;(8)
+	exolve-down:
+		1  Bangs emanate from this hydrogen carrier&nbsp;(8)
+		2  Trim outsides of educational image&nbsp;(4)
+		3  Guardian beast and dreadful tower lit by enchanter at the borders&nbsp;(10)
+		4  Makes revisions, incorporating college requirements&nbsp;(6)
+		5  Love interest has a way into your heart&nbsp;(4)
+		6  Simplify creek&#8217;s path?&nbsp;(10)
+		7  Leaders of sinister cult yielding before the reaper&nbsp;(6)
+		13  One of a quirky pair dwelt with recycled components&nbsp;(10)
+		14  Hairy spider is upset, running and scattering&nbsp;(10)
+		17  Setter covers a quiz containing information that&#8217;s most thought&#8209;provoking&nbsp;(8)
+		19  A planet&#8217;s first full moon oddly goes over Earth, at the far point of its orbit&nbsp;(6)
+		20  Gil ejected from wrestling, roughly getting thrown around&nbsp;(6)
+		22  Endlessly discuss debut of Cher&#8217;s soft rock&nbsp;(4)
+		24  Pressure from some begrudgingly coming back&nbsp;(4)
+	exolve-end
+
+======REPLACE WITH YOUR PUZZLE ABOVE======
+`);
+})
 
 </script>
 <script src="exolve/dkm-exolve-utils.js"></script>
