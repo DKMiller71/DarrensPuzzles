@@ -11,10 +11,9 @@ See the full Exolve license notice in exolve-m.js.
 <link rel="stylesheet" type="text/css" href="exolve/exolve-m.css"/>
 <script src="exolve/exolve-m.js"></script>
 <title>Cryptic 2025-11 by Darren Miller</title>
-
 <style>
 	body {
-		font-family: "Gill Sans", Verdana, sans-serif;
+		font-family: "Optima", Verdana, sans-serif;
 	}
 	@media print {
 		.extractButton, .checkPuzzleButton, .hintButton {
@@ -26,7 +25,6 @@ See the full Exolve license notice in exolve-m.js.
 <script src="exolve/dkm-popup.js"></script>
 <script src="exolve/dkm-checker.js"></script>
 <script src="exolve/dkm-extractor.js"></script>
-<script src="exolve/dkm-decode.js"></script>
 </head>
 <body>
 <div id="popupModal" class="modal"></div>
@@ -67,77 +65,7 @@ var exolveanswers = {
 	'D24':	'7206e3a5ca2220a5c6b047cbcef55914ee755dc18f1a39a50196a98986d9c7a4'
 }
 
-// var hinturl = '../../hints/Cryptic202305_hints.html';
-
-const exolvedata = `
-	QjnMX1M1jpXqSamg8EBHtH7WfQi605Ssv6UkX2yHXny234h8blVjFOx/zvwiMVcY84jAx0
-	rAj0rw89posnBZyqfCtjGOp09BrZPzpWoBamlyLG3Z8DGLC/GiOTMvry1teCXdTZjSwei2
-	AFygzILvCWvyLsEMdTM68qv04mGo69oUgNoRKM5l9I7pLmdAZFA6foL38KHIbgK50jgIJi
-	V9PfPvD7DLrAmca78NocjaS45xuzxAZO0iByoxDgLASxbLrn6105DadG2JIU1oYYQQ4xxC
-	FnB0bie0VQ+R5UwkhwNNSTesrlIWj7dnvJFsSwyCZKHJibFTcouxoLxFzRXzpTQTAUrLrl
-	Xf2D632xxmsmGUzIfUC9Z6E3VbpIgTo2d/HRlf/jRL4w8KtYjbt4hUcNl47pW57UiOy/TG
-	sYh/HMPCPP6TqzRFhn/ED+jBnGcTPQQ/HKDWtA6MBQCO725mrukNyQj2+3+K636cUo+DyI
-	/GHjrxy7FX0/ycvdqzFdjgHZfvhKW5U0/NslJ/prY6w7/EshL7W0LV41C2UCzHALMYRmqy
-	bUg/VecjTHwq+npZ6PG8PIn8+MlUcIATjQmSGTGhWcur0jmd3W1Uya3uKzgn2GLwDv4ZFn
-	vtmntVWlu1ALgXa48LcikqW1sBhaMy6Iw3ZYLees64DDCbfwRw3CqbPTIfct0wPYWo1gaO
-	rL7zWirw7e64Av6oKaX3Xgz59b5Ji4ZpQxmOsM0czDVzztRLWxMsnf0ThCC7IcCu7ZK5Mo
-	WnK5Nitmfdg6xR1LVAFrYTtAeZ3GUYckf/ij4+M/0f6mnR18fhALXvthisg8Y3ZphbIGS9
-	/j96e1gKEkxsJIwQKnx14Cv3TP5Ob0pnPYL/H57ED864EhF4eHCYmN/eTluZ0dmjog5+cC
-	CjjYzlnU7p7g1g/DyN2XzXdgv0gYr1AwDWxPmY8MoQ5ly3jfrWQLfLd8x5XL30j1r+m1B7
-	uqPOS7bGxAyCjWNXHt3f15ADfMCNa8Dlv6v3uFff7WGdJNPPqY/AlfxWaCF9hWqISYjagU
-	DvOvkHW1/jB7Zc9ydVnl03yBTH91f/522Qirl4H0UVQ3ehsdPR/Azt/i7HUFOlJX0xYXKz
-	lwRL7cUpuDLZJ/lV22fR6TdAObaST8X4asgljcIP0+c0kGh79gqJQA/IPZoROgO9ZtRAeD
-	+9GTrHAG3J6td2WyuvRsrbnSxEQ/2bHTUOdB41W/KYFLakjESKYKm/KGvIi48d1UGZkoxF
-	aIkbvjvbA6A/kpjIHvYt0eFogjGF3aNjUyRmNIZE3A+Mphq1iQNm4TkpZKp3XZcD6k/jEC
-	Zk386PZz3DN0rWSGa6VrHTJSrjEGeIcmm6oxU4h7dvUhGQu03BEigIJ9CnCtedHacNekV1
-	8Kie6g7FgJS8qeXCowFEaMpqG/Vquwk4Y8YIPOzvWouhkQTEo5VsnLAik9zBP33yYATMgu
-	sCzBX113xaqmdf6fdFeLHdm8kvr9Ry3a0NX+0NWHB/s+DrTaeDF+3iRCZ2qo6plq8ExgGa
-	q7aKttJbWSoY6J/L9m7xEw2UsFd4ZKp8hivJVtP8bV/jd49Fctr3ToNxnePIyH93s+SgXB
-	vTaAdNg+EoPOwzQjjsRPkO3hGkXFJONWhwP+LfOkRisIqsfRQeXXUEpxYM4XhzhosDJ36A
-	/ND/X9EKf7xZygKymUlKoT3AvAIaX+/EoeTn5x3o9opnkIp1RcDbpKgvDAzwyZs223uug0
-	hgMtjocfaMg5R8TqOb1bup1qJD9WqOeq4S0lSXtHVlhlzWH0fmWFFv+qP8Sny20huY8XlS
-	80JeHt8hcVEZCVrOKkOBZ0pt4C5boNItVAGio3d0bwtSHrMDdJRAPrwh5makiHsLmPhu1o
-	Vztmqqt2W6ztW/ETiJcFcXHJzQwmWnF7MbX1422YmbUkyAV6QsUM1zgEaeg6cOehcFLWEs
-	c+tvJtAS4J39T+dtRt5WGzNJvOOJr6e9uadDjpC6I+wRacy2Pm4FM9wIfXMmcjBwgTvz1A
-	63oewEBIW//zPGCDlTRhsShitI0ZcF/+G78GQWM4MysvAWvIA/CxcHIr8FMlq36OdcchqI
-	NX5sHhPme58BAd/mTKpi/w7FILw/BZmNJzFYsJb3QtUdm9SKssDuVivMKTqq+2lBPEWnce
-	5bTqubW3JCwwsrSI5x7EIeiiKr/DvgRpm0g/H5Xk5BUQlZl0ZJjPe9ARR/SNo+y0Qb/T9k
-	E/4mHHzHtW5cg/MyxgFofsy0VscHrTNcIbjHT8+I4ANptX9Uprn4vtn6Y9vafeDWNYS1Pm
-	GMAKhX6KWpxqFYAyrzSBOAneLuhoMjzhQDz4oPyjDKTYaMsf5QDyZDZirqUnRHJtlxgOJ8
-	Pa4AdaI8EQT/8J6/g4E5CLC9eccsBKOZXlarzBCbt8lwHwqhW3KPIXSVOgfm6t+caUfRvb
-	670oMzSmMGl1g1PluYclOHsJlkJf9DKOU6Z8TVQbUleIYiaN12mCB8nIl3O5WeUY5O2XR4
-	+InYV1PUFVMDAPGiPQbQvDcmdpo6SmbK6geZosdSHFORM4aly5EDb5GwhYeX/rnxlPrhTj
-	Q52u2RW4kK2yIRxO6ta7FNKwE17xrUYgSjrS7lEgNvrMKKep3DJ9ilqkhsHLXcUAy3vIsc
-	xm3Fw5V3DGQWd+FFbL1GR8kjpbh7lIF2CDXuRyqXVrqBbJarsCcVlsbJKl4B88UxPmLooX
-	ijMsKmnonOxnH4fycx1KQ+UMs/lM9ZHYUHGHwqfaOkl3IBKr30vTRmgtFG+1PR9D6v0+eG
-	dmv1sEllRZC/XdJTwqA0h9Ze5dzj+49o0eCSwC2ITYoY4Qkg6IsA+DWea4F+30AEEV10xM
-	ZWJnUmIEWrWROlxrDfx6VpJXIK2w9Tvc60PFarLrujWkMwexTFeZ5/ZifLthnLdIqb/57a
-	4W63CzFH78TdGVggLIzNptxzkzOt/zspZX3ZDKC2xslpmZ71/IJ5mT0jbLrWBDEvUPVJvp
-	pB6z/br1XacX4NEUWB7o/lHWqHoPkMwMTj6pDT1T4if/6Z/+R0XcVBKh0fYDOiRktNsN85
-	CycjekjnUV5RIa0ll8UGre+7W68p2yuflY0CnqThjB3BHuVcTRCGxY5u9giyp4vVIRTHKv
-	yyuEWpr+iw8YPWl6dz4K85axcOO+/XehOlSNRbo2trPdoFGsTKufevfCZl+pqm4E0f2F59
-	HdHmcLGSrIG85a+5u5DGQiQectOkBf2pdS0jaBJk2hBZUAYrsUPAMNP3Y8wpBSNiyiYJjL
-	NLHfj+5uigXisVKJVaK1l3sMUiib58M6hspNx7QQ5NxgNAvS8rqUci04IDF6E+vZFxmFbb
-	EcFOrWq9aPVkjhm5FHyEcHQry5zHINtL8Y5W3kAeLlYvNP2IC4dV9KSAMP7oJsMy0VigyR
-	/Wfc79rmPNwPQ0xn0o0uch/YhqHb5eLQo/gcDFEDvxtRGtutQtd/hQg4yhz4cZGRUypZ0Z
-	awJMk/izL3/eLiTIoL2CwZ/NKSYItcO1lNDlZT4JTeKhCtysjHL+7iWrbJaE/4ExLBT53k
-	jeWC7CI+cRki2gbko0+1GdrxYqgfh0+7RwdXTRF6va054jg2wuWfI7A52/7YOhtrLfQHZg
-	F5+NVnBI7POSVepMYEnyWwMLUTIrx3NxdV+8chceJ/2I++y/smYfU21poz6K+A7oieCOW1
-	fetJuhyuHteMq2OC9zXg4ilWE5RXfSS10IeSjXiTjSwwtNMfHxU39CAF2KbefMqaWbwn2k
-	wHSa0DjBolufwv08xtybb5MwoeOd7jBF2StfqUFcIPyDAOwnxt466Tq25l7zKygGT3eFVq
-	IYPObUJZm1MikBCQgilhw/ja+L3mfnAVCZAwiZOMmLOsL44zdXor+gSvLLDMF58uQFBgpT
-	rEAxjFOHsGaRfDPt+hpp7/mbD+OQw7n3L0A/CPGWFMaNt5NESRtVql5o7mz14ooZ/GY5rd
-	d602yFVOBtt5oHGe9AR3a0fPVoFfkg5pcWBMfGoEN7KY3LTPscSjTjSUbpno3CBOqeAInl
-	VkAoD59B8r4VwM1kRXRVzFu+gbzK5u8vqs4eYQz4p2AAEIYdeaBJC0Og5kdupuAT2Q4K0h
-	Vn5TSQfouOIHw2NWxikJITOQHo2m0DyrnHEcZcJvLMBVjjcjRFemSDoB635JavXwNftk9f
-	oVKOnuENy3sp+VLjWa0PTYgi7k2yx7OUMdTo8i4kWNTkFwjSYJUYTAVKLRL72D6+6bVbmy
-	rsOq54kSQW//0FhduVE7jzFpTQ//zVK1nBR2ubFKUSGvEtr0p0iAFol0Pw3T5hRQJk6S+9
-	ibdPDsGWRl7q4xWXMPFxo0wslBG749KnpX3sUEozA7gvH2Ey8SkQQXNjCM0q8i06TIze8s
-	6gT8vpW6pCCEQiv09+eoFtbt2dHKYGOuPmPv3MrrgIDwdsxRxVnWcTX+2XFqw2VVq+QTXp
-	fvqjrc8+p3IX9cKicxOpfxAL7facxnqJS/1GPjYO0iwG7Y4DyFxs2ObAe9S1JybR69pKG6
-	NiafM2Jcx69UCVr9ZLXjWEV5oCH6dAMoCmbBVfyWcrghnLOast97XXCyPq2brPYsTDhNOx
-	fpMd1pvlpkC2+Z8lpyncetPryA==
-`
+var hinturl = '../../hints/Cryptic202511_hints.html';
 
 function customizeExolve(puz) {
 	if(typeof markedCells !== 'undefined') {
@@ -153,6 +81,7 @@ function customizeExolve(puz) {
 	if(typeof hinturl !== 'undefined') {
  		puz.hintButton = addButton(puz, 'Get hints', openHint);
 	}
+	
 	puz.clearArea.after(puz.currClue);
 	puz.resizeCurrClueAndControls = customResizeCurrClueAndControls;
 }
@@ -182,8 +111,6 @@ customResizeCurrClueAndControls = function() {
   this.currClue.style.left = horOffset + 'px';
 }
 
-
-
 function markupCells(p, cells, ht, basewid, labelcolor='') {
 	for(let i=0; i<cells.length; i++) {
 		let coords = p.parseCellLocation(cells[i]);   // [row,col]
@@ -201,6 +128,87 @@ function markupCells(p, cells, ht, basewid, labelcolor='') {
 function openHint() {
 	if(hinturl) { window.open(hinturl, '_blank'); }
 }
+
+window.addEventListener('load', function () {
+window.puz = createExolve(`
+======REPLACE WITH YOUR PUZZLE BELOW======
+
+exolve-begin
+  exolve-id: dkm-cryptic-202511
+  exolve-title: Cryptic 2025-11
+  exolve-setter: Darren Miller
+  exolve-copyright: 2025 Darren Miller
+  exolve-preamble:
+  exolve-width: 15
+  exolve-height: 15
+  exolve-credits: Testers: Amy F
+  exolve-option: font-family:inherit
+	exolve-option: color-active:lightyellow
+	exolve-option: color-active-clue:lightyellow
+  exolve-option: color-input:lightblue color-arrow:lightyellow
+  exolve-option: color-light-label-input:white
+  exolve-option: color-light-text-input:white
+  exolve-option: color-overwritten-start:#FFF5EE
+  exolve-option: color-overwritten-end:	#FAF9F6
+  exolve-option: highlight-overwritten-seconds:0.05
+  exolve-option: color-button:blue color-button-hover:lightblue
+  exolve-option: hide-copy-placeholder-buttons
+  exolve-relabel:
+    clear: Clear this word
+    reveal: Show hint for method(s)
+  exolve-grid:
+		0 0 0 0 0 0 0 0 . 0 0 0 0 0 0
+		0 . 0 . 0 . 0 . 0 . 0 . 0 . 0
+		0 0 0 0 0 . 0 0 0 0 0 0 0 0 0
+		0 . 0 . 0 . 0 . 0 . 0 . 0 . 0
+		0 0 0 0 0 0 0 0 0 . . 0 0 0 0
+		0 . . . 0 . 0 . 0 . 0 . 0 . 0
+		. 0 0 0 0 0 0 . 0 0 0 0 0 0 0
+		. . 0 . 0 . 0 . 0 . 0 . 0 . .
+		0 0 0 0 0 0 0 . 0 0 0 0 0 0 .
+		0 . 0 . 0 . 0 . 0 . 0 . . . 0
+		0 0 0 0 . . 0 0 0 0 0 0 0 0 0
+		0 . 0 . 0 . 0 . 0 . 0 . 0 . 0
+		0 0 0 0 0 0 0 0 0 . 0 0 0 0 0
+		0 . 0 . 0 . 0 . 0 . 0 . 0 . 0
+		0 0 0 0 0 0 . 0 0 0 0 0 0 0 0                              
+	exolve-across:
+		1  Heavens! Bitten by dog? Could be most irritating&nbsp;(8)
+		5  Amy leaves machinery running to build up wealth&nbsp;(6)
+		10  Throw out old curse in conversation&nbsp;(5)
+		11  You and me, chasing sound around empty attic? That&#8217;s bold&nbsp;(9)
+		12  Magnificent song aired in performance&nbsp;(9)
+		13  Case of cola marketed essentially for dessert&nbsp;(4)
+		15  Banjoists regularly slipped into Florida&#8217;s borders for some Tex&#8209;Mex&nbsp;(6)
+		17  Subjects protecting castle in a hot zone&nbsp;(7)
+		18  Shut down in your face&nbsp;(5&#8209;2) (7)*
+		19  Sun coming up? Take top off shade&nbsp;(6)
+		21  Bound to get even&nbsp;(4)
+		22  Public invitation to ring fancy phone with application&nbsp;(4,5) (9)*
+		25  Terror engulfs man, about 50, in a fantasy world&nbsp;(9)
+		26  Scanner going back and forth&nbsp;(5)
+		27  Lurking in Louisiana shelter&nbsp;(6)
+		28  Most hasty bets in trouble, involving danger&nbsp;(8)
+	exolve-down:
+		1  Originally, police&#8217;s lax enforcement demanded governor&#8217;s election promise&nbsp;(6)
+		2  Dark brown component of Japanese piano&nbsp;(5)
+		3  Sick commercial held to be irresponsible&nbsp;(3&#8209;7) (10)*
+		4  Mark to recommend oval apples for cooking with nip of alcohol&nbsp;(4,2,8) (14)*
+		6  Picnickers covering a little cut&nbsp;(4)
+		7  Exile changed unsatisfactory to high grade in one answer&nbsp;(9)
+		8  Accommodating woman sets up in homes without yours truly&nbsp;(7)
+		9  Engineer traded clean van for something with a lot of doors&nbsp;(6,8) (14)*
+		14  Spooner said to have displayed tricks to those taking a lot of interest&nbsp;(4,6) (10)*
+		16  Delivered a pitch intended to get payment&nbsp;(9)
+		18  Some wrangled a ticket heading up to a fortress&nbsp;(7)
+		20  Clandestine cult infiltrated by heartless rogue&nbsp;(6)
+		23  Inappropriate dancing nude supports university&nbsp;(5)
+		24  Nautilus captain coming back? That&#8217;s a bad sign&nbsp;(4)
+	exolve-end
+
+======REPLACE WITH YOUR PUZZLE ABOVE======
+`);
+})
 
 </script>
 <script src="exolve/dkm-exolve-utils.js"></script>
