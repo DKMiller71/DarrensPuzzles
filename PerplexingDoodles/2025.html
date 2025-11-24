@@ -20,26 +20,14 @@
 {%- assign nowunix = 'now' | date: '%s' | minus: 14400 -%}
 
 {%- comment -%}
-  2. Create an empty array to hold valid records
-{%- endcomment -%}
-{%- assign rows = '[]' | from_json -%}
-
-{%- comment -%}
-  3. Loop through each record, comparing timestamps directly
+  2. Loop through each record, comparing timestamps directly
 {%- endcomment -%}
 {%- for rec in site.data.pd2025 -%}
   {%- assign rectime = rec.date | strip | date: '%s' | plus: 0 -%}
   {%- if rectime <= nowunix -%}
-  	{%- assign rows = rows | push: rec.id -%}
-  	{%- assign row_json = rec | jsonify | replace: '\n', '' -%}
-    {%- assign rows = rows | push: row_json -%}
+ 		{{rec | jsonify | replace: '\n', ''  }}
   {%- endif -%}
 {%- endfor -%}
-
-{%- comment -%}
-  4. Output array as JSON
-{%- endcomment -%}
-{{ rows | jsonify }}
 </xmp>
 <noscript>This page requires Javascript.</noscript>
 </div></div>
