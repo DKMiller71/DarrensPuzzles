@@ -1,0 +1,43 @@
+---
+---
+<html>
+<head>
+	<title>Perplexing Doodles Christmas Advent 2025</title>
+<link rel="stylesheet" type="text/css" href="js/puzzlechecker2025.css" />
+<script src="js/puzzlechecker.js"></script>
+</head>
+<body>
+<div id="torn_banner" class="torn_container torn_left torn_right">
+		<div></div>
+<div id="container" class="container">
+<img class="masthead" src="Masthead_24_Gifts_of_Christmas.png">
+<h1>Answer Checker</h1>
+<xmp id=answerdata hidden>
+{%- comment -%}
+  1. Compute "now" as a Unix timestamp directly
+{%- endcomment -%}
+{%- assign nowunix = 'now' | date: '%s' | minus: 14400 -%}
+
+{%- comment -%}
+  2. Create an empty array to hold valid records
+{%- endcomment -%}
+{%- assign valid_records = '[]' | from_json -%}
+
+{%- comment -%}
+  3. Loop through each record, comparing timestamps directly
+{%- endcomment -%}
+{%- for rec in site.data.pd2025 -%}
+  {%- if rec.date | date: '%s' < nowunix -%}
+    {%- assign valid_records = valid_records | push: rec -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- comment -%}
+  4. Emit compact JSON only (no newlines)
+{%- endcomment -%}
+{{ valid_records | jsonify }}
+</xmp>
+<noscript>This page requires Javascript.</noscript>
+</div></div>
+</body>
+</html>
