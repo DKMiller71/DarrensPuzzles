@@ -30,7 +30,8 @@
 {%- for rec in site.data.pd2025 -%}
   {%- assign rectime = rec.date | strip | date: '%s' | plus: 0 -%}
   {%- if rectime <= nowunix -%}
-  	{%- assign row_json = rec | jsonify -%}  {# serialize the row dynamically #}
+  	{%- assign rows = rows | push: rec.id -%}
+  	{%- assign row_json = rec | jsonify | replace: '\n', '' -%}
     {%- assign rows = rows | push: row_json -%}
   {%- endif -%}
 {%- endfor -%}
