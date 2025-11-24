@@ -23,10 +23,10 @@
   2. Loop through each record, comparing timestamps directly
 {%- endcomment -%}
 
-{% for rec in site.data.pd2025 %}
-{% assign rectime = rec.date | strip | date: '%s' | plus: 0 %}{% if rectime <= nowunix %}
+{%- for rec in site.data.pd2025 %}
+{%- assign rectime = rec.date | strip | date: '%s' | plus: 0 -%}{% if rectime <= nowunix %}
 {{ rec | jsonify | replace: '\n', '' }}
-{% endif %}{% endfor %}
+{% endif %}{% endfor -%}
 </xmp>
 <noscript>This page requires Javascript.</noscript>
 </div></div>
