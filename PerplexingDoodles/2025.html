@@ -27,7 +27,8 @@
   3. Loop through each record, comparing timestamps directly
 {%- endcomment -%}
 {%- for rec in site.data.pd2025 -%}
-  {%- if rec.date | date: '%s' < nowunix -%}
+  {%- assign rectime = rec.date | strip | date: '%s' -%}
+  {%- if rectime < nowunix -%}
     {%- assign valid_records = valid_records | push: rec -%}
   {%- endif -%}
 {%- endfor -%}
