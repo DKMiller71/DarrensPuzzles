@@ -30,7 +30,7 @@
 {%- for rec in site.data.pd2025 -%}
   {%- assign rectime = rec.date | strip | date: '%s' | plus: 0 -%}
   {%- if rectime < nowunix -%}
-    {%- assign valid_records = valid_records | push: rec -%}
+    {%- assign valid_records = valid_records | push: rec | jsonify -%}
   {%- endif -%}
 {%- endfor -%}
 
