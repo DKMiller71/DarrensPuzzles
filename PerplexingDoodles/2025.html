@@ -22,22 +22,23 @@
 {%- comment -%}
   2. Create an empty array to hold valid records
 {%- endcomment -%}
-{%- assign valid_records = '[]' | from_json -%}
+{%- assign rows = '[]' | from_json -%}
 
 {%- comment -%}
   3. Loop through each record, comparing timestamps directly
 {%- endcomment -%}
 {%- for rec in site.data.pd2025 -%}
   {%- assign rectime = rec.date | strip | date: '%s' | plus: 0 -%}
-  {%- if rectime < nowunix -%}
-    {%- assign valid_records = valid_records | push: rec | jsonify -%}
+  {%- if rectime <= nowunix -%}
+  	{%- assign row_json = rec | jsonify -%}  {# serialize the row dynamically #}
+    {%- assign rows = rows | push: row_json -%}
   {%- endif -%}
 {%- endfor -%}
 
 {%- comment -%}
-  4. Emit compact JSON only (no newlines)
+  4. Output array as JSON
 {%- endcomment -%}
-{{ valid_records | jsonify }}
+{{ rows | jsonify }}
 </xmp>
 <noscript>This page requires Javascript.</noscript>
 </div></div>
