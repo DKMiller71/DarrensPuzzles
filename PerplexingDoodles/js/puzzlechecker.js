@@ -16,10 +16,10 @@ const puzzleFormTemplate = `
 const puzzleResetTemplate = `
 	<input id="Puzzle_ResetButton" class="button resetbutton" name="Reset" value="Reset" onclick="resetPage()"  />
 `
-
 const PuzzleCheckTimer = {}
 const test_hashes = {}
 const answerdata_hashes = {}
+const unlockdata = {}
 const answer_state = {}
 const pageKey = location.pathname.replaceAll(/\W/g,'_').toLowerCase()
 
@@ -47,6 +47,24 @@ function handleFormSubmit(formObject) {
   checkAnswer(formObject.PuzzleID.value, formObject.Answer.value)
 }
 
+async function decodeUnlock(pid, key) {
+	console.log(`1. decodeUnlock ${pid}, ${key}`)
+	if(!unlockdata.hasOwnProperty(pid)) return
+	console.log(`2. decodeUnlock ${pid}, ${key}`)
+	decryptData(unlockdata[pid], key).then(result => showUnlock(pid, result));
+}
+
+function showUnlock(pid, text) {
+	console.log(`showUnlock ${pid}, ${text}`)
+	if(!text) return
+	const el = document.getElementById(`Puzzle_${pid}_Section`);
+	if(!el) {
+		console.log(`missing section; Puzzle_${pid}_Section`)
+		return
+	}
+	el.insertAdjacentHTML('beforeend', `<div>${text}</div>`)	
+}
+
 // Process puzzleid and answer for validation
 function checkAnswer(pid, answer, isrestore=false) {
 	answer = answer.toUpperCase().replaceAll(/\W/g, '')
@@ -54,7 +72,7 @@ function checkAnswer(pid, answer, isrestore=false) {
 
   PuzzleCheckTimer[pid] = setTimeout(function(){ timeoutAnswerCheck(pid) }, 2000);
   lockPuzzleForm(pid, 'PENDING');
-
+	decodeUnlock(pid, answer)
 	test_hashes[pid] = sha256hash(answer)	
 	test_hashes[pid].then(checkAnswerResult.bind(null, pid))
 	
@@ -279,6 +297,11 @@ function init() {
 		if(!dval) continue
 
 		answerdata_hashes[dval.id] = dval.hash
+		if(dval.hasOwnProperty('unlock')) {
+			if(dval.unlock) {
+				unlockdata[dval.id] = dval.unlock
+			}
+		}
 
 		el.insertAdjacentHTML('beforeend', 
 					puzzleFormTemplate.replaceAll('PUZZLEID', dval.id)
@@ -291,4 +314,92 @@ function init() {
 	preventFormSubmit()
 	updateTornEdges()
 	restoreFromState()	
+}
+
+// https://github.com/bradyjoslin/webcrypto-example
+// for large strings, use this from https://stackoverflow.com/a/49124600
+
+const buff_to_base64 = (buff) => btoa(
+  new Uint8Array(buff).reduce(
+    (data, byte) => data + String.fromCharCode(byte), ''
+  )
+);
+
+const base64_to_buf = (b64) =>
+  Uint8Array.from(atob(b64), (c) => c.charCodeAt(null));
+
+const enc = new TextEncoder();
+const dec = new TextDecoder();
+
+const getPasswordKey = (password) =>
+  window.crypto.subtle.importKey("raw", enc.encode(password), "PBKDF2", false, [
+    "deriveKey",
+  ]);
+
+const deriveKey = (passwordKey, salt, keyUsage) =>
+  window.crypto.subtle.deriveKey(
+    {
+      name: "PBKDF2",
+      salt: salt,
+      iterations: 250000,
+      hash: "SHA-256",
+    },
+    passwordKey,
+    { name: "AES-GCM", length: 256 },
+    false,
+    keyUsage
+  );
+
+async function encryptData(secretData, password) {
+  try {
+    const salt = window.crypto.getRandomValues(new Uint8Array(16));
+    const iv = window.crypto.getRandomValues(new Uint8Array(12));
+    const passwordKey = await getPasswordKey(password);
+    const aesKey = await deriveKey(passwordKey, salt, ["encrypt"]);
+    const encryptedContent = await window.crypto.subtle.encrypt(
+      {
+        name: "AES-GCM",
+        iv: iv,
+      },
+      aesKey,
+      enc.encode(secretData)
+    );
+
+    const encryptedContentArr = new Uint8Array(encryptedContent);
+    let buff = new Uint8Array(
+      salt.byteLength + iv.byteLength + encryptedContentArr.byteLength
+    );
+    buff.set(salt, 0);
+    buff.set(iv, salt.byteLength);
+    buff.set(encryptedContentArr, salt.byteLength + iv.byteLength);
+    const base64Buff = buff_to_base64(buff);
+    return base64Buff;
+  } catch (e) {
+    console.log(`Error - ${e}`);
+    return "";
+  }
+}
+
+async function decryptData(encryptedData, password) {
+	console.log(`decryptData ${password}`)
+  try {
+    const encryptedDataBuff = base64_to_buf(encryptedData);
+    const salt = encryptedDataBuff.slice(0, 16);
+    const iv = encryptedDataBuff.slice(16, 16 + 12);
+    const data = encryptedDataBuff.slice(16 + 12);
+    const passwordKey = await getPasswordKey(password);
+    const aesKey = await deriveKey(passwordKey, salt, ["decrypt"]);
+    const decryptedContent = await window.crypto.subtle.decrypt(
+      {
+        name: "AES-GCM",
+        iv: iv,
+      },
+      aesKey,
+      data
+    );
+    return dec.decode(decryptedContent);
+  } catch (e) {
+    console.log(`Error - ${e}`);
+    return "";
+  }
 }
