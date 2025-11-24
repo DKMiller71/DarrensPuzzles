@@ -250,6 +250,20 @@ function updateTornEdges() {
 	document.body.style.setProperty('--torn-right-clip-path',`polygon(${pathstr})`)
 }
 
+function parsedatarow(str) {
+	if(str.startsWith("{")) {
+		return JSON.parse(str)
+	}
+	const fields = str.split(/:/)
+	
+	if(fields[0] == '' || fields.length < 3) return;
+	return {
+		id: fields[0].trim(),
+		hash: fields[1].trim(),
+		author: fields[2].trim()
+	}
+}
+
 function init() {
 
 	const data = document.getElementById("answerdata");
@@ -261,16 +275,15 @@ function init() {
 	const rows = data.innerText.split(/\r?\n/);
 
 	for(let i=0; i < rows.length; i++) {
-		let fields = rows[i].split(/:/);
-		if(fields[0] == '' || fields.length < 3) continue
-		
-		let pid = fields[0].trim()
-		answerdata_hashes[pid] = fields[1].trim() 
+		const dval = parsedatarow(rows[i])
+		if(!dval) continue
+
+		answerdata_hashes[dval.id] = dval.hash
 
 		el.insertAdjacentHTML('beforeend', 
-					puzzleFormTemplate.replaceAll('PUZZLEID', pid)
-						.replaceAll('DAYNUM', parseInt(pid))
-						.replaceAll('AUTHOR', fields[2].trim()))
+					puzzleFormTemplate.replaceAll('PUZZLEID', dval.id)
+						.replaceAll('DAYNUM', parseInt(dval.id))
+						.replaceAll('AUTHOR', dval.author))
 	}
 
 	el.insertAdjacentHTML('beforeend', puzzleResetTemplate)	
