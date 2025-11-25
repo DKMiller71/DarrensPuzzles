@@ -1,0 +1,34 @@
+---
+---
+<html>
+<head>
+	<title>Perplexing Doodles: The Season of Perplexival</title>
+<link rel="stylesheet" type="text/css" href="js/puzzlechecker2025.css" />
+<script src="js/puzzlechecker.js"></script>
+<!-- Generated on: {{ 'now' | date: "%Y-%m-%d %H:%M:%S %Z" }} -->
+</head>
+<body>
+<div id="torn_banner" class="torn_container torn_left torn_right">
+		<div></div>
+<div id="container" class="container">
+<img class="masthead" src="Masthead_2025_Perplexival.png">
+<h1>Answer Checker</h1>
+<xmp id=answerdata hidden>
+{% comment -%}
+  1. Compute "now" as a Unix timestamp directly
+{%- endcomment -%}
+{%- assign nowunix = 'now' | date: '%s' | plus: 136800 -%}
+
+{%- comment -%}
+  2. Loop through each record, comparing timestamps directly
+{%- endcomment -%}
+
+{% for rec in site.data.pd2025 -%}
+{%- assign rectime = rec.date | strip | date: '%s' | plus: 0 -%}
+{{ rec | jsonify | replace: '\n', '' }}
+{% endfor -%}
+</xmp>
+<noscript>This page requires Javascript.</noscript>
+</div></div>
+</body>
+</html>
