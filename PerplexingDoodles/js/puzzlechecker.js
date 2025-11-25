@@ -14,7 +14,7 @@ const puzzleFormTemplate = `
 </div>
 `
 const puzzleResetTemplate = `
-	<input id="Puzzle_ResetButton" class="button resetbutton" name="Reset" value="Reset" onclick="resetPage()"  />
+	<br /><input id="Puzzle_ResetButton" class="button resetbutton" name="Reset" value="Reset" onclick="resetPage()" />
 `
 const PuzzleCheckTimer = {}
 const test_hashes = {}
