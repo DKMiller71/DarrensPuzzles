@@ -48,14 +48,11 @@ function handleFormSubmit(formObject) {
 }
 
 async function decodeUnlock(pid, key) {
-	console.log(`1. decodeUnlock ${pid}, ${key}`)
 	if(!unlockdata.hasOwnProperty(pid)) return
-	console.log(`2. decodeUnlock ${pid}, ${key}`)
 	decryptData(unlockdata[pid], key).then(result => showUnlock(pid, result));
 }
 
 function showUnlock(pid, text) {
-	console.log(`showUnlock ${pid}, ${text}`)
 	if(!text) return
 	const el = document.getElementById(`Puzzle_${pid}_Section`);
 	if(!el) {
@@ -381,7 +378,6 @@ async function encryptData(secretData, password) {
 }
 
 async function decryptData(encryptedData, password) {
-	console.log(`decryptData ${password}`)
   try {
     const encryptedDataBuff = base64_to_buf(encryptedData);
     const salt = encryptedDataBuff.slice(0, 16);
