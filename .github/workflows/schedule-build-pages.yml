@@ -4,7 +4,7 @@ name: Build GitHub Pages on schedule
 
 on:
   schedule:
-   - cron: '0 10,12 * * *'
+   - cron: '0 10,11,12 * * *'
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
