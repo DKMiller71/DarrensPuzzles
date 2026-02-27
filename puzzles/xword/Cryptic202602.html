@@ -11,7 +11,6 @@ See the full Exolve license notice in exolve-m.js.
 <link rel="stylesheet" type="text/css" href="exolve/exolve-m.css"/>
 <script src="exolve/exolve-m.js"></script>
 <title>Cryptic 2026-02 by Darren Miller</title>
-
 <style>
 	body {
 		font-family: "Optima", Verdana, sans-serif;
@@ -28,7 +27,7 @@ See the full Exolve license notice in exolve-m.js.
 <script src="exolve/dkm-checker.js"></script>
 <script src="exolve/dkm-extractor.js"></script>
 <script src="exolve/Hex2Exolve.js"></script>
-<script src="exolve/dkm-decode.js"></script>
+
 </head>
 <body>
 <div id="popupModal" class="modal"></div>
@@ -63,100 +62,13 @@ var exolveanswers = {
 	'DR21':	'9aee6b1bcdf617d8e39bb1f2b624c68ea33deb9d48e0364aeaded836d3d00293'
 }
 
-// var hinturl = '../../hints/Cryptic202305_hints.html';
+var hinturl = '../../hints/Cryptic202602_hints.html';
 
 // const markedCells = []
 
-const exolvetemplate = `
-exolve-begin
-  exolve-id: dkm-cryptic-202602
-  exolve-title: Cryptic 2026-02
-  exolve-setter: Darren Miller
-  exolve-copyright: 2026 Darren Miller
-  exolve-credits:
-  exolve-preamble:
-  exolve-option: font-family:inherit
-  exolve-option: color-active:lightblue
-  exolve-option: color-active-clue:lightblue
-  exolve-option: color-input:darkblue color-arrow:blue
-  exolve-option: color-solved:#228B22
-  exolve-option: color-light-label-input:white
-  exolve-option: color-light-text-input:white
-  exolve-option: color-overwritten-start:#FFF5EE
-  exolve-option: color-overwritten-end:#FAF9F6
-  exolve-option: highlight-overwritten-seconds:0.05
-  exolve-option: color-button:blue color-button-hover:lightblue
-  exolve-option: override-number-GRIDLINE:0 offset-top:10 offset-left:10
-  exolve-option: color-background:transparent
-  exolve-grid-spacing: %COLWIDTH% %ROWHEIGHT%
-  exolve-cell-size: %CELLWIDTH% %CELLHEIGHT%
-  exolve-width: %WIDTH%
-  exolve-height: %HEIGHT%
-  exolve-shaped-cell: %SHAPE%
-%DECORATORS%
-  exolve-grid:
-%GRID%
-  exolve-nodir:%CLUES%
-exolve-end
-`
-const hexdata = `
-	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
-	+YHSFS7QSoi1vp
-`
-
 function customizeExolve(puz) {
 	if(typeof markedCells !== 'undefined') {
-		markupCells(puz, markedCells, 10, 6, 'darkgreen');
+		markupCells(puz, markedCells, 10, 6, 'darkblue');
   	puz.extractButton = addButton(puz, 'Extract cells', getMarkedCells);
   }
   if (Object.keys(exolveanswers).length) {
@@ -168,9 +80,9 @@ function customizeExolve(puz) {
 	if(typeof hinturl !== 'undefined') {
  		puz.hintButton = addButton(puz, 'Get hints', openHint);
 	}
+	
 	puz.clearArea.after(puz.currClue);
 	puz.resizeCurrClueAndControls = customResizeCurrClueAndControls;
-
 }
 
 customResizeCurrClueAndControls = function() {
@@ -207,37 +119,102 @@ function markupCells(p, cells, ht, basewid, labelcolor='') {
 		if(labelcolor) c.style.stroke = labelcolor
 		hexAdjustCellText(p, c, ht, row, col)
 	}
-	
 	p.cellActivator(0,0); 
 }
 
-		function openHint() {
+function openHint() {
 	if(hinturl) { window.open(hinturl, '_blank'); }
 }
 
-let exolvehexdata = ''
+const exolvetemplate = `
+exolve-begin
+  exolve-id: dkm-cryptic-202602
+  exolve-title: Cryptic 2026-02
+  exolve-setter: Darren Miller
+  exolve-copyright: 2026 Darren Miller
+  exolve-credits:
+  exolve-preamble:
+  exolve-option: font-family:inherit
+  exolve-option: color-active:lightblue
+  exolve-option: color-active-clue:lightblue
+  exolve-option: color-input:darkblue color-arrow:blue
+  exolve-option: color-solved:#228Bff
+  exolve-option: color-light-label-input:white
+  exolve-option: color-light-text-input:white
+  exolve-option: color-overwritten-start:#FFF5EE
+  exolve-option: color-overwritten-end:#FAF9F6
+  exolve-option: highlight-overwritten-seconds:0.05
+  exolve-option: color-button:blue color-button-hover:lightblue
+  exolve-option: override-number-GRIDLINE:0 offset-top:10 offset-left:10
+  exolve-option: color-background:transparent
+  exolve-grid-spacing: %COLWIDTH% %ROWHEIGHT%
+  exolve-cell-size: %CELLWIDTH% %CELLHEIGHT%
+  exolve-width: %WIDTH%
+  exolve-height: %HEIGHT%
+  exolve-shaped-cell: %SHAPE%
+%DECORATORS%
+  exolve-grid:
+%GRID%
+  exolve-nodir:%CLUES%
+exolve-end
+`
+const hexdata = `
+	separator-color:gray
+	separator-width:1
+	border-color:blue
+	border-width:1
+	orient:h
+	directions:EE,SE,SW
+	hexside:22
+	grid:
+		.  .  .  .  .  .  0  .  .  .  .  .  .  .  .  .  .  .  0  .  .  .  .  .  . 
+		.  .  .  .  .  .  .  0  .  04 .  0  .  0  .  02 .  0  .  .  .  .  .  .  . 
+		.  .  .  .  .  .  01 .  0  .  .  .  0  .  .  .  01 .  0  .  .  .  .  .  . 
+		.  .  .  .  .  0  .  .  .  01 .  01 .  01 .  0  .  .  .  0  .  .  .  .  . 
+		.  .  .  .  01 .  01 .  01 .  0  .  .  .  01 .  01 .  01 .  0  .  .  .  . 
+		.  .  .  02 .  .  .  0  .  .  .  05 .  02 .  .  .  0  .  .  .  04 .  .  . 
+		0  .  0  .  04 .  0  .  0  .  02 .  .  .  04 .  0  .  0  .  02 .  0  .  0 
+		.  .  .  0  .  .  .  0  .  .  .  01 .  0  .  .  .  0  .  .  .  0  .  .  . 
+		.  .  .  .  01 .  01 .  01 .  0  .  .  .  01 .  01 .  01 .  0  .  .  .  . 
+		.  .  .  .  .  0  .  .  .  01 .  01 .  01 .  0  .  .  .  0  .  .  .  .  . 
+		.  .  .  .  .  .  01 .  02 .  .  .  0  .  .  .  05 .  0  .  .  .  .  .  . 
+		.  .  .  .  .  .  .  0  .  0  .  0  .  0  .  0  .  0  .  .  .  .  .  .  . 
+		.  .  .  .  .  .  0  .  .  .  .  .  .  .  .  .  .  .  0  .  .  .  .  .  . 
+	clues-EE-Across:
+		3  Recent arrival and new lover entertained by that thing&nbsp;(6)
+		11  Show up at premiere of Thor: Ragnarok?&nbsp;(6)
+		15  Wild ogre escapes from angry bootlegger with a fancy vessel&nbsp;(6)
+		23  Gossip coming from conflict with bishop going out for tea&nbsp;(6)
+	clues-SE-Down-Right:
+		1  Part of crossword is malformed, it&#8217;s quite depressing&nbsp;(6)
+		4  Outsides of foyer entrance on the house&nbsp;(4)
+		6  Break down essential ingredients of bumblebee butt&nbsp;(6)
+		7  Conflicted with rent&nbsp;(4)
+		9  Oblivious to principles of behavior, making unfortunate noises in return&nbsp;(4)
+		12  Chokepoint that protects the heart of Europe&nbsp;(6)
+		13  Long&#8209;time contribution to committee on security&nbsp;(4)
+		16  Margarine regularly found in chocolate drops&nbsp;(4)
+		20  Creeps and cranks, topless&nbsp;(6)
+		21  Assignment by mail&nbsp;(4)
+	clues-SW-Down-Left:
+		2  Delivered capital punishment on a trip&nbsp;(6)
+		3  Mangled tin net for a reason&nbsp;(6)
+		5  Greg&#8217;s girls becoming aces in field of expertise&nbsp;(4)
+		8  Backside of vehicle edge overturned in mud&nbsp;(4)
+		10  Brief note from exhausted mezzosoprano next to setter&nbsp;(4)
+		14  Japanese theater at New Orleans is forbidden&nbsp;(2&#8209;2) (4)*
+		17  Alliance occupying Pueblo, Colorado&nbsp;(4)
+		18  Spilled corn in empty enclosure? Do it again&nbsp;(6)
+		19  Charlie ignored by reckless suspect, creating disturbances&nbsp;(6)
+		22  Robin&#8217;s home at northeastern street&nbsp;(4)
+`
+let exolvedata = ''
 
-window.addEventListener('load', initHexDecode);
-
-function initHexDecode() {
-	let params = new URLSearchParams(document.location.search);
-	let query = params.get('key');
-
-	if(query && typeof(hexdata) !== 'undefined') {
-		let key = query instanceof Array ? query[0] : query;
-		do_decodeHex(hexdata, key);
-	}
-}
-
-async function do_decodeHex(data, key) {
-	decryptData(data, key).then(exdata => loadHexExolve(exdata));
-}
-
-function loadHexExolve(hexdecoded) {
-	exolvehexdata = getHex2Exolve(exolvetemplate, hexdecoded).replaceAll("\t","  ")
-	window.puz = createExolve(exolvehexdata)
+window.addEventListener('load', function () {
+	exolvedata = getHex2Exolve(exolvetemplate, hexdata).replaceAll("\t","  ")
+	window.puz = createExolve(exolvedata)
 	mapPuzzleClues(puz)
-}
+})
 
 </script>
 <script src="exolve/dkm-exolve-utils.js"></script>
