@@ -11,7 +11,6 @@ See the full Exolve license notice in exolve-m.js.
 <link rel="stylesheet" type="text/css" href="exolve/exolve-m.css"/>
 <script src="exolve/exolve-m.js"></script>
 <title>Cryptic 2026-09 by Darren Miller</title>
-
 <style>
 	body {
 		font-family: "Optima", Verdana, sans-serif;
@@ -50,7 +49,6 @@ See the full Exolve license notice in exolve-m.js.
 <script src="exolve/dkm-popup.js"></script>
 <script src="exolve/dkm-checker.js"></script>
 <script src="exolve/dkm-extractor.js"></script>
-<script src="exolve/dkm-decode.js"></script>
 </head>
 <body>
 <div id="popupModal" class="modal"></div>
@@ -84,77 +82,14 @@ var exolveanswers = {
 	'D16':	'b11f025d977d693e6323a9485d4bb1c79517bb586621c47bc757d92474c9f53c',
 	'D18':	'acda47627f691f0d169aa8f213a0b956d5a591bd5f3d2c425c72787ed2c57e64',
 	'D20':	'8b7373b7fecf4a0143f91285e19b4d8f960422c506f7757fa735debdff7ce106',
-	'D21':	'071f30d7be8e7ae383f863bca61fc55295262f2ac15092fffb2b2f868c864f17',
+	'D21':	'3c56942567c889506f9aea68c49e81b74e1290eec926d1ebbc4e1f42f29414b1',
 	'D23':	'6e23a36976162bc841a2ed6f6319cc6745d9d70164bf572ccd434cb6c5cb7b75'
 }
 
-// var hinturl = '../../hints/Cryptic202305_hints.html';
-
-const exolvedata = `
-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
-`
+var hinturl = '../../hints/Cryptic202609_hints.html';
 
 function customizeExolve(puz) {
+	redrawLinesForLightCells(puz, '#1100cc', 'black');
 	if(typeof markedCells !== 'undefined') {
 		markupCells(puz, markedCells, 10, 6, 'darkgreen');
   	puz.extractButton = addButton(puz, 'Extract cells', getMarkedCells);
@@ -168,6 +103,7 @@ function customizeExolve(puz) {
 	if(typeof hinturl !== 'undefined') {
  		puz.hintButton = addButton(puz, 'Get hints', openHint);
 	}
+	
 	puz.clearArea.after(puz.currClue);
 	puz.resizeCurrClueAndControls = customResizeCurrClueAndControls;
 }
@@ -197,8 +133,6 @@ customResizeCurrClueAndControls = function() {
   this.currClue.style.left = horOffset + 'px';
 }
 
-
-
 function markupCells(p, cells, ht, basewid, labelcolor='') {
 	for(let i=0; i<cells.length; i++) {
 		let coords = p.parseCellLocation(cells[i]);   // [row,col]
@@ -216,6 +150,81 @@ function markupCells(p, cells, ht, basewid, labelcolor='') {
 function openHint() {
 	if(hinturl) { window.open(hinturl, '_blank'); }
 }
+
+window.addEventListener('load', function () {
+window.puz = createExolve(`
+======REPLACE WITH YOUR PUZZLE BELOW======
+
+exolve-begin
+  exolve-id: dkm-cryptic-202609
+  exolve-title: Cryptic 2026-09
+  exolve-setter: Darren Miller
+  exolve-copyright: 2026 Darren Miller
+  exolve-preamble: 
+  exolve-width: 15
+  exolve-height: 10
+  exolve-credits:
+	exolve-option: font-family:inherit
+ 	exolve-option: color-active:#cccccc
+	exolve-option: color-active-clue:#cccccc
+  exolve-option: color-input:#cccc80 color-arrow:#1100cc
+  exolve-option: color-light-label-input:white
+  exolve-option: color-light-text-input:white
+  exolve-option: color-separator:#1100cc
+  exolve-option: color-overwritten-start:#FFF5EE
+  exolve-option: color-overwritten-end:	#FAF9F6
+  exolve-option: highlight-overwritten-seconds:0.05
+  exolve-option: color-button:#1100cc color-button-hover:#800080
+  exolve-option: hide-copy-placeholder-buttons
+  exolve-option: color-background:#000000
+  exolve-relabel:
+    clear: Clear this word
+    reveal: Show hint for method(s)
+  exolve-grid:
+		 . . . . 0 0_0 0 0 0_0 . . . .
+		 . . 0 0_0 0_0 0 0 0_0 0_0 . .
+		 . 0|0 0_0_0_0|0|0 0_0_0_0|0 .
+		 . 0 0 0 . . 0 0 0 . . 0 0 0 .
+		 . 0|0 . . . 0|0|0 . . . 0|0 .
+		 . 0 0 0_0 0_0 .|0 0_0 0_0 0 .
+		 . . 0 0 0 0 . . . 0 0 0 0 . .
+		 . . . . 0 0 0_0 0_0 0 . . . .
+		 . . . . 0 0 0 0 0 0 0 . . . .
+		 . . . . . 0 . 0 . 0 . . . . .
+	exolve-across:
+		1  Bread and cheese, stuffed with egg and zucchini in the center&nbsp;(7)
+		6  Topless Casanova burns, protecting girl with everyone making improper demands&nbsp;(11)
+		9  Using odd numbers every so often is inappropriate&nbsp;(5)
+		10  Spooner describing the first option for Hamlet&#8217;s end&nbsp;(5)
+		12  Forecast for receiving letter from Greece&nbsp;(3)
+		13  Back of chest covered by a scarf&nbsp;(3)
+		14  Revolutionary group mistakenly includes troublemaker&nbsp;(3)
+		15  A teacher on vacation, involved in stir with model&nbsp;(6)
+		17  Monarch loses crown at sea. It can be a real drag&nbsp;(6)
+		19  Report of Sunday through Saturday is pathetic&nbsp;(4)
+		21  Flipping circuit in a place for different strokes?&nbsp;(4)
+		22  Bypasses portals near New England&nbsp;(7)
+		24  Turmoil resulting from trial engulfing half of empire&nbsp;(7)
+	exolve-down
+		1  Trailers from suburb drive around rest area&nbsp;(3)
+		2  Brig with second in command and bishop, overthrown supporting island around England?&nbsp;(6)
+		3  Cheer from pirate raised over bow of boat: &ldquo;Huzzah!&rdquo;&nbsp;(2,3) (5)*
+		4  California bank doesn&#8217;t close a house&nbsp;(6)
+		5  Pride constrained by performance goals&nbsp;(3)
+		6  Someone wanted to hula, with husband quitting dancing&nbsp;(6)
+		7  Representative rearranging Molly&#8217;s blossoms, removing extra bits&nbsp;(6)
+		8  That guy left Mike in command&nbsp;(4)
+		11  Fight with ship&#8217;s staff?&nbsp;(4)
+		16  Caps from riders always need tucking in carry&#8209;on&nbsp;(4)
+		18  Damage created by hiding head of snake in bunk&nbsp;(4)
+		20  They say pier will collapse&nbsp;(4)
+		21  Money generated by Prime choices of open stock&nbsp;(4)
+		23  Knock top to bottom? That&#8217;s right&nbsp;(3)
+	exolve-end
+
+======REPLACE WITH YOUR PUZZLE ABOVE======
+`);
+})
 
 </script>
 <script src="exolve/dkm-exolve-utils.js"></script>
